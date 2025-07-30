@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Mentions légales | En Compagnie des Étoiles</title>
+<meta name="keywords" content="">
+<meta name="description" content="Mentions légales du site encompagniedesetoiles.fr">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/mentions-legales/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.36819bea596090d8b48cf10d9831382996197aa7e4fc86f792f7c08c9ca4d23b.css" integrity="sha256-NoGb6llgkNi0jPENmDE4KZYZeqfk/Ib3kvfAjJyk0js=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/mentions-legales/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" class="site-title" title="En Compagnie des Étoiles (Alt + H)">En Compagnie des Étoiles</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+
+		<button
+			id="panier-toggle"
+			class="panier-indicateur"
+			onclick="ouvrirOuFermerPanier()"
+			aria-label="Ouvrir ou fermer le panier"
+		>
+			🛒<span id="panier-compte">0</span>
+		</button>
+	
+	<div id="mini-panier" class="volet-panier">
+		<div class="entete-panier">
+			<h2>Mon panier</h2>
+			<button class="btn-fermer" onclick="fermerPanier()">×</button>
+		</div>
+		<div id="contenu-panier" class="contenu-panier">
+			
+		</div>
+		<div class="footer-panier">
+			<p id="total-panier">Total : 0 €</p>
+			<button onclick="window.location.href='/checkout.html'" class="btn-commander">
+				Finaliser ma commande
+			</button>
+		</div>
+	</div>
+</header>
+
+<script>
+		 
+		function ouvrirOuFermerPanier() {
+			const volet = document.getElementById('mini-panier');
+			const indicateur = document.getElementById('panier-toggle');
+
+			if (volet.classList.contains('actif')) {
+				
+				volet.classList.remove('actif');
+				if (indicateur) indicateur.classList.remove('panier-decale');
+			} else {
+				
+				volet.classList.add('actif', 'slide-in');
+				if (indicateur) indicateur.classList.add('panier-decale');
+				afficherMiniPanier();
+				setTimeout(() => volet.classList.remove('slide-in'), 300);
+			}
+		}
+
+
+
+		function fermerPanier() {
+			const volet = document.getElementById('mini-panier');
+			const indicateur = document.getElementById('panier-toggle');
+
+			volet.classList.remove('actif');
+			if (indicateur) indicateur.classList.remove('panier-decale');
+		}
+
+		function afficherMiniPanier() {
+			const panier = JSON.parse(localStorage.getItem("panier")) || [];
+			const conteneur = document.getElementById("contenu-panier");
+			conteneur.innerHTML = "";
+
+			let total = 0;
+
+			panier.forEach(item => {
+				total += parseFloat(item.prix) * item.quantite;
+				const bloc = document.createElement("div");
+				bloc.className = "item-panier";
+				bloc.innerHTML = `
+					<img src="${item.image}" alt="${item.titre}">
+					<div class="info-item">
+						<strong>${item.titre}</strong><br>
+						${item.quantite} × ${item.prix} €
+						<div class="quantite-controls">
+							<button onclick="modifierQuantite('${item.titre}', 1)">+</button>
+							<button onclick="modifierQuantite('${item.titre}', -1)">−</button>
+						</div>
+						<button class="btn-supprimer" onclick="supprimerDuPanier('${item.titre}')" aria-label="Retirer du panier">
+							🗑️
+						</button>
+					</div>
+				`;
+				conteneur.appendChild(bloc);
+			});
+
+			document.getElementById("total-panier").textContent = `Total : ${total.toFixed(2)} € hors frais de port`;
+
+			const btnCommander = document.querySelector(".btn-commander");
+			if (btnCommander) {
+				if (panier.length === 0) {
+					btnCommander.disabled = true;
+					btnCommander.classList.add("desactive");
+				} else {
+					btnCommander.disabled = false;
+					btnCommander.classList.remove("desactive");
+				}
+			}
+
+		}
+
+		function modifierQuantite(titre, delta) {
+			const panier = JSON.parse(localStorage.getItem("panier")) || [];
+			const index = panier.findIndex(p => p.titre === titre);
+			if (index >= 0) {
+				panier[index].quantite += delta;
+				if (panier[index].quantite <= 0) {
+					panier.splice(index, 1);
+				}
+				localStorage.setItem("panier", JSON.stringify(panier));
+				window.dispatchEvent(new Event("panierMisAJour"));
+				afficherMiniPanier();
+				mettreAJourIndicateur(); 
+			}
+			const indicateurEl = document.getElementById("panier-toggle");
+			if (indicateurEl) {
+				indicateurEl.classList.add("pulse");
+				setTimeout(() => indicateurEl.classList.remove("pulse"), 300);
+			}
+		}
+
+
+		function supprimerDuPanier(titre) {
+			const panier = JSON.parse(localStorage.getItem("panier")) || [];
+			const nouveau = panier.filter(p => p.titre !== titre);
+			localStorage.setItem("panier", JSON.stringify(nouveau));
+			window.dispatchEvent(new Event("panierMisAJour"));
+			afficherMiniPanier();
+			mettreAJourIndicateur(); 
+			
+			const indicateurEl = document.getElementById("panier-toggle");
+			if (indicateurEl) {
+				indicateurEl.classList.add("pulse");
+				setTimeout(() => indicateurEl.classList.remove("pulse"), 300);
+			}
+
+		}
+
+		document.addEventListener("click", function (event) {
+			const volet = document.getElementById("mini-panier");
+			const toggle = document.getElementById("panier-toggle");
+
+			
+			const ajouterBtn = event.target.closest(".btn-add-to-cart");
+
+			
+			const quantiteBtn = event.target.closest(".quantite-controls");
+			const supprimerBtn = event.target.closest(".btn-supprimer");
+
+			if (!volet || !volet.classList.contains("actif")) return;
+
+			if (
+				volet.contains(event.target) ||
+				toggle.contains(event.target) ||
+				ajouterBtn ||
+				quantiteBtn ||
+				supprimerBtn
+			) {
+				return; 
+			}
+
+			
+			fermerPanier();
+		});
+
+
+		function mettreAJourIndicateur() {
+			const panier = JSON.parse(localStorage.getItem("panier")) || [];
+			const total = panier.reduce((sum, item) => sum + item.quantite, 0);
+
+			const compteEl = document.getElementById("panier-compte");
+			const indicateurEl = document.getElementById("panier-toggle");
+
+			if (compteEl) compteEl.textContent = total;
+
+			if (indicateurEl) {
+				if (total === 0) {
+					indicateurEl.style.background = "white";
+					indicateurEl.style.color = "black";
+				} else {
+					indicateurEl.style.background = "black";
+					indicateurEl.style.color = "white";
+				}
+			}
+		}
+
+		window.addEventListener("pageshow", function () {
+			mettreAJourIndicateur();
+		});
+
+</script>
+<style>
+		.site-title {
+			color: inherit;
+			text-decoration: none;
+			border: none;
+			font-weight: normal;
+			font-size: 1.4em;
+		}
+
+		.site-title:hover {
+			color: inherit;
+			text-decoration: none;
+			border: none;
+		}
+
+		 
+		.volet-panier {
+			position: fixed;
+			top: 0;
+			right: -100%;
+			width: 340px;
+			height: 100%;
+			background: #f7f7f7;  
+			box-shadow: -1px 0 8px rgba(0, 0, 0, 0.1);  
+			transition: right 0.3s ease;
+			z-index: 1001;
+			display: flex;
+			flex-direction: column;
+			border-left: 1px solid #ddd;  
+		}
+
+
+		.volet-panier.actif { right: 0; }
+
+		.entete-panier {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 15px;
+			border-bottom: 1px solid #ddd;
+		}
+
+		.btn-fermer {
+			font-size: 24px;
+			border: none;
+			background: none;
+			cursor: pointer;
+		}
+
+		.contenu-panier {
+			flex: 1;
+			overflow-y: auto;
+			padding: 15px;
+		}
+
+		.item-panier {
+			border-bottom: 1px solid #eee;
+			padding: 10px 0;
+			display: flex;
+			gap: 10px;
+		}
+
+		.item-panier img {
+			width: 60px;
+			height: auto;
+			object-fit: cover;
+			border: 1px solid #ccc;
+		}
+
+		.info-item {
+			flex: 1;
+		}
+
+		.quantite-controls {
+			display: flex;
+			gap: 5px;
+			margin-top: 5px;
+		}
+
+		.quantite-controls button {
+			width: 25px;
+			height: 25px;
+			font-size: 18px;
+			font-weight: bold;
+			line-height: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border: none;
+			background: #007acc;
+			color: white;
+			border-radius: 4px;
+			padding: 0;
+			user-select: none;      
+			cursor: pointer;        
+			outline: none;          
+
+		}
+
+		.quantite-controls button:hover { background: #005fa3; }
+		
+		.btn-supprimer {
+			background: none;
+			border: none;
+			color: #888;
+			font-size: 18px;
+			transition: color 0.2s ease;
+			user-select: none;      
+			cursor: pointer;        
+			outline: none;          
+		}
+
+		.btn-supprimer:hover {
+			color: red;
+		}
+		
+		.footer-panier {
+			padding: 15px;
+			border-top: 1px solid #ddd;
+		}
+
+		.btn-commander {
+			width: 100%;
+			padding: 10px;
+      background: #007acc;
+      color: #fff;
+			border: none;
+			border-radius: 4px;
+			font-weight: bold;
+			user-select: none;      
+			cursor: pointer;        
+			outline: none;          
+		}
+		
+		.btn-commander:focus {
+			outline: none;
+		}
+
+		.btn-commander.desactive {
+			background: #ccc;
+			color: #666;
+			cursor: not-allowed;
+			box-shadow: none;
+		}
+
+		.btn-commander:disabled {
+			pointer-events: none;
+		}
+
+		.btn-commander:hover { background: #005fa3; }
+
+		.volet-panier.slide-in {
+			animation: slideIn 0.3s ease;
+		}
+
+		@keyframes slideIn {
+			0%   { transform: translateX(100%); opacity: 0; }
+			100% { transform: translateX(0); opacity: 1; }
+		}
+
+		 
+		.pulse {
+			animation: pulseGrow 0.3s ease;
+		}
+		@keyframes pulseGrow {
+			0%   { transform: scale(1); }
+			50%  { transform: scale(1.1); }
+			100% { transform: scale(1); }
+		}
+		
+	.panier-indicateur {
+		position: fixed;
+		top: 10px;
+		right: 10px;
+		padding: 4px 10px;
+		font-size: 15px;
+		border-radius: 16px;
+		z-index: 2000;
+		background: white;
+		color: black;
+		box-shadow: 0 0 4px rgba(0,0,0,0.2);
+		cursor: pointer;
+		user-select: none;
+		transition: right 0.3s ease-in-out, background 0.3s ease, color 0.3s ease;
+	}
+
+
+	.panier-indicateur.panier-decale {
+		right: 360px;  
+	}
+
+
+
+
+	@keyframes pulse {
+		0% { transform: scale(1); }
+		50% { transform: scale(1.1); }
+		100% { transform: scale(1); }
+	}
+
+	.panier-indicateur.pulse {
+		animation: pulse 0.3s ease;
+	}
+
+</style>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Mentions légales
+    </h1>
+    <div class="post-description">
+      Mentions légales du site encompagniedesetoiles.fr
+    </div>
+    <div class="post-meta">
+
+</div>
+  </header> 
+  <div class="post-content"><h1 id="mentions-légales">Mentions légales<a hidden class="anchor" aria-hidden="true" href="#mentions-légales">#</a></h1>
+<p><strong>Version en vigueur au 26 juin 2025</strong><br>
+<strong>Site : encompagniedesetoiles.fr</strong></p>
+<hr>
+<h2 id="1-éditeur-du-site">1. Éditeur du site<a hidden class="anchor" aria-hidden="true" href="#1-éditeur-du-site">#</a></h2>
+<p>Le présent site est édité par :<br>
+<strong>Thierry AILLERET, Entrepreneur Individuel</strong><br>
+SIRET : 932 235 237 00017<br>
+📍 37 rue Lucien Carlier, 59240 DUNKERQUE, France<br>
+📧 <a href="mailto:encompagniedesetoiles@laposte.net">encompagniedesetoiles@laposte.net</a></p>
+<hr>
+<h2 id="2-hébergeur-du-site">2. Hébergeur du site<a hidden class="anchor" aria-hidden="true" href="#2-hébergeur-du-site">#</a></h2>
+<p>Le site encompagniedesetoiles.fr est hébergé par :<br>
+<strong>Netlify, Inc.</strong><br>
+📍 610 22nd Street, Suite 315, San Francisco, CA 94107, États-Unis<br>
+🌐 <a href="https://www.netlify.com">www.netlify.com</a></p>
+<hr>
+<h2 id="3-propriété-intellectuelle">3. Propriété intellectuelle<a hidden class="anchor" aria-hidden="true" href="#3-propriété-intellectuelle">#</a></h2>
+<p>L’ensemble des éléments présents sur le site (textes, images, photographies, graphismes, logos, noms de domaine, etc.) est la propriété exclusive de Thierry AILLERET, sauf mention contraire explicite.</p>
+<p>Toute reproduction, représentation, modification, publication, transmission ou dénaturation — totale ou partielle — est <strong>interdite sans autorisation écrite préalable</strong>.</p>
+<p>🚫 Toute utilisation non autorisée constitue une contrefaçon (articles L335-2 et suivants du Code de la propriété intellectuelle) et engage la responsabilité civile et pénale de son auteur.</p>
+<hr>
+<h2 id="4-ressources-tierces-polices-images">4. Ressources tierces (polices, images)<a hidden class="anchor" aria-hidden="true" href="#4-ressources-tierces-polices-images">#</a></h2>
+<p>Certaines ressources utilisées peuvent provenir de tiers et être soumises à des licences spécifiques :</p>
+<ul>
+<li>Les <strong>polices de caractères</strong> proviennent de bibliothèques libres ou sont utilisées selon leur licence.</li>
+<li>Les <strong>images et illustrations externes</strong> sont utilisées conformément à leurs droits d’usage (libres, achetés ou autorisés).
+<blockquote>
+<p>Les crédits éventuels sont précisés à proximité ou dans une section dédiée.</p></blockquote>
+</li>
+</ul>
+<p>📬 Toute demande de retrait ou de correction peut être adressée à <a href="mailto:encompagniedesetoiles@laposte.net">encompagniedesetoiles@laposte.net</a>.</p>
+<hr>
+<h2 id="5-clause-générale">5. Clause générale<a hidden class="anchor" aria-hidden="true" href="#5-clause-générale">#</a></h2>
+<p>Le présent site est conforme à la réglementation française et européenne en vigueur.<br>
+Toute anomalie, erreur ou contenu litigieux peut être signalé à l’éditeur via l’adresse mentionnée ci-dessus.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+		<span>&copy; 2025 <a href="http://localhost:1313/">En Compagnie des Étoiles</a></span> · 
+		<a href="/mentions-legales/">Mentions légales</a> ·  
+		<a href="/conditions-generales-vente/">CGV</a> · 
+		<a href="/politique-confidentialite/">Confidentialité</a> ·
+		<span class="info-cookie" title="Ce site ne dépose aucun cookie. Le panier fonctionne uniquement via le stockage local du navigateur.">
+			Zéro cookie, zéro suivi
+		</span>
+
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

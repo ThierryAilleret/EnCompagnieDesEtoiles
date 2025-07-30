@@ -1,0 +1,63 @@
+{{ define "main" }}
+<div class="product-gallery">
+  <h1>Nos Produits</h1>
+  <div class="product-grid">
+    {{ range .Pages }}
+      <a href="{{ .RelPermalink }}" class="product-item">
+        {{ if .Params.thumbnail }}
+          <img src="{{ .Params.thumbnail }}" alt="{{ .Params.thumbnail_alt }}" class="product-thumb" />
+        {{ end }}
+        <h2>{{ .Title }}</h2>
+        <p>{{ .Params.description }}</p>
+      </a>
+    {{ end }}
+  </div>
+</div>
+
+<style>
+	.product-gallery {
+		max-width: 1000px;
+		margin: 0 auto;
+		padding: 40px 20px;
+	}
+
+	.product-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 30px;
+	}
+
+	.product-item {
+		display: block;
+		text-decoration: none;
+		color: inherit;
+		border: 1px solid #eee;
+		padding: 20px;
+		text-align: center;
+		background-color: #fafafa;
+		transition: box-shadow 0.2s ease;
+	}
+
+	.product-item:hover {
+		box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+	}
+
+	.product-item h2 {
+		font-size: 1.2em;
+		margin: 10px 0;
+	}
+
+	.product-item p {
+		font-size: 1em;
+		color: #555;
+	}
+
+	.product-thumb {
+		max-width: 100%;
+		height: auto;
+		margin-bottom: 10px;
+		object-fit: cover;
+	}
+
+</style>
+{{ end }}

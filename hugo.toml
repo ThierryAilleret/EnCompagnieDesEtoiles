@@ -1,0 +1,8 @@
+baseURL = "https://encompagniedesetoiles.netlify.app/"
+languageCode = "FR-fr"
+title = "En Compagnie des Étoiles"
+theme = "PaperMod"
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true

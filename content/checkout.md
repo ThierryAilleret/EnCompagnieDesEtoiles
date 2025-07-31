@@ -315,6 +315,25 @@ function surveillerEtape1() {
   }
 }
 
+function verifierEtatPaiement() {
+    const panier = JSON.parse(localStorage.getItem("panier")) || [];
+    const boutonStripe = document.getElementById("checkout-button");
+
+    if (!boutonStripe) return;
+
+    if (panier.length === 0) {
+        boutonStripe.disabled = true;
+        boutonStripe.classList.add("bouton-verrouille");
+    } else {
+        boutonStripe.disabled = false;
+        boutonStripe.classList.remove("bouton-verrouille");
+    }
+}
+
+window.addEventListener("panierMisAJour", function () {
+    verifierEtatPaiement();
+});
+
 </script>
 
 <div class="checkout-wrapper">

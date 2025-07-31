@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><meta charset="UTF-8">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Finaliser ma commande</title>
 <meta name="description" content="">
@@ -35,7 +35,7 @@
 	<div class="header-container">
     <nav class="nav">
         <div class="logo">
-            <a href="https://encompagniedesetoiles.fr/" accesskey="h" class="site-title" title="En Compagnie des Étoiles (Alt + H)">En Compagnie des Étoiles<button id="theme-toggle" accesskey="t" title="Basculer le thème (Alt + T)" aria-label="Basculer le thème">
+            <a href="http://localhost:1313/" accesskey="h" class="site-title" title="En Compagnie des Étoiles (Alt + H)">En Compagnie des Étoiles<button id="theme-toggle" accesskey="t" title="Basculer le thème (Alt + T)" aria-label="Basculer le thème">
 							<svg id="moon-icon" class="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 								<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
 							</svg>
@@ -561,6 +561,25 @@ function surveillerEtape1() {
   }
 }
 
+function verifierEtatPaiement() {
+    const panier = JSON.parse(localStorage.getItem("panier")) || [];
+    const boutonStripe = document.getElementById("checkout-button");
+
+    if (!boutonStripe) return;
+
+    if (panier.length === 0) {
+        boutonStripe.disabled = true;
+        boutonStripe.classList.add("bouton-verrouille");
+    } else {
+        boutonStripe.disabled = false;
+        boutonStripe.classList.remove("bouton-verrouille");
+    }
+}
+
+window.addEventListener("panierMisAJour", function () {
+    verifierEtatPaiement();
+});
+
 </script>
 <div class="checkout-wrapper">
   <div class="checkout-left">
@@ -654,7 +673,7 @@ document.getElementById("checkout-button").addEventListener("click", function (e
     
 <footer class="footer">
 	<div class="footer-container">
-		<span>&copy; 2025 <a href="https://encompagniedesetoiles.fr/">En Compagnie des Étoiles</a></span> · 
+		<span>&copy; 2025 <a href="http://localhost:1313/">En Compagnie des Étoiles</a></span> · 
 		<a href="/mentions-legales/">Mentions légales</a> ·  
 		<a href="/conditions-generales-vente/">CGV</a> · 
 		<a href="/politique-confidentialite/">Confidentialité</a> ·

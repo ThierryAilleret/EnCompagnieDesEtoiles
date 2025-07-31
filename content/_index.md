@@ -14,7 +14,7 @@ Deux collections, un même esprit :
 
 - D’autres en **plexiglas transparent**, où la lumière danse sur des films irisés ou givrés.
 
-Et lorsque la nuit tombe, la magie opère : illuminés de l’intérieur, les luminaires révèlent un second visage. Le décor extérieur s’efface pour laisser place à un jeu de transparence et de projections. Sur le plafond, un ciel étoilé prend forme — comme une constellation privée.
+Et lorsque la nuit tombe, la magie opère : illuminés de l’intérieur, les luminaires révèlent un second visage. Le décor extérieur s’efface pour laisser place à un jeu de transparence et de projections. Sur le plafond, un ciel étoilé prend forme - comme une constellation privée.
 
 Des objets lumineux et singuliers, pensés pour apporter une touche d’élégance et de personnalité à votre intérieur, de jour comme de nuit.
 

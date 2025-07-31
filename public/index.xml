@@ -359,8 +359,28 @@ function surveillerEtape1() {
 					&lt;!-- Bouton pour lancer le widget --&gt;
 					&lt;button type=&#34;button&#34; id=&#34;bouton-relai&#34; class=&#34;bouton-relai&#34; style=&#34;display:none;&#34;&gt;📍 Choisir un Point Relais&lt;/button&gt;
 					&lt;!-- Zone d&#39;affichage du point relais choisi --&gt;
-					&lt;div id=&#34;relai-selectionne&#34; style=&#34;display:none; margin-top:1em;&#34;&gt;
-						&lt;p&gt;&lt;strong&gt;Relais sélectionné :&lt;/strong&gt;&lt;/p&gt;</description>
+					&lt;div id=&#34;relai-selectionne&#34; style=&#34;display:none; margin-top:0.5em; margin-bottom:0em;&#34;&gt;
+						&lt;div id=&#34;titre-relai-selectionne&#34;&gt;&lt;strong&gt;Relais sélectionné :&lt;/strong&gt;&lt;/div&gt;
+						&lt;div id=&#34;info-relai&#34;&gt;&lt;/div&gt;
+					&lt;/div&gt;
+        &lt;/div&gt;
+			&lt;/fieldset&gt;
+      &lt;!-- Étape 3 : Paiement --&gt;
+      &lt;fieldset id=&#34;step-3&#34; class=&#34;etape&#34;&gt;
+        &lt;legend&gt;&lt;span class=&#34;etape-numero&#34;&gt;3&lt;/span&gt; Paiement&lt;/legend&gt;
+        &lt;div id=&#34;prix-total&#34;&gt;Total : ... €&lt;/div&gt;
+				&lt;button type=&#34;button&#34; id=&#34;checkout-button&#34; class=&#34;bouton-checkout  bouton-verrouille&#34;&gt;
+          Payer avec Stripe
+        &lt;/button&gt;
+				&lt;script src=&#34;https://js.stripe.com/v3/&#34;&gt;&lt;/script&gt;
+      &lt;/fieldset&gt;
+    &lt;/form&gt;
+  &lt;/div&gt;
+	&lt;!-- Résumé commande --&gt;
+	&lt;div class=&#34;checkout-right&#34;&gt;
+		&lt;h3&gt;Résumé de la commande&lt;/h3&gt;
+		&lt;ul id=&#34;panier-resume&#34;&gt;&lt;/ul&gt;
+		&lt;p id=&#34;total-commande&#34;&gt;&lt;strong&gt;Total :&lt;/strong&gt; ... €&lt;/p&gt;</description>
     </item>
     <item>
       <title>Luminaire Carte vintage</title>

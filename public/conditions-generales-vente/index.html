@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="UTF-8">
+<head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Conditions Générales de Vente</title>
 <meta name="description" content="CGV applicables aux commandes sur le site encompagniedesetoiles.fr">
@@ -41,13 +41,18 @@ class PanierManager {
         this.init();
     }
 
-    init() {
-        this.attendreDOM(() => {
-            this.afficherCompteur();
-            this.revelerBouton();
-        });
-        window.addEventListener("pageshow", () => this.mettreAJourCompteur());
-    }
+		init() {
+				this.attendreDOM(() => {
+						this.afficherCompteur();
+						this.revelerBouton();
+				});
+
+				window.addEventListener("pageshow", () => this.mettreAJourCompteur());
+
+				
+				window.addEventListener("panierMisAJour", () => this.mettreAJourCompteur());
+		}
+
 
     attendreDOM(callback) {
         const interval = setInterval(() => {
@@ -75,6 +80,12 @@ class PanierManager {
         this.compteEl.textContent = total;
 
         this.styliserIndicateur(total);
+
+				const indicateurEl = document.getElementById("panier-toggle");
+				if (indicateurEl) {
+					indicateurEl.classList.add("pulse");
+					setTimeout(() => indicateurEl.classList.remove("pulse"), 300);
+				}
     }
 
     styliserIndicateur(total) {
@@ -97,23 +108,25 @@ window.addEventListener("DOMContentLoaded", () => {
 	<div class="header-container">
     <nav class="nav">
         <div class="logo">
-            <a href="http://localhost:1313/" accesskey="h" class="site-title" title="En Compagnie des Étoiles (Alt + H)">En Compagnie des Étoiles<button id="theme-toggle" accesskey="t" title="Basculer le thème (Alt + T)" aria-label="Basculer le thème">
-							<svg id="moon-icon" class="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-								<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-							</svg>
-							<svg id="sun-icon" class="theme-icon" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-								<circle cx="12" cy="12" r="5"></circle>
-								<line x1="12" y1="1" x2="12" y2="3"></line>
-								<line x1="12" y1="21" x2="12" y2="23"></line>
-								<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-								<line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-								<line x1="1" y1="12" x2="3" y2="12"></line>
-								<line x1="21" y1="12" x2="23" y2="12"></line>
-								<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-								<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-							</svg>
-						</button>						
-            </a>
+
+						<div class="site-header-content">
+								<a href="/" accesskey="h" class="site-title" title="En Compagnie des Étoiles (Alt + H)">En Compagnie des Étoiles</a>							<button id="theme-toggle" accesskey="t" title="Basculer le thème (Alt + T)" aria-label="Basculer le thème">
+								<svg id="moon-icon" class="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+									<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+								</svg>
+								<svg id="sun-icon" class="theme-icon" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+									<circle cx="12" cy="12" r="5"></circle>
+									<line x1="12" y1="1" x2="12" y2="3"></line>
+									<line x1="12" y1="21" x2="12" y2="23"></line>
+									<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+									<line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+									<line x1="1" y1="12" x2="3" y2="12"></line>
+									<line x1="21" y1="12" x2="23" y2="12"></line>
+									<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+									<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+								</svg>
+							</button>
+							</div>
             <div class="logo-switches">
             </div>
         </div>
@@ -158,6 +171,17 @@ window.addEventListener("DOMContentLoaded", () => {
 				
 				volet.classList.remove('actif');
 			} else {
+				
+				volet.classList.add('actif', 'slide-in');
+				afficherMiniPanier();
+				setTimeout(() => volet.classList.remove('slide-in'), 300);
+			}
+		}
+		function ouvrirPanier() {
+			const volet = document.getElementById('mini-panier');
+			const indicateur = document.getElementById('panier-toggle');
+
+			if (!volet.classList.contains('actif')) {
 				
 				volet.classList.add('actif', 'slide-in');
 				afficherMiniPanier();
@@ -382,7 +406,7 @@ Le vendeur se réserve le droit de <strong>modifier</strong> les CGV à tout mom
     
 <footer class="footer">
 	<div class="footer-container">
-		<span>&copy; 2025 <a href="http://localhost:1313/">En Compagnie des Étoiles</a></span> · 
+		<span>&copy; 2025 <a href="https://encompagniedesetoiles.fr/">En Compagnie des Étoiles</a></span> · 
 		<a href="/mentions-legales/">Mentions légales</a> ·  
 		<a href="/conditions-generales-vente/">CGV</a> · 
 		<a href="/politique-confidentialite/">Confidentialité</a> ·

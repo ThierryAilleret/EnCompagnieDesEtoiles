@@ -331,19 +331,32 @@ function surveillerEtape1() {
 }
 
 function verifierEtatPaiement() {
-    const panier = JSON.parse(localStorage.getItem(&#34;panier&#34;)) || [];
-    const boutonStripe = document.getElementById(&#34;checkout-button&#34;);
+  const panier = JSON.parse(localStorage.getItem(&#34;panier&#34;)) || [];
+  const boutonStripe = document.getElementById(&#34;checkout-button&#34;);
 
-    if (!boutonStripe) return;
+  const steps = [
+    document.getElementById(&#34;step-1&#34;),
+    document.getElementById(&#34;step-2&#34;),
+    document.getElementById(&#34;step-3&#34;)
+  ];
 
-    if (panier.length === 0) {
-        boutonStripe.disabled = true;
-        boutonStripe.classList.add(&#34;bouton-verrouille&#34;);
-    } else {
-        boutonStripe.disabled = false;
-        boutonStripe.classList.remove(&#34;bouton-verrouille&#34;);
-    }
+  if (!boutonStripe) return;
+
+  if (panier.length === 0) {
+    //boutonStripe.disabled = true;
+    //boutonStripe.classList.add(&#34;bouton-verrouille&#34;);
+
+    // ❌ Retire la classe actif pour les étapes
+    steps.forEach(step =&gt; step.classList.remove(&#34;actif&#34;));
+  } else {
+   //boutonStripe.disabled = false;
+    //boutonStripe.classList.remove(&#34;bouton-verrouille&#34;);
+
+    // ✅ Ajoute actif pour les étapes si l&#39;adresse est remplie
+    surveillerEtape1(); // Cela réactive step-2 et step-3 si conditions sont remplies
+  }
 }
+
 
 window.addEventListener(&#34;panierMisAJour&#34;, function () {
     verifierEtatPaiement();

@@ -316,19 +316,32 @@ function surveillerEtape1() {
 }
 
 function verifierEtatPaiement() {
-    const panier = JSON.parse(localStorage.getItem("panier")) || [];
-    const boutonStripe = document.getElementById("checkout-button");
+  const panier = JSON.parse(localStorage.getItem("panier")) || [];
+  const boutonStripe = document.getElementById("checkout-button");
 
-    if (!boutonStripe) return;
+  const steps = [
+    document.getElementById("step-1"),
+    document.getElementById("step-2"),
+    document.getElementById("step-3")
+  ];
 
-    if (panier.length === 0) {
-        boutonStripe.disabled = true;
-        boutonStripe.classList.add("bouton-verrouille");
-    } else {
-        boutonStripe.disabled = false;
-        boutonStripe.classList.remove("bouton-verrouille");
-    }
+  if (!boutonStripe) return;
+
+  if (panier.length === 0) {
+    //boutonStripe.disabled = true;
+    //boutonStripe.classList.add("bouton-verrouille");
+
+    // ❌ Retire la classe actif pour les étapes
+    steps.forEach(step => step.classList.remove("actif"));
+  } else {
+   //boutonStripe.disabled = false;
+    //boutonStripe.classList.remove("bouton-verrouille");
+
+    // ✅ Ajoute actif pour les étapes si l'adresse est remplie
+    surveillerEtape1(); // Cela réactive step-2 et step-3 si conditions sont remplies
+  }
 }
+
 
 window.addEventListener("panierMisAJour", function () {
     verifierEtatPaiement();

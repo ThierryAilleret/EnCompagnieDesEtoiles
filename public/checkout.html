@@ -30,28 +30,103 @@
     }
 
 </script>
+<script>
+class PanierManager {
+    constructor() {
+        this.indicateurEl = document.getElementById("panier-toggle");
+        this.compteEl = document.getElementById("panier-compte");
+        this.panierKey = "panier";
+        this.compteurKey = "compteurPanier";
 
+        this.init();
+    }
+
+		init() {
+				this.attendreDOM(() => {
+						this.afficherCompteur();
+						this.revelerBouton();
+				});
+
+				window.addEventListener("pageshow", () => this.mettreAJourCompteur());
+
+				
+				window.addEventListener("panierMisAJour", () => this.mettreAJourCompteur());
+		}
+
+
+    attendreDOM(callback) {
+        const interval = setInterval(() => {
+            if (this.compteEl && this.indicateurEl) {
+                clearInterval(interval);
+                callback();
+            }
+        }, 50);
+    }
+
+    afficherCompteur() {
+        const totalSauvegarde = localStorage.getItem(this.compteurKey);
+        this.compteEl.textContent = totalSauvegarde ?? "0";
+    }
+
+    revelerBouton() {
+        this.indicateurEl.classList.remove("masque");
+    }
+
+    mettreAJourCompteur() {
+        const panier = JSON.parse(localStorage.getItem(this.panierKey)) || [];
+        const total = panier.reduce((sum, item) => sum + item.quantite, 0);
+
+        localStorage.setItem(this.compteurKey, total);
+        this.compteEl.textContent = total;
+
+        this.styliserIndicateur(total);
+
+				const indicateurEl = document.getElementById("panier-toggle");
+				if (indicateurEl) {
+					indicateurEl.classList.add("pulse");
+					setTimeout(() => indicateurEl.classList.remove("pulse"), 300);
+				}
+    }
+
+    styliserIndicateur(total) {
+        if (total === 0) {
+            this.indicateurEl.style.background = "white";
+            this.indicateurEl.style.color = "black";
+        } else {
+            this.indicateurEl.style.background = "black";
+            this.indicateurEl.style.color = "white";
+        }
+    }
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    new PanierManager();
+});
+
+</script>
 <header class="header">
 	<div class="header-container">
     <nav class="nav">
         <div class="logo">
-            <a href="http://localhost:1313/" accesskey="h" class="site-title" title="En Compagnie des Étoiles (Alt + H)">En Compagnie des Étoiles<button id="theme-toggle" accesskey="t" title="Basculer le thème (Alt + T)" aria-label="Basculer le thème">
-							<svg id="moon-icon" class="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-								<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-							</svg>
-							<svg id="sun-icon" class="theme-icon" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-								<circle cx="12" cy="12" r="5"></circle>
-								<line x1="12" y1="1" x2="12" y2="3"></line>
-								<line x1="12" y1="21" x2="12" y2="23"></line>
-								<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-								<line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-								<line x1="1" y1="12" x2="3" y2="12"></line>
-								<line x1="21" y1="12" x2="23" y2="12"></line>
-								<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-								<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-							</svg>
-						</button>						
-            </a>
+
+						<div class="site-header-content">
+								<a href="http://localhost:1313/" accesskey="h" class="site-title" title="En Compagnie des Étoiles (Alt + H)">En Compagnie des Étoiles</a>							<button id="theme-toggle" accesskey="t" title="Basculer le thème (Alt + T)" aria-label="Basculer le thème">
+								<svg id="moon-icon" class="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+									<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+								</svg>
+								<svg id="sun-icon" class="theme-icon" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+									<circle cx="12" cy="12" r="5"></circle>
+									<line x1="12" y1="1" x2="12" y2="3"></line>
+									<line x1="12" y1="21" x2="12" y2="23"></line>
+									<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+									<line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+									<line x1="1" y1="12" x2="3" y2="12"></line>
+									<line x1="21" y1="12" x2="23" y2="12"></line>
+									<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+									<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+								</svg>
+							</button>
+							</div>
             <div class="logo-switches">
             </div>
         </div>
@@ -60,12 +135,12 @@
     </nav>
 
 		<button
-			id="panier-toggle"
-			class="panier-indicateur"
-			onclick="ouvrirOuFermerPanier()"
-			aria-label="Ouvrir ou fermer le panier"
+				id="panier-toggle"
+				class="panier-indicateur masque"
+				onclick="ouvrirOuFermerPanier()"
+				aria-label="Ouvrir ou fermer le panier"
 		>
-			🛒<span id="panier-compte">0</span>
+				🛒<span id="panier-compte">0</span>
 		</button>
 		
 		<div id="mini-panier" class="volet-panier">
@@ -95,24 +170,30 @@
 			if (volet.classList.contains('actif')) {
 				
 				volet.classList.remove('actif');
-				
 			} else {
 				
 				volet.classList.add('actif', 'slide-in');
-				
 				afficherMiniPanier();
 				setTimeout(() => volet.classList.remove('slide-in'), 300);
 			}
 		}
+		function ouvrirPanier() {
+			const volet = document.getElementById('mini-panier');
+			const indicateur = document.getElementById('panier-toggle');
 
-
+			if (!volet.classList.contains('actif')) {
+				
+				volet.classList.add('actif', 'slide-in');
+				afficherMiniPanier();
+				setTimeout(() => volet.classList.remove('slide-in'), 300);
+			}
+		}
 
 		function fermerPanier() {
 			const volet = document.getElementById('mini-panier');
 			const indicateur = document.getElementById('panier-toggle');
 
 			volet.classList.remove('actif');
-			if (indicateur) indicateur.classList.remove('panier-decale');
 		}
 
 		function afficherMiniPanier() {
@@ -169,7 +250,6 @@
 				localStorage.setItem("panier", JSON.stringify(panier));
 				window.dispatchEvent(new Event("panierMisAJour"));
 				afficherMiniPanier();
-				mettreAJourIndicateur(); 
 			}
 			const indicateurEl = document.getElementById("panier-toggle");
 			if (indicateurEl) {
@@ -178,14 +258,13 @@
 			}
 		}
 
-
 		function supprimerDuPanier(titre) {
 			const panier = JSON.parse(localStorage.getItem("panier")) || [];
 			const nouveau = panier.filter(p => p.titre !== titre);
 			localStorage.setItem("panier", JSON.stringify(nouveau));
-			window.dispatchEvent(new Event("panierMisAJour"));
 			afficherMiniPanier();
-			mettreAJourIndicateur(); 
+			window.dispatchEvent(new Event("panierMisAJour"));
+
 			
 			const indicateurEl = document.getElementById("panier-toggle");
 			if (indicateurEl) {
@@ -220,31 +299,6 @@
 
 			
 			fermerPanier();
-		});
-
-
-		function mettreAJourIndicateur() {
-			const panier = JSON.parse(localStorage.getItem("panier")) || [];
-			const total = panier.reduce((sum, item) => sum + item.quantite, 0);
-
-			const compteEl = document.getElementById("panier-compte");
-			const indicateurEl = document.getElementById("panier-toggle");
-
-			if (compteEl) compteEl.textContent = total;
-
-			if (indicateurEl) {
-				if (total === 0) {
-					indicateurEl.style.background = "white";
-					indicateurEl.style.color = "black";
-				} else {
-					indicateurEl.style.background = "black";
-					indicateurEl.style.color = "white";
-				}
-			}
-		}
-
-		window.addEventListener("pageshow", function () {
-			mettreAJourIndicateur();
 		});
 
 </script>
@@ -562,19 +616,32 @@ function surveillerEtape1() {
 }
 
 function verifierEtatPaiement() {
-    const panier = JSON.parse(localStorage.getItem("panier")) || [];
-    const boutonStripe = document.getElementById("checkout-button");
+  const panier = JSON.parse(localStorage.getItem("panier")) || [];
+  const boutonStripe = document.getElementById("checkout-button");
 
-    if (!boutonStripe) return;
+  const steps = [
+    document.getElementById("step-1"),
+    document.getElementById("step-2"),
+    document.getElementById("step-3")
+  ];
 
-    if (panier.length === 0) {
-        boutonStripe.disabled = true;
-        boutonStripe.classList.add("bouton-verrouille");
-    } else {
-        boutonStripe.disabled = false;
-        boutonStripe.classList.remove("bouton-verrouille");
-    }
+  if (!boutonStripe) return;
+
+  if (panier.length === 0) {
+    //boutonStripe.disabled = true;
+    //boutonStripe.classList.add("bouton-verrouille");
+
+    // ❌ Retire la classe actif pour les étapes
+    steps.forEach(step => step.classList.remove("actif"));
+  } else {
+   //boutonStripe.disabled = false;
+    //boutonStripe.classList.remove("bouton-verrouille");
+
+    // ✅ Ajoute actif pour les étapes si l'adresse est remplie
+    surveillerEtape1(); // Cela réactive step-2 et step-3 si conditions sont remplies
+  }
 }
+
 
 window.addEventListener("panierMisAJour", function () {
     verifierEtatPaiement();

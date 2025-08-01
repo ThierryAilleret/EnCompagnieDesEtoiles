@@ -109,7 +109,7 @@
 			images = collectGalleryImages();
 
 			// Panier visuel
-			mettreAJourIndicateur();
+			window.dispatchEvent(new Event("panierMisAJour"));
 		});
 
     function openModal(src, alt) {
@@ -172,58 +172,38 @@
 		}
 		
 		function ajouterAuPanier() {
-			const panier = JSON.parse(localStorage.getItem("panier")) || [];
+				const panier = JSON.parse(localStorage.getItem("panier")) || [];
 
-			const titre = document.querySelector("h1").textContent.trim();
-			const description = document.querySelector("h3").textContent.trim();
-			const prix = parseFloat("{{ .Params.price }}");
-			const monnaie = "{{ .Params.currency }}";
-			const image = "{{ .Params.thumbnail }}".startsWith("http")
-				? "{{ .Params.thumbnail }}"
-				: `https://encompagniedesetoiles.fr{{ .Params.thumbnail }}`;
+				const titre = document.querySelector("h1")?.textContent.trim() || "";
+				const description = document.querySelector("h3")?.textContent.trim() || "";
+				const prix = parseFloat("{{ .Params.price }}");
+				const monnaie = "{{ .Params.currency }}";
+				const image = "{{ .Params.thumbnail }}".startsWith("http")
+						? "{{ .Params.thumbnail }}"
+						: `https://encompagniedesetoiles.fr{{ .Params.thumbnail }}`;
 
-			// 🔍 Vérification avant ajout
-			if (isNaN(prix) || !monnaie || !titre) {
-				console.error("Article invalide – vérifie les données !");
-				alert("⚠️ Impossible d'ajouter cet article : données manquantes ou invalides.");
-				return;
-			}
+				// 🔍 Vérification
+				if (isNaN(prix) || !monnaie || !titre) {
+						console.error("Article invalide – vérifie les données !");
+						alert("⚠️ Impossible d'ajouter cet article : données manquantes ou invalides.");
+						return;
+				}
 
-			const index = panier.findIndex(p => p.titre === titre);
+				const index = panier.findIndex(p => p.titre === titre);
 
-			if (index >= 0) {
-				panier[index].quantite += 1;
-			} else {
-				panier.push({
-					titre,
-					description,
-					prix,
-					monnaie,
-					image,
-					quantite: 1
-				});
-			}
+				if (index >= 0) {
+						panier[index].quantite += 1;
+				} else {
+						panier.push({ titre, description, prix, monnaie, image, quantite: 1 });
+				}
 
-			localStorage.setItem("panier", JSON.stringify(panier));
-			mettreAJourIndicateur();
+				localStorage.setItem("panier", JSON.stringify(panier));
+				window.dispatchEvent(new Event("panierMisAJour")); // ✅ déclenche la mise à jour
+				
+				ouvrirPanier();
 
-			// 🛒 Ouvre le volet si fermé et déplace le logo
-			const volet = document.getElementById("mini-panier");
-			const indicateur = document.getElementById("panier-toggle");
-
-			if (!volet.classList.contains("actif")) {
-				volet.classList.add("actif", "slide-in");
-				setTimeout(() => volet.classList.remove("slide-in"), 300);
-			}
-
-			if (indicateur) {
-				//indicateur.classList.add("panier-decale"); // 👈 déplace le logo 🛒
-				indicateur.classList.add("pulse");
-				setTimeout(() => indicateur.classList.remove("pulse"), 300);
-			}
-
-			afficherMiniPanier();
 		}
+
 
   </script>
 {{ end }}

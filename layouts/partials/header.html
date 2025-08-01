@@ -120,7 +120,7 @@ window.addEventListener("DOMContentLoaded", () => {
             {{- if site.Title }}
 
 						<div class="site-header-content">
-								<a href="{{ "" | absLangURL }}" accesskey="h" class="site-title" title="{{ $label_text }} (Alt + H)">
+								<a href="{{ "/" | relURL }}" accesskey="h" class="site-title" title="{{ $label_text }} (Alt + H)">
 										{{- if site.Params.label.icon }}
 										{{- $img := resources.Get site.Params.label.icon }}
 										{{- if $img }}

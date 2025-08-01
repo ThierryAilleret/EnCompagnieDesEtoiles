@@ -183,10 +183,20 @@ function afficherPopupMondialRelay() {
 
 	// Fermeture si clic à l'extérieur du conteneur
 	popup.addEventListener("click", function(e) {
-		if (!conteneur.contains(e.target)) {
-			close.click(); // Simule le clic sur le bouton croix
+		const estDansWidget = conteneur.contains(e.target);
+		const conteneurAuto = document.querySelector(".PR-AutoCplCity");
+		const estDansAutocomplete = conteneurAuto?.contains(e.target);
+
+		const estDansSuggestion = e.target.closest(".PR-City") !== null;
+
+		if (!estDansWidget && !estDansAutocomplete && !estDansSuggestion) {
+			console.log("on ferme");
+			close.click();
 		}
 	});
+
+
+
 
 	// Fermeture avec Échap ou Entrée
 	window.addEventListener("keydown", function(e) {
@@ -413,7 +423,7 @@ document.getElementById("checkout-button").addEventListener("click", function (e
     ...item,
     monnaie: item.monnaie === "€" ? "eur" : item.monnaie
   }));
-
+	
   fetch("https://encompagniedesetoiles.fr/.netlify/functions/creer-session-checkout", {
     method: "POST",
     headers: { "Content-Type": "application/json" },

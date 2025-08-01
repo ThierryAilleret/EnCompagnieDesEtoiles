@@ -190,7 +190,6 @@ function afficherPopupMondialRelay() {
 		const estDansSuggestion = e.target.closest(".PR-City") !== null;
 
 		if (!estDansWidget && !estDansAutocomplete && !estDansSuggestion) {
-			console.log("on ferme");
 			close.click();
 		}
 	});

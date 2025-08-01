@@ -825,13 +825,13 @@ select {
   overflow-y: auto;
 }
 
-.PR-AutoCplCity {
+body.dark .PR-AutoCplCity {
   background-color: #1e1e1e !important;  /* Fond sombre */
   color: #e0e0e0 !important;            /* Texte gris clair */
   border: 1px solid #555;              /* Optionnel : contour discret */
 }
 
-.PR-City {
+body.dark .PR-City {
   color: #dcdcdc !important;           /* Suggestions bien lisibles */
 }
 

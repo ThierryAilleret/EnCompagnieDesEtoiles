@@ -198,10 +198,20 @@ function afficherPopupMondialRelay() {
 
 	// Fermeture si clic à l&#39;extérieur du conteneur
 	popup.addEventListener(&#34;click&#34;, function(e) {
-		if (!conteneur.contains(e.target)) {
-			close.click(); // Simule le clic sur le bouton croix
+		const estDansWidget = conteneur.contains(e.target);
+		const conteneurAuto = document.querySelector(&#34;.PR-AutoCplCity&#34;);
+		const estDansAutocomplete = conteneurAuto?.contains(e.target);
+
+		const estDansSuggestion = e.target.closest(&#34;.PR-City&#34;) !== null;
+
+		if (!estDansWidget &amp;&amp; !estDansAutocomplete &amp;&amp; !estDansSuggestion) {
+			console.log(&#34;on ferme&#34;);
+			close.click();
 		}
 	});
+
+
+
 
 	// Fermeture avec Échap ou Entrée
 	window.addEventListener(&#34;keydown&#34;, function(e) {

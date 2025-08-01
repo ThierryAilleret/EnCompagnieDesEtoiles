@@ -414,7 +414,7 @@ document.getElementById("checkout-button").addEventListener("click", function (e
     monnaie: item.monnaie === "€" ? "eur" : item.monnaie
   }));
 
-  fetch("https://encompagniedesetoiles.netlify.app/.netlify/functions/creer-session-checkout", {
+  fetch("https://encompagniedesetoiles.fr/.netlify/functions/creer-session-checkout", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ panier })

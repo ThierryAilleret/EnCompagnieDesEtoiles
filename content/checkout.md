@@ -374,6 +374,7 @@ window.addEventListener("panierMisAJour", function () {
 					<div id="autocomplete-container"></div>
 				</div>
         <label>Complément d'addresse :<br><input type="text" name="complement_adresse" /></label>
+        <label>Mail :<br><input type="text" name="mail" id="mail" required /></label>
 			</fieldset>
       <!-- Étape 2 : Livraison -->
       <fieldset id="step-2" class="etape">

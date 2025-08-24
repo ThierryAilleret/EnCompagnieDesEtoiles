@@ -6,7 +6,7 @@ Bienvenue **En Compagnie des Étoiles !**
 
 Des luminaires artisanaux conçus comme des pièces uniques, à la croisée du design, de l’artisanat et de la géométrie.
 
-Chaque création est composée de 60 éléments identiques, assemblés à la main pour former une sphère parfaite. Un défi géométrique rendu possible grâce à pas mal de calcul et de lignes de code informatique. Oui, c’est de l’art… et un peu de maths aussi !
+Chaque création est composée de 60 pièces identiques, assemblées à la main pour former une sphère parfaite. Un défi géométrique rendu possible grâce à pas mal de calcul et de lignes de code informatique. Oui, c’est de l’art… et un peu de maths aussi !
 
 Deux collections, un même esprit :
 

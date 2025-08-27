@@ -88,9 +88,9 @@ function afficherPanierDansCheckout() {
 		const li = document.createElement(&#34;li&#34;);
 		li.innerHTML = `
 			&lt;div style=&#34;display:flex; gap:10px; margin-bottom:10px;&#34;&gt;
-				&lt;img src=&#34;${article.image}&#34; alt=&#34;${article.titre}&#34; style=&#34;height:48px; width:auto; border-radius:4px;&#34;&gt;
+				&lt;img src=&#34;${article.image}&#34; alt=&#34;${article.nom}&#34; style=&#34;height:48px; width:auto; border-radius:4px;&#34;&gt;
 				&lt;div&gt;
-					&lt;strong&gt;${article.titre}&lt;/strong&gt;&lt;br&gt;
+					&lt;strong&gt;${article.nom}&lt;/strong&gt;&lt;br&gt;
 					&lt;span style=&#34;font-size:0.9em;&#34;&gt;${article.description}&lt;/span&gt;&lt;br&gt;
 					&lt;span&gt;${article.quantite} × ${article.prix}${article.monnaie}&lt;/span&gt;
 				&lt;/div&gt;

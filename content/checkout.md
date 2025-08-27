@@ -73,9 +73,9 @@ function afficherPanierDansCheckout() {
 		const li = document.createElement("li");
 		li.innerHTML = `
 			<div style="display:flex; gap:10px; margin-bottom:10px;">
-				<img src="${article.image}" alt="${article.titre}" style="height:48px; width:auto; border-radius:4px;">
+				<img src="${article.image}" alt="${article.nom}" style="height:48px; width:auto; border-radius:4px;">
 				<div>
-					<strong>${article.titre}</strong><br>
+					<strong>${article.nom}</strong><br>
 					<span style="font-size:0.9em;">${article.description}</span><br>
 					<span>${article.quantite} × ${article.prix}${article.monnaie}</span>
 				</div>

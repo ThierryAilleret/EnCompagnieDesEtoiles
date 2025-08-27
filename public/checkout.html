@@ -208,15 +208,15 @@ window.addEventListener("DOMContentLoaded", () => {
 				const bloc = document.createElement("div");
 				bloc.className = "item-panier";
 				bloc.innerHTML = `
-					<img src="${item.image}" alt="${item.titre}">
+					<img src="${item.image}" alt="${item.nom}">
 					<div class="info-item">
-						<strong>${item.titre}</strong><br>
+						<strong>${item.nom}</strong><br>
 						${item.quantite} × ${item.prix} €
 						<div class="quantite-controls">
-							<button onclick="modifierQuantite('${item.titre}', 1)">+</button>
-							<button onclick="modifierQuantite('${item.titre}', -1)">−</button>
+							<button onclick="modifierQuantite('${item.nom}', 1)">+</button>
+							<button onclick="modifierQuantite('${item.nom}', -1)">−</button>
 						</div>
-						<button class="btn-supprimer" onclick="supprimerDuPanier('${item.titre}')" aria-label="Retirer du panier">
+						<button class="btn-supprimer" onclick="supprimerDuPanier('${item.nom}')" aria-label="Retirer du panier">
 							🗑️
 						</button>
 					</div>
@@ -239,9 +239,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
 		}
 
-		function modifierQuantite(titre, delta) {
+		function modifierQuantite(nom, delta) {
 			const panier = JSON.parse(localStorage.getItem("panier")) || [];
-			const index = panier.findIndex(p => p.titre === titre);
+			const index = panier.findIndex(p => p.nom === nom);
 			if (index >= 0) {
 				panier[index].quantite += delta;
 				if (panier[index].quantite <= 0) {
@@ -258,9 +258,9 @@ window.addEventListener("DOMContentLoaded", () => {
 			}
 		}
 
-		function supprimerDuPanier(titre) {
+		function supprimerDuPanier(nom) {
 			const panier = JSON.parse(localStorage.getItem("panier")) || [];
-			const nouveau = panier.filter(p => p.titre !== titre);
+			const nouveau = panier.filter(p => p.nom !== nom);
 			localStorage.setItem("panier", JSON.stringify(nouveau));
 			afficherMiniPanier();
 			window.dispatchEvent(new Event("panierMisAJour"));
@@ -373,9 +373,9 @@ function afficherPanierDansCheckout() {
 		const li = document.createElement("li");
 		li.innerHTML = `
 			<div style="display:flex; gap:10px; margin-bottom:10px;">
-				<img src="${article.image}" alt="${article.titre}" style="height:48px; width:auto; border-radius:4px;">
+				<img src="${article.image}" alt="${article.nom}" style="height:48px; width:auto; border-radius:4px;">
 				<div>
-					<strong>${article.titre}</strong><br>
+					<strong>${article.nom}</strong><br>
 					<span style="font-size:0.9em;">${article.description}</span><br>
 					<span>${article.quantite} × ${article.prix}${article.monnaie}</span>
 				</div>

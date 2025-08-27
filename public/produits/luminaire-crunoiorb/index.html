@@ -208,15 +208,15 @@ window.addEventListener("DOMContentLoaded", () => {
 				const bloc = document.createElement("div");
 				bloc.className = "item-panier";
 				bloc.innerHTML = `
-					<img src="${item.image}" alt="${item.titre}">
+					<img src="${item.image}" alt="${item.nom}">
 					<div class="info-item">
-						<strong>${item.titre}</strong><br>
+						<strong>${item.nom}</strong><br>
 						${item.quantite} × ${item.prix} €
 						<div class="quantite-controls">
-							<button onclick="modifierQuantite('${item.titre}', 1)">+</button>
-							<button onclick="modifierQuantite('${item.titre}', -1)">−</button>
+							<button onclick="modifierQuantite('${item.nom}', 1)">+</button>
+							<button onclick="modifierQuantite('${item.nom}', -1)">−</button>
 						</div>
-						<button class="btn-supprimer" onclick="supprimerDuPanier('${item.titre}')" aria-label="Retirer du panier">
+						<button class="btn-supprimer" onclick="supprimerDuPanier('${item.nom}')" aria-label="Retirer du panier">
 							🗑️
 						</button>
 					</div>
@@ -239,9 +239,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
 		}
 
-		function modifierQuantite(titre, delta) {
+		function modifierQuantite(nom, delta) {
 			const panier = JSON.parse(localStorage.getItem("panier")) || [];
-			const index = panier.findIndex(p => p.titre === titre);
+			const index = panier.findIndex(p => p.nom === nom);
 			if (index >= 0) {
 				panier[index].quantite += delta;
 				if (panier[index].quantite <= 0) {
@@ -258,9 +258,9 @@ window.addEventListener("DOMContentLoaded", () => {
 			}
 		}
 
-		function supprimerDuPanier(titre) {
+		function supprimerDuPanier(nom) {
 			const panier = JSON.parse(localStorage.getItem("panier")) || [];
-			const nouveau = panier.filter(p => p.titre !== titre);
+			const nouveau = panier.filter(p => p.nom !== nom);
 			localStorage.setItem("panier", JSON.stringify(nouveau));
 			afficherMiniPanier();
 			window.dispatchEvent(new Event("panierMisAJour"));
@@ -478,7 +478,7 @@ window.addEventListener("DOMContentLoaded", () => {
 		function ajouterAuPanier() {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
 
-				const titre = document.querySelector("h1")?.textContent.trim() || "";
+				const nom = document.querySelector("h1")?.textContent.trim() || "";
 				const description = document.querySelector("h3")?.textContent.trim() || "";
 				const prix = parseFloat("150");
 				const monnaie = "€";
@@ -487,18 +487,18 @@ window.addEventListener("DOMContentLoaded", () => {
 						: `https://encompagniedesetoiles.fr\/images\/CRUNOIORB_1.jpg`;
 
 				
-				if (isNaN(prix) || !monnaie || !titre) {
+				if (isNaN(prix) || !monnaie || !nom) {
 						console.error("Article invalide – vérifie les données !");
 						alert("⚠️ Impossible d'ajouter cet article : données manquantes ou invalides.");
 						return;
 				}
 
-				const index = panier.findIndex(p => p.titre === titre);
+				const index = panier.findIndex(p => p.nom === nom);
 
 				if (index >= 0) {
 						panier[index].quantite += 1;
 				} else {
-						panier.push({ titre, description, prix, monnaie, image, quantite: 1 });
+						panier.push({ nom, description, prix, monnaie, image, quantite: 1 });
 				}
 
 				localStorage.setItem("panier", JSON.stringify(panier));

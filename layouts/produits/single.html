@@ -174,7 +174,7 @@
 		function ajouterAuPanier() {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
 
-				const titre = document.querySelector("h1")?.textContent.trim() || "";
+				const nom = document.querySelector("h1")?.textContent.trim() || "";
 				const description = document.querySelector("h3")?.textContent.trim() || "";
 				const prix = parseFloat("{{ .Params.price }}");
 				const monnaie = "{{ .Params.currency }}";
@@ -183,18 +183,18 @@
 						: `https://encompagniedesetoiles.fr{{ .Params.thumbnail }}`;
 
 				// 🔍 Vérification
-				if (isNaN(prix) || !monnaie || !titre) {
+				if (isNaN(prix) || !monnaie || !nom) {
 						console.error("Article invalide – vérifie les données !");
 						alert("⚠️ Impossible d'ajouter cet article : données manquantes ou invalides.");
 						return;
 				}
 
-				const index = panier.findIndex(p => p.titre === titre);
+				const index = panier.findIndex(p => p.nom === nom);
 
 				if (index >= 0) {
 						panier[index].quantite += 1;
 				} else {
-						panier.push({ titre, description, prix, monnaie, image, quantite: 1 });
+						panier.push({ nom, description, prix, monnaie, image, quantite: 1 });
 				}
 
 				localStorage.setItem("panier", JSON.stringify(panier));

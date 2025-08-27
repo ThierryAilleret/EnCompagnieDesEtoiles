@@ -2,8 +2,6 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async (event) => {
   try {
-    console.log("Clé Stripe:", process.env.STRIPE_SECRET_KEY);
-
     const { panier } = JSON.parse(event.body);
     console.log("Panier reçu:", panier);
     console.log("Création session Stripe...");

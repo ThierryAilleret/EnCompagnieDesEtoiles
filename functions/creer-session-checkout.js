@@ -16,6 +16,7 @@ exports.handler = async (event) => {
           currency: item.monnaie,
           product_data: {
             name: item.nom,
+						description: "Description du produit",
           },
           unit_amount: Math.round(item.prix * 100),
         },

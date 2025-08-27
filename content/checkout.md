@@ -439,10 +439,10 @@ document.getElementById("checkout-button").addEventListener("click", function (e
     const stripe = Stripe("pk_test_51RkqVwGEPWcc8pKFZevbWerlrXRo1mIBwK9XfkO2eFBn9ulLVVXhpvozeHjDM7D3Xdu9hm3oUdTLhMO9UZfbPIYI00OmhDMt0o");
     stripe.redirectToCheckout({ sessionId: data.sessionId });
   })
-  .catch(error => {
-    console.error("💥 Erreur Stripe :", error);
-    alert("Une erreur est survenue pendant la création du paiement. Vérifie ton panier et réessaie.");
-  });
+	.catch(error => {
+		console.error("💥 Erreur Stripe :", error);
+		alert("Erreur : " + error.message); // Affiche le message exact
+	});
 });
 
 </script>

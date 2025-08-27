@@ -2,7 +2,11 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async (event) => {
   try {
+    console.log("Clé Stripe:", process.env.STRIPE_SECRET_KEY);
+
     const { panier } = JSON.parse(event.body);
+    console.log("Panier reçu:", panier);
+    console.log("Création session Stripe...");
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -13,7 +17,7 @@ exports.handler = async (event) => {
           product_data: {
             name: item.nom,
           },
-          unit_amount: Math.round(item.prix * 100), // prix en centimes
+          unit_amount: Math.round(item.prix * 100),
         },
         quantity: item.quantite || 1,
       })),
@@ -23,13 +27,20 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({ sessionId: session.id }),
     };
   } catch (err) {
     console.error("Stripe error:", err);
+    console.error("Stack:", err.stack);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: err.message }),
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ error: err.message || "Erreur inconnue" })
     };
   }
 };

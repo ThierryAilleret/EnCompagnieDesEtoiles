@@ -333,9 +333,7 @@ function remplirAdresseGeo(item) {
 	localStorage.setItem(&#39;codePostal&#39;, cp);
 	localStorage.setItem(&#39;ville&#39;, ville);
 
-  // Affiche ou masque les points relais
-	const boutonrelai = document.getElementById(&#34;bouton-relai&#34;);
-	boutonrelai.style.display = &#34;inline-block&#34;;
+
 
   window.adresseGoogleValidee = true;
   surveillerEtape1();
@@ -355,6 +353,9 @@ function surveillerEtape1() {
 
   if (etape_1_complete) {
     etape2.classList.add(&#34;actif&#34;);
+	  // Affiche ou masque les points relais
+		const boutonrelai = document.getElementById(&#34;bouton-relai&#34;);
+		boutonrelai.style.display = &#34;inline-block&#34;;
   } else {
     etape2.classList.remove(&#34;actif&#34;);
   }

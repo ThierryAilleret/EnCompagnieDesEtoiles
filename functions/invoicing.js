@@ -19,13 +19,13 @@ exports.handler = async (event) => {
       const panier = session.metadata ? JSON.parse(session.metadata.panier) : [];
 
       for (const item of panier) {
-        await stripe.invoiceItems.create({
-          customer: session.customer,
-          description: item.nom,
-          amount: Math.round(item.prix * 100),
-          currency: item.monnaie,
-          quantity: item.quantite || 1,
-        });
+				await stripe.invoiceItems.create({
+					customer: session.customer,
+					description: item.nom,
+					unit_amount: Math.round(item.prix * 100), // ✅ prix unitaire
+					currency: item.monnaie,
+					quantity: item.quantite || 1,
+				});
       }
 
       // 3. Créer et finaliser la facture

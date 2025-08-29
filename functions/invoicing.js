@@ -22,7 +22,7 @@ exports.handler = async (event) => {
 				await stripe.invoiceItems.create({
 					customer: session.customer,
 					description: item.nom,
-					unit_amount: Math.round(item.prix * 100), // ✅ prix unitaire
+					unit_amount_decimal: String(Math.round(item.prix * 100)), // ✅ prix unitaire
 					currency: item.monnaie,
 					quantity: item.quantite || 1,
 				});

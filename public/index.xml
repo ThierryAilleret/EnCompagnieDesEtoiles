@@ -346,11 +346,12 @@ function surveillerEtape1() {
   const nom     = document.getElementById(&#34;nom&#34;).value.trim();
   const prenom  = document.getElementById(&#34;prenom&#34;).value.trim();
   const adresse = document.getElementById(&#34;adresse&#34;).value.trim();
+  const mail = document.getElementById(&#34;mail&#34;).value.trim();
 
   const etape1 = document.getElementById(&#34;step-1&#34;);
   const etape2 = document.getElementById(&#34;step-2&#34;);
 
-  const etape_1_complete = nom &amp;&amp; prenom &amp;&amp; adresse;
+  const etape_1_complete = nom &amp;&amp; prenom &amp;&amp; adresse &amp;&amp; mail;
 
   if (etape_1_complete) {
     etape2.classList.add(&#34;actif&#34;);

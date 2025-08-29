@@ -311,11 +311,12 @@ function surveillerEtape1() {
   const nom     = document.getElementById("nom").value.trim();
   const prenom  = document.getElementById("prenom").value.trim();
   const adresse = document.getElementById("adresse").value.trim();
+  const mail = document.getElementById("mail").value.trim();
 
   const etape1 = document.getElementById("step-1");
   const etape2 = document.getElementById("step-2");
 
-  const etape_1_complete = nom && prenom && adresse;
+  const etape_1_complete = nom && prenom && adresse && mail;
 
   if (etape_1_complete) {
     etape2.classList.add("actif");

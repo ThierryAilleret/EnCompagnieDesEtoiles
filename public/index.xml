@@ -8,6 +8,26 @@
     <language>FR-fr</language>
     <atom:link href="https://encompagniedesetoiles.fr/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Commande annulée</title>
+      <link>https://encompagniedesetoiles.fr/cancel.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://encompagniedesetoiles.fr/cancel.html</guid>
+      <description>&lt;h1&gt;😕 Paiement annulé&lt;/h1&gt;
+&lt;p&gt;Il semble que vous ayez annulé le processus de paiement.&lt;/p&gt;
+&lt;p&gt;Si c&#39;était une erreur, vous pouvez réessayer à tout moment.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://encompagniedesetoiles.fr/&#34;&gt;Retour à la boutique&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Commande réussie</title>
+      <link>https://encompagniedesetoiles.fr/success.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://encompagniedesetoiles.fr/success.html</guid>
+      <description>&lt;h1&gt;🎉 Merci pour votre commande !&lt;/h1&gt;
+&lt;p&gt;Votre paiement a été effectué avec succès.&lt;/p&gt;
+&lt;p&gt;Nous préparons votre commande avec soin et vous tiendrons informé(e) par email.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://encompagniedesetoiles.fr/&#34;&gt;Retour à l&#39;accueil&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
       <title>Conditions Générales de Vente</title>
       <link>https://encompagniedesetoiles.fr/conditions-generales-vente/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>

@@ -3,8 +3,8 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 exports.handler = async (event) => {
   try {
     const { panier } = JSON.parse(event.body);
-    console.log("Panier reçu:", panier);
-    console.log("Création session Stripe...");
+    // console.log("Panier reçu:", panier);
+    // console.log("Création session Stripe...");
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],

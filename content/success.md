@@ -1,5 +1,5 @@
 +++  
-title = "Commande réussie"  
+title = "Commande validée"  
 url    = "/success.html"
 layout = "post_checkout"
 +++

@@ -2,7 +2,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async (event) => {
   try {
-    const { panier } = JSON.parse(event.body);
+    const { panier, client } = JSON.parse(event.body);
     // console.log("Panier reçu:", panier);
     // console.log("Création session Stripe...");
 
@@ -22,6 +22,17 @@ exports.handler = async (event) => {
       })),
       success_url: "https://encompagniedesetoiles.fr/success",
       cancel_url: "https://encompagniedesetoiles.fr/cancel",
+			
+	     // ✅ Ajout du panier dans metadata pour le webhook
+			metadata: {
+				panier: JSON.stringify(panier),
+				nomClient: client.nom,
+				prenomClient: client.prenom,
+				emailClient: client.email,
+				adresseClient: client.adresse,
+				complement: client.complement,
+				pointRelais: client.pointRelais
+			}
     });
 
     return {

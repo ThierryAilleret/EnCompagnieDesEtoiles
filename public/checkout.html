@@ -672,7 +672,7 @@ window.addEventListener("panierMisAJour", function () {
 					</label>
 					<div id="autocomplete-container"></div>
 				</div>
-        <label>Complément d'addresse :<br><input type="text" name="complement_adresse" /></label>
+        <label>Complément d'addresse :<br><input type="text" name="complement_adresse" id="complement_adresse"/></label>
         <label>Mail :<br><input type="text" name="mail" id="mail" required /></label>
 			</fieldset>
       <!-- Étape 2 : Livraison -->
@@ -722,10 +722,21 @@ document.getElementById("checkout-button").addEventListener("click", function (e
     monnaie: item.monnaie === "€" ? "eur" : item.monnaie
   }));
 	
+	//Récupère les données client
+	const client = {
+		nom: document.getElementById("nom").value.trim(),
+		prenom: document.getElementById("prenom").value.trim(),
+		email: document.getElementById("mail").value.trim(),
+		adresse: document.getElementById("adresse").value.trim(),
+		complement: document.getElementById("complement_adresse").value.trim(),
+		pointRelais: window._pointRelaisAdresse || ""
+	};
+
+	
   fetch("https://encompagniedesetoiles.fr/.netlify/functions/creer-session-checkout", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ panier })
+    body: JSON.stringify({ panier, client })
   })
   .then(response => {
     if (!response.ok) throw new Error("Réponse serveur non valide");

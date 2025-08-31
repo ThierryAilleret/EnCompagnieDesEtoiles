@@ -24,8 +24,43 @@
       <guid>https://encompagniedesetoiles.fr/success.html</guid>
       <description>&lt;p&gt;Merci pour votre commande !&lt;/p&gt;
 &lt;p&gt;Votre paiement a été effectué avec succès.&lt;/p&gt;
-&lt;p&gt;Nous préparons votre commande avec soin et vous tiendrons informé(e) par email.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://encompagniedesetoiles.fr/&#34;&gt;Retour à l&amp;rsquo;accueil&lt;/a&gt;&lt;/p&gt;</description>
+&lt;p&gt;Nous préparons votre commande avec soin et vous informerons par email.&lt;/p&gt;
+&lt;div id=&#34;facture-container&#34; style=&#34;margin-top:2em;&#34;&gt;&lt;/div&gt;
+&lt;p&gt;&lt;a href=&#34;https://encompagniedesetoiles.fr/&#34;&gt;Retour à l&amp;rsquo;accueil&lt;/a&gt;&lt;/p&gt;
+&lt;script&gt;
+document.addEventListener(&#34;DOMContentLoaded&#34;, async () =&gt; {
+  // Récupérer l&#39;ID de session Stripe stocké localement
+  const sessionId = localStorage.getItem(&#34;stripeSessionId&#34;);
+  if (!sessionId) return;
+
+  try {
+    const res = await fetch(&#34;/.netlify/functions/get-invoice-url&#34;, {
+      method: &#34;POST&#34;,
+      headers: { &#34;Content-Type&#34;: &#34;application/json&#34; },
+      body: JSON.stringify({ sessionId })
+    });
+
+    const data = await res.json();
+    if (data.invoiceUrl) {
+      const lien = document.createElement(&#34;a&#34;);
+      lien.href = data.invoiceUrl;
+      lien.textContent = &#34;📄 Télécharger votre facture&#34;;
+      lien.target = &#34;_blank&#34;;
+      lien.style.display = &#34;inline-block&#34;;
+      lien.style.marginTop = &#34;1em&#34;;
+      lien.style.fontWeight = &#34;bold&#34;;
+      lien.style.color = &#34;#2e7d32&#34;;
+
+      document.getElementById(&#34;facture-container&#34;).appendChild(lien);
+    }
+  } catch (err) {
+    console.error(&#34;Erreur récupération facture :&#34;, err);
+  }
+	
+	// Nettoyage, on supprime stripeSessionId
+	localStorage.removeItem(&#34;stripeSessionId&#34;);
+});
+&lt;/script&gt;</description>
     </item>
     <item>
       <title>Conditions Générales de Vente</title>

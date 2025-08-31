@@ -35,6 +35,13 @@ exports.handler = async (event) => {
       });
 
       await stripe.invoices.finalizeInvoice(invoice.id);
+			
+			// 4. Stocker l'URL dans le client pour la retrouver plus tard
+			await stripe.customers.update(session.customer, {
+				metadata: {
+					invoice_url: invoice.hosted_invoice_url
+				}
+			});
     }
 
     return { statusCode: 200 };

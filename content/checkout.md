@@ -418,6 +418,7 @@ window.addEventListener("panierMisAJour", function () {
 document.getElementById("checkout-button").addEventListener("click", function (event) {
   event.preventDefault(); // Empêche la soumission du formulaire
 
+  // Récupération du panier
   let panier = JSON.parse(localStorage.getItem("panier")) || [];
 
   // Normaliser la monnaie pour Stripe
@@ -425,18 +426,26 @@ document.getElementById("checkout-button").addEventListener("click", function (e
     ...item,
     monnaie: item.monnaie === "€" ? "eur" : item.monnaie
   }));
-	
-	//Récupère les données client
-	const client = {
-		nom: document.getElementById("nom").value.trim(),
-		prenom: document.getElementById("prenom").value.trim(),
-		email: document.getElementById("mail").value.trim(),
-		adresse: document.getElementById("adresse").value.trim(),
-		complement: document.getElementById("complement_adresse").value.trim(),
-		pointRelais: window._pointRelaisAdresse || ""
-	};
 
-	
+  // Récupération des données client depuis le formulaire
+  const client = {
+    nom: document.getElementById("nom").value.trim(),
+    prenom: document.getElementById("prenom").value.trim(),
+    email: document.getElementById("mail").value.trim(),
+    adresse: document.getElementById("adresse").value.trim(),
+    complement: document.querySelector("[name='complement_adresse']").value.trim(),
+    codePostal: localStorage.getItem("codePostal") || "",
+    ville: localStorage.getItem("ville") || "",
+    pointRelais: window._pointRelaisAdresse || ""
+  };
+
+  // Vérification minimale
+  if (!client.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(client.email)) {
+    alert("Veuillez entrer une adresse email valide.");
+    return;
+  }
+
+  // Envoi au backend
   fetch("https://encompagniedesetoiles.fr/.netlify/functions/creer-session-checkout", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -449,13 +458,16 @@ document.getElementById("checkout-button").addEventListener("click", function (e
   .then(data => {
     if (!data.sessionId) throw new Error("Session Stripe non reçue");
 
+    // ✅ Stocker l'ID de session pour la page success
+    localStorage.setItem("stripeSessionId", data.sessionId);
+
+    // Redirection vers Stripe Checkout
     const stripe = Stripe("pk_test_51RkqVwGEPWcc8pKFZevbWerlrXRo1mIBwK9XfkO2eFBn9ulLVVXhpvozeHjDM7D3Xdu9hm3oUdTLhMO9UZfbPIYI00OmhDMt0o");
     stripe.redirectToCheckout({ sessionId: data.sessionId });
   })
-	.catch(error => {
-		console.error("💥 Erreur Stripe :", error);
-		alert("Erreur : " + error.message); // Affiche le message exact
-	});
+  .catch(error => {
+    console.error("💥 Erreur Stripe :", error);
+    alert("Erreur : " + error.message);
+  });
 });
-
 </script>

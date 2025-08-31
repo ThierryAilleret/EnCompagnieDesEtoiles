@@ -25,46 +25,7 @@
       <description>&lt;p&gt;Merci pour votre commande !&lt;/p&gt;
 &lt;p&gt;Votre paiement a été effectué avec succès.&lt;/p&gt;
 &lt;p&gt;Nous préparons votre commande avec soin et vous informerons par email.&lt;/p&gt;
-&lt;div id=&#34;facture-container&#34; style=&#34;margin-top:2em;&#34;&gt;&lt;/div&gt;
-&lt;p&gt;&lt;a href=&#34;https://encompagniedesetoiles.fr/&#34;&gt;Retour à l&amp;rsquo;accueil&lt;/a&gt;&lt;/p&gt;
-&lt;script&gt;
-document.addEventListener(&#34;DOMContentLoaded&#34;, async () =&gt; {
-
-	console.log(&#34;Session récupérée sur success :&#34;, localStorage.getItem(&#34;stripeSessionId&#34;));
-
-  // Récupérer l&#39;ID de session Stripe stocké localement
-  const sessionId = localStorage.getItem(&#34;stripeSessionId&#34;);	
-
-  if (!sessionId) return;
-
-  try {
-    const res = await fetch(&#34;/.netlify/functions/get-invoice-url&#34;, {
-      method: &#34;POST&#34;,
-      headers: { &#34;Content-Type&#34;: &#34;application/json&#34; },
-      body: JSON.stringify({ sessionId })
-    });
-
-    const data = await res.json();
-    if (data.invoiceUrl) {
-      const lien = document.createElement(&#34;a&#34;);
-      lien.href = data.invoiceUrl;
-      lien.textContent = &#34;📄 Télécharger votre facture&#34;;
-      lien.target = &#34;_blank&#34;;
-      lien.style.display = &#34;inline-block&#34;;
-      lien.style.marginTop = &#34;1em&#34;;
-      lien.style.fontWeight = &#34;bold&#34;;
-      lien.style.color = &#34;#2e7d32&#34;;
-
-      document.getElementById(&#34;facture-container&#34;).appendChild(lien);
-    }
-  } catch (err) {
-    console.error(&#34;Erreur récupération facture :&#34;, err);
-  }
-	
-	// Nettoyage, on supprime stripeSessionId
-	localStorage.removeItem(&#34;stripeSessionId&#34;);
-});
-&lt;/script&gt;</description>
+&lt;p&gt;&lt;a href=&#34;https://encompagniedesetoiles.fr/&#34;&gt;Retour à l&amp;rsquo;accueil&lt;/a&gt;&lt;/p&gt;</description>
     </item>
     <item>
       <title>Conditions Générales de Vente</title>
@@ -86,6 +47,14 @@ document.addEventListener(&#34;DOMContentLoaded&#34;, async () =&gt; {
 &lt;!-- Autocomplétion d&#39;adresse via Geoportail --&gt;
 &lt;script&gt;
 document.addEventListener(&#34;DOMContentLoaded&#34;, () =&gt; {
+
+  // 🔁 Surveille les champs nom, prénom, adresse, mail
+  [&#34;nom&#34;, &#34;prenom&#34;, &#34;adresse&#34;, &#34;mail&#34;].forEach(id =&gt; {
+    const champ = document.getElementById(id);
+    if (champ) {
+      champ.addEventListener(&#34;input&#34;, surveillerEtape1);
+    }
+  });
 
   const adresseInput = document.getElementById(&#34;adresse&#34;);
   const cpInput      = document.getElementById(&#34;code-postal&#34;);
@@ -375,7 +344,6 @@ function remplirAdresseGeo(item) {
 
 
   window.adresseGoogleValidee = true;
-  surveillerEtape1();
 
 }
 

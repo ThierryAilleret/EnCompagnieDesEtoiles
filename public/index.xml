@@ -29,8 +29,12 @@
 &lt;p&gt;&lt;a href=&#34;https://encompagniedesetoiles.fr/&#34;&gt;Retour à l&amp;rsquo;accueil&lt;/a&gt;&lt;/p&gt;
 &lt;script&gt;
 document.addEventListener(&#34;DOMContentLoaded&#34;, async () =&gt; {
+
+	console.log(&#34;Session récupérée sur success :&#34;, localStorage.getItem(&#34;stripeSessionId&#34;));
+
   // Récupérer l&#39;ID de session Stripe stocké localement
-  const sessionId = localStorage.getItem(&#34;stripeSessionId&#34;);
+  const sessionId = localStorage.getItem(&#34;stripeSessionId&#34;);	
+
   if (!sessionId) return;
 
   try {

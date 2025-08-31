@@ -758,6 +758,8 @@ document.getElementById("checkout-button").addEventListener("click", function (e
 
     // ✅ Stocker l'ID de session pour la page success
     localStorage.setItem("stripeSessionId", data.sessionId);
+		console.log("Session enregistrée :", data.sessionId);
+
 
     // Redirection vers Stripe Checkout
     const stripe = Stripe("pk_test_51RkqVwGEPWcc8pKFZevbWerlrXRo1mIBwK9XfkO2eFBn9ulLVVXhpvozeHjDM7D3Xdu9hm3oUdTLhMO9UZfbPIYI00OmhDMt0o");

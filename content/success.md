@@ -15,8 +15,12 @@ Nous préparons votre commande avec soin et vous informerons par email.
 
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
+
+	console.log("Session récupérée sur success :", localStorage.getItem("stripeSessionId"));
+
   // Récupérer l'ID de session Stripe stocké localement
-  const sessionId = localStorage.getItem("stripeSessionId");
+  const sessionId = localStorage.getItem("stripeSessionId");	
+
   if (!sessionId) return;
 
   try {

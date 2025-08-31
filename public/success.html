@@ -313,8 +313,12 @@ window.addEventListener("DOMContentLoaded", () => {
 <p><a href="/">Retour à l&rsquo;accueil</a></p>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
+
+	console.log("Session récupérée sur success :", localStorage.getItem("stripeSessionId"));
+
   // Récupérer l'ID de session Stripe stocké localement
-  const sessionId = localStorage.getItem("stripeSessionId");
+  const sessionId = localStorage.getItem("stripeSessionId");	
+
   if (!sessionId) return;
 
   try {

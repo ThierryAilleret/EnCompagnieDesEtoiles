@@ -216,16 +216,14 @@
 
 		function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
-				const index = panier.findIndex(p => p.stripeProduct === stripeProduct);
-				const quantiteActuelle = index >= 0 ? panier[index].quantite : 0;
+				const quantiteDisponible = fetchInventory(stripeProduct);
 
 				// 🧾 Log de diagnostic
-				console.log(`🛒 Quantité actuelle dans le panier : ${quantiteActuelle}`);
-				console.log(`📦 Stock disponible : ${stockDisponible}`);
+				console.log(`📦 Stock disponible : ${quantiteDisponible}`);
 				console.log(`📥 Quantité demandée : ${quantiteDemandee}`);
 
 				// Vérifie si la quantité demandée dépasse le stock
-				if (quantiteDemandee > stockDisponible) {
+				if (quantiteDemandee > quantiteDisponible) {
 						alert("⚠️ Stock insuffisant : quantité demandée supérieure au stock disponible.");
 						return false;
 				}

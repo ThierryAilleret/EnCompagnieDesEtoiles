@@ -547,7 +547,6 @@ window.addEventListener("DOMContentLoaded", () => {
 		async function fetchInventory(stripeProduct) {
 				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
 				const data = await response.json();
-				console.log(data);
 				stockDisponible = parseInt(data.inventory, 10);
 
 				return stockDisponible;
@@ -555,7 +554,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
 		
 		async function fetchInventoryCurrentProduct() {
-				const stockDisponible = fetchInventory("prod_SzuiT9mIfW0bYZ")
+				const response = await fetch(`/.netlify/functions/getInventory?product=` + "prod_SzuiT9mIfW0bYZ");
+				const data = await response.json();
+				stockDisponible = parseInt(data.inventory, 10);
+				
 				document.getElementById("stock-display").textContent = stockDisponible;
 				
 				if (stockDisponible <= 0) {

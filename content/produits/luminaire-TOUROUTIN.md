@@ -1,5 +1,5 @@
 +++
-draft = false
+product = "TOUROUTIN"
 title = "Luminaire Tintin"
 thumbnail = "/images/TOUROUTIN_1.jpg"
 thumbnail_alt = "Description de l'image miniature du Luminaire Tintin"

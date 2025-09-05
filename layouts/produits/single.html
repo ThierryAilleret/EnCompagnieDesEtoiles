@@ -48,7 +48,7 @@
 					<li><strong>Fabriqué à :</strong> Dunkerque, France</li>
 				</ul>
 			</div>
-
+			<p>Stock disponible : <span id="stock-display">Chargement...</span></p>
 			<p>Prix : {{ .Params.price }} {{ .Params.currency }}</p>
 			<button class="btn-add-to-cart" onclick="ajouterAuPanier()">Ajouter au panier</button>
 		</article>
@@ -174,8 +174,9 @@
 		function ajouterAuPanier() {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
 
-				const nom = document.querySelector("h1")?.textContent.trim() || "";
-				const description = document.querySelector("h3")?.textContent.trim() || "";
+				const produit = "{{ .Params.product }}";
+				const nom = "{{ .Params.title }}";//document.querySelector("h1")?.textContent.trim() || "";
+				const description = "{{ .Params.description }}";//document.querySelector("h3")?.textContent.trim() || "";
 				const prix = parseFloat("{{ .Params.price }}");
 				const monnaie = "{{ .Params.currency }}";
 				const image = "{{ .Params.thumbnail }}".startsWith("http")
@@ -194,16 +195,25 @@
 				if (index >= 0) {
 						panier[index].quantite += 1;
 				} else {
-						panier.push({ nom, description, prix, monnaie, image, quantite: 1 });
+						panier.push({ produit, nom, description, prix, monnaie, image, quantite: 1 });
 				}
 
 				localStorage.setItem("panier", JSON.stringify(panier));
 				window.dispatchEvent(new Event("panierMisAJour")); // ✅ déclenche la mise à jour
 				
+				afficherMiniPanier();
 				ouvrirPanier();
 
 		}
 
+	//Récupération du stock sur Stripe
+  async function fetchInventory(productId) {
+		const produit = "{{ .Params.product }}";
+    const response = await fetch(`/.netlify/functions/getInventory?product=`+produit);
+    const data = await response.json();
+    document.getElementById("stock-display").textContent = data.inventory;
+  }
 
-  </script>
+  fetchInventory("CARJAUDRA");
+</script>
 {{ end }}

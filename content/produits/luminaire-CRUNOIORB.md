@@ -1,5 +1,5 @@
 +++
-draft = false
+product = "CRUNOIORB"
 title = "Luminaire Nuit Étoilée"
 thumbnail = "/images/CRUNOIORB_1.jpg"
 thumbnail_alt = "Description de l'image miniature du Luminaire Nuit Étoilée"

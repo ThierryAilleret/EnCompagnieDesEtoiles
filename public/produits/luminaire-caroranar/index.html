@@ -355,7 +355,7 @@ window.addEventListener("DOMContentLoaded", () => {
 					<li><strong>Fabriqué à :</strong> Dunkerque, France</li>
 				</ul>
 			</div>
-
+			<p>Stock disponible : <span id="stock-display">Chargement...</span></p>
 			<p>Prix : 150 €</p>
 			<button class="btn-add-to-cart" onclick="ajouterAuPanier()">Ajouter au panier</button>
 		</article>
@@ -481,8 +481,9 @@ window.addEventListener("DOMContentLoaded", () => {
 		function ajouterAuPanier() {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
 
-				const nom = document.querySelector("h1")?.textContent.trim() || "";
-				const description = document.querySelector("h3")?.textContent.trim() || "";
+				const produit = "CARORANAR";
+				const nom = "Luminaire Naruto";
+				const description = "Sphère lumineuse en carton coloré et planches de manga (Naruto)";
 				const prix = parseFloat("150");
 				const monnaie = "€";
 				const image = "\/images\/CARORANAR_1.jpg".startsWith("http")
@@ -501,18 +502,27 @@ window.addEventListener("DOMContentLoaded", () => {
 				if (index >= 0) {
 						panier[index].quantite += 1;
 				} else {
-						panier.push({ nom, description, prix, monnaie, image, quantite: 1 });
+						panier.push({ produit, nom, description, prix, monnaie, image, quantite: 1 });
 				}
 
 				localStorage.setItem("panier", JSON.stringify(panier));
 				window.dispatchEvent(new Event("panierMisAJour")); 
 				
+				afficherMiniPanier();
 				ouvrirPanier();
 
 		}
 
+	
+  async function fetchInventory(productId) {
+		const produit = "CARORANAR";
+    const response = await fetch(`/.netlify/functions/getInventory?product=`+produit);
+    const data = await response.json();
+    document.getElementById("stock-display").textContent = data.inventory;
+  }
 
-  </script>
+  fetchInventory("CARJAUDRA");
+</script>
 
     </main>
     

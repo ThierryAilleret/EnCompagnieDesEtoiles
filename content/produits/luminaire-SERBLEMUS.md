@@ -1,5 +1,5 @@
 +++
-draft = false
+product = "SERBLEMUS"
 title = "Luminaire Maestro"
 thumbnail = "/images/SERBLEMUS_1.jpg"
 thumbnail_alt = "Description de l'image miniature du Luminaire Maestro"

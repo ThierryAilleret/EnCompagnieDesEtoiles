@@ -1,5 +1,5 @@
 +++
-draft = false
+product = "CARORANAR"
 title = "Luminaire Naruto"
 thumbnail = "/images/CARORANAR_1.jpg"
 thumbnail_alt = "Description de l'image miniature du Luminaire Naruto"

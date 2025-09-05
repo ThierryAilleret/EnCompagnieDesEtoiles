@@ -1,4 +1,5 @@
 +++
+product = "TOUROUMUS"
 title = "Luminaire Lyra"
 thumbnail = "/images/TOUROUMUS_1.jpg"
 thumbnail_alt = "Description de l'image miniature du Luminaire Lyra"

@@ -3,8 +3,8 @@
 
 <head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luminaire Dragon Ball</title>
-<meta name="description" content="Sphère lumineuse en carton coloré et planches de manga (Dragon Ball)">
+<title>Luminaire Manga</title>
+<meta name="description" content="Sphère lumineuse en carton coloré et planches de manga">
 
 
 <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
@@ -306,8 +306,8 @@ window.addEventListener("DOMContentLoaded", () => {
 	<div class="single-container">
 		<article>
 		
-			<h1>Luminaire Dragon Ball</h1>
-			<h3>Sphère lumineuse en carton coloré et planches de manga (Dragon Ball)</h3>
+			<h1>Luminaire Manga</h1>
+			<h3>Sphère lumineuse en carton coloré et planches de manga</h3>
 
 			
 			<div class="gallery-container">
@@ -322,8 +322,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
 				<div class="gallery">
 					
-						<img src="/images/CARJAUDRA_1.jpg" alt="Description de l&#39;image miniature du Luminaire Dragon Ball"
-								 onclick="openModal('\/images\/CARJAUDRA_1.jpg','Description de l\u0027image miniature du Luminaire Dragon Ball')">
+						<img src="/images/CARJAUDRA_1.jpg" alt="Description de l&#39;image miniature du Luminaire Manga"
+								 onclick="openModal('\/images\/CARJAUDRA_1.jpg','Description de l\u0027image miniature du Luminaire Manga')">
 					
 					
 						<img src="/images/CARJAUDRA_2.jpg" alt=""
@@ -346,7 +346,7 @@ window.addEventListener("DOMContentLoaded", () => {
 			</div>
 
 			<div class="fiche-texte">
-				<p>Le <b>luminaire Dragon Ball</b> est une pièce unique en carton coloré, habillée de planches d'un vieux manga récupéré en fin de vide grenier (pour les experts, c'est Dragon Ball, l'enfance de Goku, en couleur).<br>Assemblé à partir de 60 éléments identiques, il forme une sphère parfaite dont les entrelacements dessinent un motif en étoile, visible de jour comme de nuit.<br>Éteint, c’est un objet de décoration sculptural. Éclairé, il révèle son intérieur et projette un discret ciel étoilé au plafond.</p>
+				<p>Le <b>luminaire Manga</b> est une pièce unique en carton coloré, habillée de planches d'un vieux manga récupéré en fin de vide grenier.<br>Assemblé à partir de 60 éléments identiques, il forme une sphère parfaite dont les entrelacements dessinent un motif en étoile, visible de jour comme de nuit.<br>Éteint, c’est un objet de décoration sculptural. Éclairé, il révèle son intérieur et projette un discret ciel étoilé au plafond.</p>
 				<ul>
 					<li><strong>Dimensions :</strong> diamètre 30 cm</li>
 					<li><strong>Matériaux :</strong> carton, planches de manga, clips plastique</li>
@@ -355,7 +355,7 @@ window.addEventListener("DOMContentLoaded", () => {
 					<li><strong>Fabriqué à :</strong> Dunkerque, France</li>
 				</ul>
 			</div>
-
+			<p>Stock disponible : <span id="stock-display">Chargement...</span></p>
 			<p>Prix : 150 €</p>
 			<button class="btn-add-to-cart" onclick="ajouterAuPanier()">Ajouter au panier</button>
 		</article>
@@ -481,8 +481,9 @@ window.addEventListener("DOMContentLoaded", () => {
 		function ajouterAuPanier() {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
 
-				const nom = document.querySelector("h1")?.textContent.trim() || "";
-				const description = document.querySelector("h3")?.textContent.trim() || "";
+				const produit = "CARJAUDRA";
+				const nom = "Luminaire Manga";
+				const description = "Sphère lumineuse en carton coloré et planches de manga";
 				const prix = parseFloat("150");
 				const monnaie = "€";
 				const image = "\/images\/CARJAUDRA_1.jpg".startsWith("http")
@@ -501,18 +502,27 @@ window.addEventListener("DOMContentLoaded", () => {
 				if (index >= 0) {
 						panier[index].quantite += 1;
 				} else {
-						panier.push({ nom, description, prix, monnaie, image, quantite: 1 });
+						panier.push({ produit, nom, description, prix, monnaie, image, quantite: 1 });
 				}
 
 				localStorage.setItem("panier", JSON.stringify(panier));
 				window.dispatchEvent(new Event("panierMisAJour")); 
 				
+				afficherMiniPanier();
 				ouvrirPanier();
 
 		}
 
+	
+  async function fetchInventory(productId) {
+		const produit = "CARJAUDRA";
+    const response = await fetch(`/.netlify/functions/getInventory?product=`+produit);
+    const data = await response.json();
+    document.getElementById("stock-display").textContent = data.inventory;
+  }
 
-  </script>
+  fetchInventory("CARJAUDRA");
+</script>
 
     </main>
     

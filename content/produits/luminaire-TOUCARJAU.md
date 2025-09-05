@@ -1,5 +1,5 @@
 +++
-draft = false
+product = "TOUCARJAU"
 title = "Luminaire Carte vintage"
 thumbnail = "/images/TOUCARJAU_1.jpg"
 thumbnail_alt = "Description de l'image miniature du Luminaire Carte vintage"

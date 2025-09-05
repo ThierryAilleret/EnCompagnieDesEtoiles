@@ -1,5 +1,5 @@
 +++
-draft = false
+product = "TOUROSSWA"
 title = "Luminaire du Côté de chez Swann"
 thumbnail = "/images/TOUROSSWA_1.jpg"
 thumbnail_alt = "Description de l'image miniature du Luminaire Swann"

@@ -327,10 +327,8 @@ window.addEventListener(&#34;panierMisAJour&#34;, function () {
               &lt;input type=&#34;text&#34; id=&#34;code-postal&#34; name=&#34;code-postal&#34; maxlength=&#34;5&#34; style=&#34;display:none;&#34;&gt;
               &lt;input type=&#34;text&#34; id=&#34;ville&#34; name=&#34;ville&#34;  style=&#34;display:none;&#34;&gt;
           &lt;/div&gt;
-					&lt;!-- Bouton pour lancer le widget --&gt;
-					&lt;!--&lt;button type=&#34;button&#34; id=&#34;bouton-relai&#34; class=&#34;bouton-relai&#34; style=&#34;display:none;&#34;&gt;📍 Choisir un Point Relais&lt;/button&gt;--&gt;
 					&lt;!-- Zone d’intégration directe du widget Mondial Relay --&gt;
-					&lt;div id=&#34;zone-widget-relai&#34; style=&#34;display:none; margin-top:1em;&#34;&gt;
+					&lt;div id=&#34;zone-widget-relai&#34; style=&#34;display:none; margin-top:0em;&#34;&gt;
 						&lt;div id=&#34;Zone_Widget&#34;&gt;&lt;/div&gt;
 						&lt;input type=&#34;hidden&#34; id=&#34;Target_Widget&#34; name=&#34;point-relay&#34; /&gt;
 					&lt;/div&gt;

@@ -745,19 +745,18 @@ window.addEventListener("panierMisAJour", function () {
 						<div id="Zone_Widget"></div>
 						<input type="hidden" id="Target_Widget" name="point-relay" />
 					</div>
-<pre><code>    &lt;/div&gt;
-		&lt;/fieldset&gt;
-  &lt;!-- Étape 3 : Paiement --&gt;
-  &lt;fieldset id=&quot;step-3&quot; class=&quot;etape&quot;&gt;
-    &lt;legend&gt;&lt;span class=&quot;etape-numero&quot;&gt;3&lt;/span&gt; Paiement&lt;/legend&gt;
-    &lt;div id=&quot;prix-total&quot;&gt;Total : ... €&lt;/div&gt;
-			&lt;button type=&quot;button&quot; id=&quot;checkout-button&quot; class=&quot;bouton-checkout  bouton-verrouille&quot;&gt;
-      Payer avec Stripe
-    &lt;/button&gt;
-			&lt;script src=&quot;https://js.stripe.com/v3/&quot;&gt;&lt;/script&gt;
-  &lt;/fieldset&gt;
-&lt;/form&gt;
-</code></pre>
+        </div>
+			</fieldset>
+      <!-- Étape 3 : Paiement -->
+      <fieldset id="step-3" class="etape">
+        <legend><span class="etape-numero">3</span> Paiement</legend>
+        <div id="prix-total">Total : ... €</div>
+				<button type="button" id="checkout-button" class="bouton-checkout  bouton-verrouille">
+          Payer avec Stripe
+        </button>
+				<script src="https://js.stripe.com/v3/"></script>
+      </fieldset>
+    </form>
   </div>
 	<!-- Résumé commande -->
 	<div class="checkout-right">

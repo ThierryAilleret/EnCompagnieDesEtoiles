@@ -481,19 +481,18 @@ window.addEventListener(&#34;panierMisAJour&#34;, function () {
 						&lt;div id=&#34;Zone_Widget&#34;&gt;&lt;/div&gt;
 						&lt;input type=&#34;hidden&#34; id=&#34;Target_Widget&#34; name=&#34;point-relay&#34; /&gt;
 					&lt;/div&gt;
-&lt;pre&gt;&lt;code&gt;    &amp;lt;/div&amp;gt;
-		&amp;lt;/fieldset&amp;gt;
-  &amp;lt;!-- Étape 3 : Paiement --&amp;gt;
-  &amp;lt;fieldset id=&amp;quot;step-3&amp;quot; class=&amp;quot;etape&amp;quot;&amp;gt;
-    &amp;lt;legend&amp;gt;&amp;lt;span class=&amp;quot;etape-numero&amp;quot;&amp;gt;3&amp;lt;/span&amp;gt; Paiement&amp;lt;/legend&amp;gt;
-    &amp;lt;div id=&amp;quot;prix-total&amp;quot;&amp;gt;Total : ... €&amp;lt;/div&amp;gt;
-			&amp;lt;button type=&amp;quot;button&amp;quot; id=&amp;quot;checkout-button&amp;quot; class=&amp;quot;bouton-checkout  bouton-verrouille&amp;quot;&amp;gt;
-      Payer avec Stripe
-    &amp;lt;/button&amp;gt;
-			&amp;lt;script src=&amp;quot;https://js.stripe.com/v3/&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-  &amp;lt;/fieldset&amp;gt;
-&amp;lt;/form&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
+        &lt;/div&gt;
+			&lt;/fieldset&gt;
+      &lt;!-- Étape 3 : Paiement --&gt;
+      &lt;fieldset id=&#34;step-3&#34; class=&#34;etape&#34;&gt;
+        &lt;legend&gt;&lt;span class=&#34;etape-numero&#34;&gt;3&lt;/span&gt; Paiement&lt;/legend&gt;
+        &lt;div id=&#34;prix-total&#34;&gt;Total : ... €&lt;/div&gt;
+				&lt;button type=&#34;button&#34; id=&#34;checkout-button&#34; class=&#34;bouton-checkout  bouton-verrouille&#34;&gt;
+          Payer avec Stripe
+        &lt;/button&gt;
+				&lt;script src=&#34;https://js.stripe.com/v3/&#34;&gt;&lt;/script&gt;
+      &lt;/fieldset&gt;
+    &lt;/form&gt;
   &lt;/div&gt;
 	&lt;!-- Résumé commande --&gt;
 	&lt;div class=&#34;checkout-right&#34;&gt;

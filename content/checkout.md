@@ -439,7 +439,6 @@ window.addEventListener("panierMisAJour", function () {
 						<div id="Zone_Widget"></div>
 						<input type="hidden" id="Target_Widget" name="point-relay" />
 					</div>
-
         </div>
 			</fieldset>
       <!-- Étape 3 : Paiement -->

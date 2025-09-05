@@ -335,7 +335,7 @@ window.addEventListener(&#34;panierMisAJour&#34;, function () {
 						&lt;input type=&#34;hidden&#34; id=&#34;Target_Widget&#34; name=&#34;point-relay&#34; /&gt;
 					&lt;/div&gt;
 					&lt;!-- Zone d&#39;affichage du point relais choisi --&gt;
-					&lt;div id=&#34;relai-selectionne&#34; style=&#34;display:none; margin-top:0.5em; margin-bottom:0em;&#34;&gt;
+					&lt;div id=&#34;relai-selectionne&#34; style=&#34;display:none; margin-top:0.5em; margin-bottom:0.5em; margin-bottom:0em;&#34;&gt;
 						&lt;div id=&#34;titre-relai-selectionne&#34;&gt;&lt;strong&gt;Relais sélectionné :&lt;/strong&gt;&lt;/div&gt;
 						&lt;div id=&#34;info-relai&#34;&gt;&lt;/div&gt;
 					&lt;/div&gt;
@@ -347,7 +347,7 @@ window.addEventListener(&#34;panierMisAJour&#34;, function () {
       &lt;!-- Étape 3 : Paiement --&gt;
       &lt;fieldset id=&#34;step-3&#34; class=&#34;etape&#34;&gt;
         &lt;legend&gt;&lt;span class=&#34;etape-numero&#34;&gt;3&lt;/span&gt; Paiement&lt;/legend&gt;
-        &lt;div id=&#34;prix-total&#34;&gt;Total : ... €&lt;/div&gt;
+        &lt;div id=&#34;prix-total&#34; style=&#34;display:none&#34;&gt;Total : ... €&lt;/div&gt;
 				&lt;button type=&#34;button&#34; id=&#34;checkout-button&#34; class=&#34;bouton-checkout  bouton-verrouille&#34; style=&#34;display:none&#34;&gt;
           Payer avec Stripe
         &lt;/button&gt;

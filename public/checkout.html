@@ -599,7 +599,7 @@ window.addEventListener("panierMisAJour", function () {
 						<input type="hidden" id="Target_Widget" name="point-relay" />
 					</div>
 					<!-- Zone d'affichage du point relais choisi -->
-					<div id="relai-selectionne" style="display:none; margin-top:0.5em; margin-bottom:0em;">
+					<div id="relai-selectionne" style="display:none; margin-top:0.5em; margin-bottom:0.5em; margin-bottom:0em;">
 						<div id="titre-relai-selectionne"><strong>Relais sélectionné :</strong></div>
 						<div id="info-relai"></div>
 					</div>
@@ -611,7 +611,7 @@ window.addEventListener("panierMisAJour", function () {
       <!-- Étape 3 : Paiement -->
       <fieldset id="step-3" class="etape">
         <legend><span class="etape-numero">3</span> Paiement</legend>
-        <div id="prix-total">Total : ... €</div>
+        <div id="prix-total" style="display:none">Total : ... €</div>
 				<button type="button" id="checkout-button" class="bouton-checkout  bouton-verrouille" style="display:none">
           Payer avec Stripe
         </button>
@@ -633,10 +633,13 @@ document.getElementById("validation-relais-button").addEventListener("click", fu
 	const etape3 = document.getElementById("step-3");
 	etape3.classList.add("actif");
 	
+	const prixTotal = document.getElementById("prix-total");
+	prixTotal.style.display = "block";
+
 	const boutonPaiement = document.getElementById("checkout-button");
 	boutonPaiement.classList.remove("bouton-verrouille");
 	boutonPaiement.style.display = "block";
-	
+
 });
 document.getElementById("checkout-button").addEventListener("click", function (event) {
   event.preventDefault(); // Empêche la soumission du formulaire

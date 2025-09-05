@@ -515,7 +515,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 	
   async function fetchInventory(productId) {
-		const produit = "prod_SzsotNIdMOc9tS";
+		const produit = "prod_Szt6zvf1SoR67P";
     const response = await fetch(`/.netlify/functions/getInventory?product=`+produit);
     const data = await response.json();
     document.getElementById("stock-display").textContent = data.inventory;

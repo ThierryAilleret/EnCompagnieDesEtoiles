@@ -216,7 +216,10 @@
 
 		function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
-				const quantiteDisponible = fetchInventory(stripeProduct);
+
+				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
+				const data = await response.json();
+				quantiteDisponible = parseInt(data.inventory, 10);
 
 				// 🧾 Log de diagnostic
 				console.log(`📦 Stock disponible : ${quantiteDisponible}`);
@@ -231,15 +234,6 @@
 				return true;
 		}
 
-		//Récupération du stock sur Stripe
-		async function fetchInventory(stripeProduct) {
-				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
-				const data = await response.json();
-				stockDisponible = parseInt(data.inventory, 10);
-				console.log(`Stock pour le stripeProduct ${stripeProduct} :  ${stockDisponible} `);
-
-				return stockDisponible;
-		}
 
 		//Récupération du stock sur Stripe
 		async function fetchInventoryCurrentProduct() {

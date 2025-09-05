@@ -214,11 +214,11 @@
 
 		}
 
-		async function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
+		function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
 
-				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
-				const data = await response.json();
+				const response = fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
+				const data = response.json();
 				quantiteDisponible = parseInt(data.inventory, 10);
 
 				// 🧾 Log de diagnostic

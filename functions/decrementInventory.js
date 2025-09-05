@@ -1,69 +1,49 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-exports.handler = async function(event, context) {
-  if (event.httpMethod !== 'POST') {
-    return {
-      statusCode: 405,
-      body: 'Méthode non autorisée'
-    };
-  }
+exports.handler = async (event) => {
+  const sig = event.headers["stripe-signature"];
+  const endpointSecret = process.env.STRIPE_WEBHOOK_DECREMENT_INVENTORY_SECRET;
 
-  let body;
-  try {
-    body = JSON.parse(event.body);
-  } catch (err) {
-    return {
-      statusCode: 400,
-      body: 'Corps de requête invalide'
-    };
-  }
-
-  const sessionId = body.sessionId;
-  if (!sessionId) {
-    return {
-      statusCode: 400,
-      body: 'sessionId manquant'
-    };
-  }
+  let stripeEvent;
 
   try {
-    // Récupère la session Stripe
-    const session = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: ['line_items', 'line_items.data.price.product']
-    });
+    // 🔐 Vérifie la signature du webhook
+    stripeEvent = stripe.webhooks.constructEvent(event.body, sig, endpointSecret);
 
-    const lineItems = session.line_items.data;
+    if (stripeEvent.type === "checkout.session.completed") {
+      const session = stripeEvent.data.object;
 
-    for (const item of lineItems) {
-      const product = item.price.product;
-      const productId = product.id;
-      const currentInventory = parseInt(product.metadata.inventory || '0', 10);
+      // 🔍 Récupère les produits achetés via les line_items
+      const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
+        expand: ["data.price.product"]
+      });
 
-      if (currentInventory > 0) {
-        const newInventory = currentInventory - item.quantity;
+      for (const item of lineItems.data) {
+        const product = item.price.product;
+        const productId = product.id;
+        const currentInventory = parseInt(product.metadata.inventory || "0", 10);
+        const quantity = item.quantity || 1;
 
-        // Met à jour la métadonnée "inventory"
-        await stripe.products.update(productId, {
-          metadata: {
-            inventory: newInventory.toString()
-          }
-        });
+        if (currentInventory >= quantity) {
+          const newInventory = currentInventory - quantity;
 
-        console.log(`Stock mis à jour pour ${product.name} : ${newInventory}`);
-      } else {
-        console.warn(`Stock déjà épuisé pour ${product.name}`);
+          // 🛠️ Met à jour la métadonnée "inventory" dans Stripe
+          await stripe.products.update(productId, {
+            metadata: {
+              inventory: newInventory.toString()
+            }
+          });
+
+          console.log(`✅ Stock mis à jour pour ${product.name} : ${newInventory}`);
+        } else {
+          console.warn(`⚠️ Stock insuffisant pour ${product.name} (stock actuel : ${currentInventory})`);
+        }
       }
     }
 
-    return {
-      statusCode: 200,
-      body: 'Stock décrémenté avec succès'
-    };
-  } catch (error) {
-    console.error('Erreur Stripe :', error.message);
-    return {
-      statusCode: 500,
-      body: 'Erreur lors de la mise à jour du stock'
-    };
+    return { statusCode: 200 };
+  } catch (err) {
+    console.error("❌ Webhook error:", err.message);
+    return { statusCode: 400, body: `Webhook Error: ${err.message}` };
   }
 };

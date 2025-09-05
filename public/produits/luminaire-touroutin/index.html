@@ -479,6 +479,7 @@ window.addEventListener("DOMContentLoaded", () => {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
 
 				const produit = "TOUROUTIN";
+				const priceIdStripe = "";
 				const nom = "Luminaire Tintin";
 				const description = "Sphère lumineuse en carton coloré et planches du Lotus Bleu";
 				const prix = parseFloat("150");
@@ -499,7 +500,7 @@ window.addEventListener("DOMContentLoaded", () => {
 				if (index >= 0) {
 						panier[index].quantite += 1;
 				} else {
-						panier.push({ produit, nom, description, prix, monnaie, image, quantite: 1 });
+						panier.push({ produit, priceIdStripe, nom, description, prix, monnaie, image, quantite: 1 });
 				}
 
 				localStorage.setItem("panier", JSON.stringify(panier));

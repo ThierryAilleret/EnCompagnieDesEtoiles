@@ -482,6 +482,7 @@ window.addEventListener("DOMContentLoaded", () => {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
 
 				const produit = "CARJAUDRA";
+				const priceIdStripe = "price_1S3tKlGEPWcc8pKF3ByVuVck";
 				const nom = "Luminaire Manga";
 				const description = "Sphère lumineuse en carton coloré et planches de manga";
 				const prix = parseFloat("150");
@@ -502,7 +503,7 @@ window.addEventListener("DOMContentLoaded", () => {
 				if (index >= 0) {
 						panier[index].quantite += 1;
 				} else {
-						panier.push({ produit, nom, description, prix, monnaie, image, quantite: 1 });
+						panier.push({ produit, priceIdStripe, nom, description, prix, monnaie, image, quantite: 1 });
 				}
 
 				localStorage.setItem("panier", JSON.stringify(panier));

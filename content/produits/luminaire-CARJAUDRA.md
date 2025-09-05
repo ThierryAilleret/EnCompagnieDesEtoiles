@@ -17,5 +17,6 @@ ampoule = "E27, LED 20 W max (ampoule non fournie)"
 normes = "CE"
 price = 150
 currency = "€"
+priceIdStripe = "price_1S3tKlGEPWcc8pKF3ByVuVck"
 new = true
 +++

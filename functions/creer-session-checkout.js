@@ -13,14 +13,15 @@ exports.handler = async (event) => {
 			customer_email: client.email,
 
       line_items: panier.map(item => ({
-        price_data: {
-          currency: item.monnaie,
-          product_data: {
-            name: item.nom,
-						description: item.description,
-          },
-          unit_amount: Math.round(item.prix * 100),
-        },
+        // price_data: {
+          // currency: item.monnaie,
+          // product_data: {
+            // name: item.nom,
+						// description: item.description,
+          // },
+          // unit_amount: Math.round(item.prix * 100),
+        // },
+				price: item.priceIdStripe,
         quantity: item.quantite || 1,
       })),
       success_url: "https://encompagniedesetoiles.fr/success",

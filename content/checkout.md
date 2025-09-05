@@ -130,7 +130,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       window._pointRelaisAdresse = `${data.Nom}, ${data.Adresse1}, ${data.CP} ${data.Ville}`;
       window._pointRelaisId = data.ID;
-			
+
+			// On affiche le bouton de validation du relais
+			const boutonValidationRelais = document.getElementById("validation-relais-button");
+			boutonValidationRelais.classList.remove("bouton-verrouille");
+			boutonValidationRelais.style.display = "block";
+
 			// On passe à l'étape 3
 			const etape3 = document.getElementById("step-3");
 			etape3.classList.add("actif");
@@ -194,8 +199,6 @@ function remplirAdresseGeo(item) {
 	localStorage.setItem('codePostal', cp);
 	localStorage.setItem('ville', ville);
 
-
-
   window.adresseGoogleValidee = true;
 
 }
@@ -208,6 +211,7 @@ function surveillerEtape1() {
 
   const etape1 = document.getElementById("step-1");
   const etape2 = document.getElementById("step-2");
+  const etape3 = document.getElementById("step-3");
 
   const etape_1_complete = nom && prenom && adresse && mail;
 
@@ -291,16 +295,20 @@ window.addEventListener("panierMisAJour", function () {
           </div>
 					<!-- Bouton pour lancer le widget -->
 					<!--<button type="button" id="bouton-relai" class="bouton-relai" style="display:none;">📍 Choisir un Point Relais</button>-->
-					<!-- Zone d'affichage du point relais choisi -->
-					<div id="relai-selectionne" style="display:none; margin-top:0.5em; margin-bottom:0em;">
-						<div id="titre-relai-selectionne"><strong>Relais sélectionné :</strong></div>
-						<div id="info-relai"></div>
-					</div>
+
 					<!-- Zone d’intégration directe du widget Mondial Relay -->
 					<div id="zone-widget-relai" style="display:none; margin-top:1em;">
 						<div id="Zone_Widget"></div>
 						<input type="hidden" id="Target_Widget" name="point-relay" />
 					</div>
+					<!-- Zone d'affichage du point relais choisi -->
+					<div id="relai-selectionne" style="display:none; margin-top:0.5em; margin-bottom:0em;">
+						<div id="titre-relai-selectionne"><strong>Relais sélectionné :</strong></div>
+						<div id="info-relai"></div>
+					</div>
+					<button type="button" id="validation-relais-button" class="bouton-validation-relai  bouton-verrouille" style="display:none">
+						Choisir ce point relais
+					</button>
         </div>
 			</fieldset>
       <!-- Étape 3 : Paiement -->

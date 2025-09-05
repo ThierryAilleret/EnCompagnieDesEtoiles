@@ -504,7 +504,11 @@ window.addEventListener("DOMContentLoaded", () => {
 
 				const index = panier.findIndex(p => p.nom === nom);
 				const quantiteActuelle = index >= 0 ? panier[index].quantite : 0;
-
+    
+				
+				console.log(`🛒 Quantité actuelle dans le panier : ${quantiteActuelle}`);
+				console.log(`📦 Stock disponible : ${stockDisponible}`);
+		
 				if (quantiteActuelle >= stockDisponible) {
 						alert("⚠️ Stock insuffisant : vous avez déjà ajouté le maximum disponible.");
 						return;

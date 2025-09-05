@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		NbResults: "10",
 		ColLivMod: "24R",
 		Responsive: true,
-		ShowResultsOnMap: true,
+		ShowResultsOnMap: false,
 		OnParcelShopSelected: function (data) {
       const zoneInfo = document.getElementById("relai-selectionne");
       const champ = document.getElementById("info-relai");

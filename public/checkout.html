@@ -669,6 +669,8 @@ function surveillerEtape1() {
 	  // Affiche ou masque les points relais
 		// const boutonrelai = document.getElementById("bouton-relai");
 		// boutonrelai.style.display = "inline-block";
+		const widgetrelai = document.getElementById("zone-widget-relai");
+		widgetrelai.style.display = "inline-block";
   } else {
     etape2.classList.remove("actif");
   }
@@ -741,7 +743,7 @@ window.addEventListener("panierMisAJour", function () {
 						<div id="info-relai"></div>
 					</div>
 					<!-- Zone d’intégration directe du widget Mondial Relay -->
-					<div id="zone-widget-relai" style="margin-top:1em;">
+					<div id="zone-widget-relai" style="display:none; margin-top:1em;">
 						<div id="Zone_Widget"></div>
 						<input type="hidden" id="Target_Widget" name="point-relay" />
 					</div>

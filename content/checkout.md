@@ -135,14 +135,6 @@ document.addEventListener("DOMContentLoaded", () => {
 			const boutonValidationRelais = document.getElementById("validation-relais-button");
 			boutonValidationRelais.classList.remove("bouton-verrouille");
 			boutonValidationRelais.style.display = "block";
-
-			// On passe à l'étape 3
-			const etape3 = document.getElementById("step-3");
-			etape3.classList.add("actif");
-			
-			const boutonPaiement = document.getElementById("checkout-button");
-			boutonPaiement.classList.remove("bouton-verrouille");
-
     }
 	});
 
@@ -314,7 +306,7 @@ window.addEventListener("panierMisAJour", function () {
       <fieldset id="step-3" class="etape">
         <legend><span class="etape-numero">3</span> Paiement</legend>
         <div id="prix-total">Total : ... €</div>
-				<button type="button" id="checkout-button" class="bouton-checkout  bouton-verrouille">
+				<button type="button" id="checkout-button" class="bouton-checkout  bouton-verrouille" style="display:none">
           Payer avec Stripe
         </button>
 				<script src="https://js.stripe.com/v3/"></script>
@@ -330,6 +322,16 @@ window.addEventListener("panierMisAJour", function () {
 </div>
 
 <script>
+document.getElementById("validation-relais-button").addEventListener("click", function (event) {
+	// On passe à l'étape 3
+	const etape3 = document.getElementById("step-3");
+	etape3.classList.add("actif");
+	
+	const boutonPaiement = document.getElementById("checkout-button");
+	boutonPaiement.classList.remove("bouton-verrouille");
+	boutonPaiement.style.display = "block";
+	
+}
 document.getElementById("checkout-button").addEventListener("click", function (event) {
   event.preventDefault(); // Empêche la soumission du formulaire
 

@@ -178,14 +178,6 @@ document.addEventListener(&#34;DOMContentLoaded&#34;, () =&gt; {
 			const boutonValidationRelais = document.getElementById(&#34;validation-relais-button&#34;);
 			boutonValidationRelais.classList.remove(&#34;bouton-verrouille&#34;);
 			boutonValidationRelais.style.display = &#34;block&#34;;
-
-			// On passe à l&#39;étape 3
-			const etape3 = document.getElementById(&#34;step-3&#34;);
-			etape3.classList.add(&#34;actif&#34;);
-			
-			const boutonPaiement = document.getElementById(&#34;checkout-button&#34;);
-			boutonPaiement.classList.remove(&#34;bouton-verrouille&#34;);
-
     }
 	});
 
@@ -356,7 +348,7 @@ window.addEventListener(&#34;panierMisAJour&#34;, function () {
       &lt;fieldset id=&#34;step-3&#34; class=&#34;etape&#34;&gt;
         &lt;legend&gt;&lt;span class=&#34;etape-numero&#34;&gt;3&lt;/span&gt; Paiement&lt;/legend&gt;
         &lt;div id=&#34;prix-total&#34;&gt;Total : ... €&lt;/div&gt;
-				&lt;button type=&#34;button&#34; id=&#34;checkout-button&#34; class=&#34;bouton-checkout  bouton-verrouille&#34;&gt;
+				&lt;button type=&#34;button&#34; id=&#34;checkout-button&#34; class=&#34;bouton-checkout  bouton-verrouille&#34; style=&#34;display:none&#34;&gt;
           Payer avec Stripe
         &lt;/button&gt;
 				&lt;script src=&#34;https://js.stripe.com/v3/&#34;&gt;&lt;/script&gt;

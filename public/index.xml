@@ -261,6 +261,8 @@ function surveillerEtape1() {
     etape2.classList.remove(&#34;actif&#34;);
 		const widgetrelai = document.getElementById(&#34;zone-widget-relai&#34;);
 		widgetrelai.style.display = &#34;none&#34;;
+		const boutonValidationRelais = document.getElementById(&#34;validation-relais-button&#34;);
+		boutonValidationRelais.classList.add(&#34;bouton-verrouille&#34;);	
 
 		etape3.classList.remove(&#34;actif&#34;);
 		const boutonPaiement = document.getElementById(&#34;checkout-button&#34;);
@@ -335,7 +337,7 @@ window.addEventListener(&#34;panierMisAJour&#34;, function () {
 						&lt;input type=&#34;hidden&#34; id=&#34;Target_Widget&#34; name=&#34;point-relay&#34; /&gt;
 					&lt;/div&gt;
 					&lt;!-- Zone d&#39;affichage du point relais choisi --&gt;
-					&lt;div id=&#34;relai-selectionne&#34; style=&#34;display:none; margin-top:0.5em; margin-bottom:0.5em; margin-bottom:0em;&#34;&gt;
+					&lt;div id=&#34;relai-selectionne&#34; style=&#34;display:none; margin-top:0.5em; margin-bottom:0.5em;&#34;&gt;
 						&lt;div id=&#34;titre-relai-selectionne&#34;&gt;&lt;strong&gt;Relais sélectionné :&lt;/strong&gt;&lt;/div&gt;
 						&lt;div id=&#34;info-relai&#34;&gt;&lt;/div&gt;
 					&lt;/div&gt;

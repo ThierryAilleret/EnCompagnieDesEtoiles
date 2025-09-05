@@ -488,6 +488,7 @@ window.addEventListener("DOMContentLoaded", () => {
 		function ajouterAuPanier() {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
 
+				const stripeProduct = "prod_Szt6zvf1SoR67P";
 				const priceIdStripe = "price_1S3tKlGEPWcc8pKF3ByVuVck";
 				const nom = "Luminaire Manga";
 				const description = "Sphère lumineuse en carton coloré et planches de manga";
@@ -508,14 +509,14 @@ window.addEventListener("DOMContentLoaded", () => {
 				
 				const quantiteDemandee = index >= 0 ? panier[index].quantite + 1 : 1;
 
-				if (!verifierQuantiteDisponible(nom, quantiteDemandee)) {
+				if (!verifierQuantiteDisponible(stripeProduct, quantiteDemandee)) {
 						return;
 				}
 				
 				if (index >= 0) {
 						panier[index].quantite += 1;
 				} else {
-						panier.push({ nom, description, prix ,priceIdStripe, monnaie, image, quantite: 1 });
+						panier.push({ nom, description, prix , stripeProduct, priceIdStripe, monnaie, image, quantite: 1 });
 				}
 
 				localStorage.setItem("panier", JSON.stringify(panier));
@@ -526,9 +527,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
 		}
 
-		function verifierQuantiteDisponible(nomProduit, quantiteDemandee) {
+		function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
-				const index = panier.findIndex(p => p.nom === nomProduit);
+				const index = panier.findIndex(p => p.stripeProduct === stripeProduct);
 				const quantiteActuelle = index >= 0 ? panier[index].quantite : 0;
 
 				
@@ -545,16 +546,24 @@ window.addEventListener("DOMContentLoaded", () => {
 				return true;
 		}
 
-	
-	async function fetchInventory(productId) {
-			const produit = "prod_Szt6zvf1SoR67P";
-			const response = await fetch(`/.netlify/functions/getInventory?product=` + produit);
-			const data = await response.json();
-			stockDisponible = parseInt(data.inventory, 10);
-			document.getElementById("stock-display").textContent = stockDisponible;
-	}
+		
+		async function fetchInventory(stripeProduct) {
+				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
+				const data = await response.json();
+				stockDisponible = parseInt(data.inventory, 10);
+				document.getElementById("stock-display").textContent = stockDisponible;
+				
+				if (stockDisponible <= 0) {
+						const bouton = document.querySelector(".btn-add-to-cart");
+						if (bouton) {
+								bouton.disabled = true;
+								bouton.textContent = "Stock épuisé";
+						}
+				}
 
-  fetchInventory("CARJAUDRA");
+		}
+
+		fetchInventory("prod_Szt6zvf1SoR67P");
 </script>
 
     </main>

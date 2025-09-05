@@ -23,7 +23,9 @@ exports.handler = async (event) => {
         const productId = product.id;
         const currentInventory = parseInt(product.metadata.inventory || "0", 10);
         const quantity = item.quantity || 1;
-
+				
+				console.log(`✅ Stock actuel pour ${product.id} - ${product} : ${currentInventory}`);
+				
         if (currentInventory >= quantity) {
           const newInventory = currentInventory - quantity;
 

@@ -237,6 +237,7 @@
 		async function fetchInventory(stripeProduct) {
 				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
 				const data = await response.json();
+				console.log(data);
 				stockDisponible = parseInt(data.inventory, 10);
 
 				return stockDisponible;

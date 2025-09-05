@@ -240,16 +240,15 @@ window.addEventListener("DOMContentLoaded", () => {
 
 		}
 
-		function modifierQuantite(nom, delta) {
+		async function modifierQuantite(nom, delta) {
 			const panier = JSON.parse(localStorage.getItem("panier")) || [];
 			const index = panier.findIndex(p => p.nom === nom);
 			if (index >= 0) {
 			
 				const nouvelleQuantite = panier[index].quantite + delta;
 				if (delta > 0) {
-					if (!verifierQuantiteDisponible(panier[index].stripeProduct, nouvelleQuantite)) {
-						return;
-					}
+					const ok = await verifierQuantiteDisponible(stripeProduct, quantiteDemandee);
+					if (!ok) return;
 				}
 				
 				panier[index].quantite += delta;

@@ -365,7 +365,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   });
 
-	# document.getElementById("bouton-relai").addEventListener("click", afficherPopupMondialRelay);
+	// document.getElementById("bouton-relai").addEventListener("click", afficherPopupMondialRelay);
 
 	const cp = localStorage.getItem('codePostal')?.trim() || "";
 	const ville = localStorage.getItem('ville')?.trim() || "";
@@ -667,8 +667,8 @@ function surveillerEtape1() {
   if (etape_1_complete) {
     etape2.classList.add("actif");
 	  // Affiche ou masque les points relais
-		# const boutonrelai = document.getElementById("bouton-relai");
-		# boutonrelai.style.display = "inline-block";
+		// const boutonrelai = document.getElementById("bouton-relai");
+		// boutonrelai.style.display = "inline-block";
   } else {
     etape2.classList.remove("actif");
   }
@@ -733,8 +733,8 @@ window.addEventListener("panierMisAJour", function () {
               <input type="text" id="code-postal" name="code-postal" maxlength="5" style="display:none;">
               <input type="text" id="ville" name="ville"  style="display:none;">
           </div>
-					# <!-- Bouton pour lancer le widget -->
-					# <button type="button" id="bouton-relai" class="bouton-relai" style="display:none;">📍 Choisir un Point Relais</button>
+					<!-- Bouton pour lancer le widget -->
+					<!--<button type="button" id="bouton-relai" class="bouton-relai" style="display:none;">📍 Choisir un Point Relais</button>-->
 					<!-- Zone d'affichage du point relais choisi -->
 					<div id="relai-selectionne" style="display:none; margin-top:0.5em; margin-bottom:0em;">
 						<div id="titre-relai-selectionne"><strong>Relais sélectionné :</strong></div>

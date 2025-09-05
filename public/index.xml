@@ -101,7 +101,7 @@ document.addEventListener(&#34;DOMContentLoaded&#34;, () =&gt; {
 
   });
 
-	# document.getElementById(&#34;bouton-relai&#34;).addEventListener(&#34;click&#34;, afficherPopupMondialRelay);
+	// document.getElementById(&#34;bouton-relai&#34;).addEventListener(&#34;click&#34;, afficherPopupMondialRelay);
 
 	const cp = localStorage.getItem(&#39;codePostal&#39;)?.trim() || &#34;&#34;;
 	const ville = localStorage.getItem(&#39;ville&#39;)?.trim() || &#34;&#34;;
@@ -403,8 +403,8 @@ function surveillerEtape1() {
   if (etape_1_complete) {
     etape2.classList.add(&#34;actif&#34;);
 	  // Affiche ou masque les points relais
-		# const boutonrelai = document.getElementById(&#34;bouton-relai&#34;);
-		# boutonrelai.style.display = &#34;inline-block&#34;;
+		// const boutonrelai = document.getElementById(&#34;bouton-relai&#34;);
+		// boutonrelai.style.display = &#34;inline-block&#34;;
   } else {
     etape2.classList.remove(&#34;actif&#34;);
   }
@@ -469,8 +469,8 @@ window.addEventListener(&#34;panierMisAJour&#34;, function () {
               &lt;input type=&#34;text&#34; id=&#34;code-postal&#34; name=&#34;code-postal&#34; maxlength=&#34;5&#34; style=&#34;display:none;&#34;&gt;
               &lt;input type=&#34;text&#34; id=&#34;ville&#34; name=&#34;ville&#34;  style=&#34;display:none;&#34;&gt;
           &lt;/div&gt;
-					# &lt;!-- Bouton pour lancer le widget --&gt;
-					# &lt;button type=&#34;button&#34; id=&#34;bouton-relai&#34; class=&#34;bouton-relai&#34; style=&#34;display:none;&#34;&gt;📍 Choisir un Point Relais&lt;/button&gt;
+					&lt;!-- Bouton pour lancer le widget --&gt;
+					&lt;!--&lt;button type=&#34;button&#34; id=&#34;bouton-relai&#34; class=&#34;bouton-relai&#34; style=&#34;display:none;&#34;&gt;📍 Choisir un Point Relais&lt;/button&gt;--&gt;
 					&lt;!-- Zone d&#39;affichage du point relais choisi --&gt;
 					&lt;div id=&#34;relai-selectionne&#34; style=&#34;display:none; margin-top:0.5em; margin-bottom:0em;&#34;&gt;
 						&lt;div id=&#34;titre-relai-selectionne&#34;&gt;&lt;strong&gt;Relais sélectionné :&lt;/strong&gt;&lt;/div&gt;

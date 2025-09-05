@@ -382,7 +382,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
   
   <script>
-    let currentImageIndex = 0;
+    let stockDisponible = 0;
+		let currentImageIndex = 0;
     let images = [];
 
     function collectGalleryImages() {
@@ -499,7 +500,13 @@ window.addEventListener("DOMContentLoaded", () => {
 				}
 
 				const index = panier.findIndex(p => p.nom === nom);
+				const quantiteActuelle = index >= 0 ? panier[index].quantite : 0;
 
+				if (quantiteActuelle >= stockDisponible) {
+						alert("⚠️ Stock insuffisant : vous avez déjà ajouté le maximum disponible.");
+						return;
+				}
+				
 				if (index >= 0) {
 						panier[index].quantite += 1;
 				} else {
@@ -515,12 +522,13 @@ window.addEventListener("DOMContentLoaded", () => {
 		}
 
 	
-  async function fetchInventory(productId) {
-		const produit = "prod_Szt6zvf1SoR67P";
-    const response = await fetch(`/.netlify/functions/getInventory?product=`+produit);
-    const data = await response.json();
-    document.getElementById("stock-display").textContent = data.inventory;
-  }
+	async function fetchInventory(productId) {
+			const produit = "prod_Szt6zvf1SoR67P";
+			const response = await fetch(`/.netlify/functions/getInventory?product=` + produit);
+			const data = await response.json();
+			stockDisponible = parseInt(data.inventory, 10);
+			document.getElementById("stock-display").textContent = stockDisponible;
+	}
 
   fetchInventory("CARJAUDRA");
 </script>

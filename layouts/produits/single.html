@@ -75,7 +75,8 @@
 
   <!-- Script -->
   <script>
-    let currentImageIndex = 0;
+    let stockDisponible = 0;
+		let currentImageIndex = 0;
     let images = [];
 
     function collectGalleryImages() {
@@ -192,7 +193,13 @@
 				}
 
 				const index = panier.findIndex(p => p.nom === nom);
+				const quantiteActuelle = index >= 0 ? panier[index].quantite : 0;
 
+				if (quantiteActuelle >= stockDisponible) {
+						alert("⚠️ Stock insuffisant : vous avez déjà ajouté le maximum disponible.");
+						return;
+				}
+				
 				if (index >= 0) {
 						panier[index].quantite += 1;
 				} else {
@@ -208,12 +215,13 @@
 		}
 
 	//Récupération du stock sur Stripe
-  async function fetchInventory(productId) {
-		const produit = "{{ .Params.stripeProduct }}";
-    const response = await fetch(`/.netlify/functions/getInventory?product=`+produit);
-    const data = await response.json();
-    document.getElementById("stock-display").textContent = data.inventory;
-  }
+	async function fetchInventory(productId) {
+			const produit = "{{ .Params.stripeProduct }}";
+			const response = await fetch(`/.netlify/functions/getInventory?product=` + produit);
+			const data = await response.json();
+			stockDisponible = parseInt(data.inventory, 10);
+			document.getElementById("stock-display").textContent = stockDisponible;
+	}
 
   fetchInventory("CARJAUDRA");
 </script>

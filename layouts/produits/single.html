@@ -172,7 +172,7 @@
 			}, 300);
 		}
 		
-		function ajouterAuPanier() {
+		async function ajouterAuPanier() {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
 
 				const stripeProduct = "{{ .Params.stripeProduct }}";
@@ -196,9 +196,8 @@
 				
 				const quantiteDemandee = index >= 0 ? panier[index].quantite + 1 : 1;
 
-				if (!verifierQuantiteDisponible(stripeProduct, quantiteDemandee)) {
-						return;
-				}
+				const ok = await verifierQuantiteDisponible(stripeProduct, quantiteDemandee);
+				if (!ok) return;
 				
 				if (index >= 0) {
 						panier[index].quantite += 1;
@@ -214,11 +213,11 @@
 
 		}
 
-		function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
+		async function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
 
-				const response = fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
-				const data = response.json();
+				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
+				const data = await response.json();
 				quantiteDisponible = parseInt(data.inventory, 10);
 
 				// 🧾 Log de diagnostic

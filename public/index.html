@@ -247,7 +247,7 @@ window.addEventListener("DOMContentLoaded", () => {
 			
 				const nouvelleQuantite = panier[index].quantite + delta;
 				if (delta > 0) {
-					const ok = await verifierQuantiteDisponible(stripeProduct, quantiteDemandee);
+					const ok = await verifierQuantiteDisponible( panier[index].stripeProduct, nouvelleQuantite);
 					if (!ok) return;
 				}
 				

@@ -789,7 +789,7 @@ select {
   box-sizing: border-box;
 }
 
-.bouton-checkout .bouton-validation-relai {
+.bouton-checkout, .bouton-validation-relai {
 	padding: 10px 20px;
   font-size: 1em;
   font-weight: bold;
@@ -802,11 +802,11 @@ select {
 	cursor: pointer;       /* main au survol */
 	outline: none;         /* supprime le halo de focus si nécessaire */
 }
-.bouton-checkout:hover bouton-validation-relai:hover{
+.bouton-checkout:hover, .bouton-validation-relai:hover{
   background: #005fa3;
 }
 
-.bouton-checkout.bouton-verrouille bouton-validation-relai.bouton-verrouille {
+.bouton-checkout.bouton-verrouille, .bouton-validation-relai.bouton-verrouille {
   background: #ccc !important;
   color: #666;
   cursor: not-allowed;

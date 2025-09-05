@@ -513,6 +513,7 @@ window.addEventListener("DOMContentLoaded", () => {
 				const ok = await verifierQuantiteDisponible(stripeProduct, quantiteDemandee);
 				if (!ok) {
 					afficherMiniPanier();
+					ouvrirPanier();
 					return;
 				}
 				

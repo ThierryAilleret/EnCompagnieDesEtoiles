@@ -511,7 +511,10 @@ window.addEventListener("DOMContentLoaded", () => {
 				const quantiteDemandee = index >= 0 ? panier[index].quantite + 1 : 1;
 
 				const ok = await verifierQuantiteDisponible(stripeProduct, quantiteDemandee);
-				if (!ok) return;
+				if (!ok) {
+					afficherMiniPanier();
+					return;
+				}
 				
 				if (index >= 0) {
 						panier[index].quantite += 1;

@@ -193,14 +193,10 @@
 				}
 
 				const index = panier.findIndex(p => p.nom === nom);
-				const quantiteActuelle = index >= 0 ? panier[index].quantite : 0;
-    
-				// 🧾 Log de diagnostic
-				console.log(`🛒 Quantité actuelle dans le panier : ${quantiteActuelle}`);
-				console.log(`📦 Stock disponible : ${stockDisponible}`);
-		
-				if (quantiteActuelle >= stockDisponible) {
-						alert("⚠️ Stock insuffisant : vous avez déjà ajouté le maximum disponible.");
+				
+				const quantiteDemandee = index >= 0 ? panier[index].quantite + 1 : 1;
+
+				if (!verifierQuantiteDisponible(nom, quantiteDemandee)) {
 						return;
 				}
 				
@@ -216,6 +212,25 @@
 				afficherMiniPanier();
 				ouvrirPanier();
 
+		}
+
+		function verifierQuantiteDisponible(nomProduit, quantiteDemandee) {
+				const panier = JSON.parse(localStorage.getItem("panier")) || [];
+				const index = panier.findIndex(p => p.nom === nomProduit);
+				const quantiteActuelle = index >= 0 ? panier[index].quantite : 0;
+
+				// 🧾 Log de diagnostic
+				console.log(`🛒 Quantité actuelle dans le panier : ${quantiteActuelle}`);
+				console.log(`📦 Stock disponible : ${stockDisponible}`);
+				console.log(`📥 Quantité demandée : ${quantiteDemandee}`);
+
+				// Vérifie si la quantité demandée dépasse le stock
+				if (quantiteDemandee > stockDisponible) {
+						alert("⚠️ Stock insuffisant : quantité demandée supérieure au stock disponible.");
+						return false;
+				}
+
+				return true;
 		}
 
 	//Récupération du stock sur Stripe

@@ -244,6 +244,12 @@ window.addEventListener("DOMContentLoaded", () => {
 			const panier = JSON.parse(localStorage.getItem("panier")) || [];
 			const index = panier.findIndex(p => p.nom === nom);
 			if (index >= 0) {
+			
+				const nouvelleQuantite = panier[index].quantite + delta;
+				if (!verifierQuantiteDisponible(nomProduit, nouvelleQuantite)) {
+					return;
+				}
+				
 				panier[index].quantite += delta;
 				if (panier[index].quantite <= 0) {
 					panier.splice(index, 1);

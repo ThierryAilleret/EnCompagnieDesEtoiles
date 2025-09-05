@@ -243,6 +243,12 @@ window.addEventListener("DOMContentLoaded", () => {
 			const panier = JSON.parse(localStorage.getItem("panier")) || [];
 			const index = panier.findIndex(p => p.nom === nom);
 			if (index >= 0) {
+			
+				const nouvelleQuantite = panier[index].quantite + delta;
+				if (!verifierQuantiteDisponible(nomProduit, nouvelleQuantite)) {
+					return;
+				}
+				
 				panier[index].quantite += delta;
 				if (panier[index].quantite <= 0) {
 					panier.splice(index, 1);
@@ -497,14 +503,10 @@ window.addEventListener("DOMContentLoaded", () => {
 				}
 
 				const index = panier.findIndex(p => p.nom === nom);
-				const quantiteActuelle = index >= 0 ? panier[index].quantite : 0;
-    
 				
-				console.log(`🛒 Quantité actuelle dans le panier : ${quantiteActuelle}`);
-				console.log(`📦 Stock disponible : ${stockDisponible}`);
-		
-				if (quantiteActuelle >= stockDisponible) {
-						alert("⚠️ Stock insuffisant : vous avez déjà ajouté le maximum disponible.");
+				const quantiteDemandee = index >= 0 ? panier[index].quantite + 1 : 1;
+
+				if (!verifierQuantiteDisponible(nom, quantiteDemandee)) {
 						return;
 				}
 				
@@ -520,6 +522,25 @@ window.addEventListener("DOMContentLoaded", () => {
 				afficherMiniPanier();
 				ouvrirPanier();
 
+		}
+
+		function verifierQuantiteDisponible(nomProduit, quantiteDemandee) {
+				const panier = JSON.parse(localStorage.getItem("panier")) || [];
+				const index = panier.findIndex(p => p.nom === nomProduit);
+				const quantiteActuelle = index >= 0 ? panier[index].quantite : 0;
+
+				
+				console.log(`🛒 Quantité actuelle dans le panier : ${quantiteActuelle}`);
+				console.log(`📦 Stock disponible : ${stockDisponible}`);
+				console.log(`📥 Quantité demandée : ${quantiteDemandee}`);
+
+				
+				if (quantiteDemandee > stockDisponible) {
+						alert("⚠️ Stock insuffisant : quantité demandée supérieure au stock disponible.");
+						return false;
+				}
+
+				return true;
 		}
 
 	

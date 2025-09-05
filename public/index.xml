@@ -261,8 +261,6 @@ function surveillerEtape1() {
     etape2.classList.remove(&#34;actif&#34;);
 		const widgetrelai = document.getElementById(&#34;zone-widget-relai&#34;);
 		widgetrelai.style.display = &#34;none&#34;;
-		const boutonValidationRelais = document.getElementById(&#34;validation-relais-button&#34;);
-		boutonValidationRelais.classList.add(&#34;bouton-verrouille&#34;);	
 
 		etape3.classList.remove(&#34;actif&#34;);
 		const boutonPaiement = document.getElementById(&#34;checkout-button&#34;);

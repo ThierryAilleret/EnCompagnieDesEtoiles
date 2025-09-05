@@ -442,6 +442,12 @@ document.addEventListener("DOMContentLoaded", () => {
 			const boutonValidationRelais = document.getElementById("validation-relais-button");
 			boutonValidationRelais.classList.remove("bouton-verrouille");
 			boutonValidationRelais.style.display = "block";
+			
+			// On désactive le bouton de paiment (juste pour donner l'impression au client qu'il doit valider son relais
+			const etape3 = document.getElementById("step-3");
+			etape3.classList.remove("actif");
+			const boutonPaiement = document.getElementById("checkout-button");
+			boutonPaiement.classList.add("bouton-verrouille");
     }
 	});
 

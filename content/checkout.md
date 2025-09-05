@@ -58,7 +58,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
   });
 
-	document.getElementById("bouton-relai").addEventListener("click", afficherPopupMondialRelay);
+	# document.getElementById("bouton-relai").addEventListener("click", afficherPopupMondialRelay);
+
+	const cp = localStorage.getItem('codePostal')?.trim() || "";
+	const ville = localStorage.getItem('ville')?.trim() || "";
+
+	$("#Zone_Widget").MR_ParcelShopPicker({
+		Target: "#Target_Widget",
+		Brand: "CC23JV2D",
+		Country: "FR",
+		AllowedCountries: "FR",
+		Language: "FR",
+		EnableGeolocalisatedSearch: "Yes",
+		PostCode: cp,
+		City: ville,
+		NbResults: "10",
+		ColLivMod: "24R",
+		Responsive: true,
+		ShowResultsOnMap: true,
+		OnParcelShopSelected: function (data) {
+			const zoneInfo = document.getElementById("relai-selectionne");
+			const champ = document.getElementById("info-relai");
+			if (!zoneInfo || !champ) return;
+
+			const fullName = `<strong>${data.Nom}</strong><br>${data.Adresse1}, ${data.CP} ${data.Ville}`;
+			champ.innerHTML = fullName;
+			zoneInfo.style.display = "block";
+
+			window._pointRelaisAdresse = `${data.Nom}, ${data.Adresse1}, ${data.CP} ${data.Ville}`;
+			window._pointRelaisId = data.ID;
+
+			// Active l’étape 3
+			document.getElementById("step-3").classList.add("actif");
+			document.getElementById("checkout-button").classList.remove("bouton-verrouille");
+		}
+	});
 
 	//Affichage du contenu du panier
 	afficherPanierDansCheckout();
@@ -326,8 +360,8 @@ function surveillerEtape1() {
   if (etape_1_complete) {
     etape2.classList.add("actif");
 	  // Affiche ou masque les points relais
-		const boutonrelai = document.getElementById("bouton-relai");
-		boutonrelai.style.display = "inline-block";
+		# const boutonrelai = document.getElementById("bouton-relai");
+		# boutonrelai.style.display = "inline-block";
   } else {
     etape2.classList.remove("actif");
   }
@@ -393,13 +427,19 @@ window.addEventListener("panierMisAJour", function () {
               <input type="text" id="code-postal" name="code-postal" maxlength="5" style="display:none;">
               <input type="text" id="ville" name="ville"  style="display:none;">
           </div>
-					<!-- Bouton pour lancer le widget -->
-					<button type="button" id="bouton-relai" class="bouton-relai" style="display:none;">📍 Choisir un Point Relais</button>
+					# <!-- Bouton pour lancer le widget -->
+					# <button type="button" id="bouton-relai" class="bouton-relai" style="display:none;">📍 Choisir un Point Relais</button>
 					<!-- Zone d'affichage du point relais choisi -->
 					<div id="relai-selectionne" style="display:none; margin-top:0.5em; margin-bottom:0em;">
 						<div id="titre-relai-selectionne"><strong>Relais sélectionné :</strong></div>
 						<div id="info-relai"></div>
 					</div>
+					<!-- Zone d’intégration directe du widget Mondial Relay -->
+					<div id="zone-widget-relai" style="margin-top:1em;">
+						<div id="Zone_Widget"></div>
+						<input type="hidden" id="Target_Widget" name="point-relay" />
+					</div>
+
         </div>
 			</fieldset>
       <!-- Étape 3 : Paiement -->

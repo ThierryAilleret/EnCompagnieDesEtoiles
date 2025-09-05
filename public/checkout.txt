@@ -13,6 +13,14 @@ layout = "checkout"
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
+  // 🔁 Surveille les champs nom, prénom, adresse, mail
+  ["nom", "prenom", "adresse", "mail"].forEach(id => {
+    const champ = document.getElementById(id);
+    if (champ) {
+      champ.addEventListener("input", surveillerEtape1);
+    }
+  });
+
   const adresseInput = document.getElementById("adresse");
   const cpInput      = document.getElementById("code-postal");
 
@@ -301,7 +309,6 @@ function remplirAdresseGeo(item) {
 
 
   window.adresseGoogleValidee = true;
-  surveillerEtape1();
 
 }
 

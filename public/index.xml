@@ -101,7 +101,41 @@ document.addEventListener(&#34;DOMContentLoaded&#34;, () =&gt; {
 
   });
 
-	document.getElementById(&#34;bouton-relai&#34;).addEventListener(&#34;click&#34;, afficherPopupMondialRelay);
+	# document.getElementById(&#34;bouton-relai&#34;).addEventListener(&#34;click&#34;, afficherPopupMondialRelay);
+
+	const cp = localStorage.getItem(&#39;codePostal&#39;)?.trim() || &#34;&#34;;
+	const ville = localStorage.getItem(&#39;ville&#39;)?.trim() || &#34;&#34;;
+
+	$(&#34;#Zone_Widget&#34;).MR_ParcelShopPicker({
+		Target: &#34;#Target_Widget&#34;,
+		Brand: &#34;CC23JV2D&#34;,
+		Country: &#34;FR&#34;,
+		AllowedCountries: &#34;FR&#34;,
+		Language: &#34;FR&#34;,
+		EnableGeolocalisatedSearch: &#34;Yes&#34;,
+		PostCode: cp,
+		City: ville,
+		NbResults: &#34;10&#34;,
+		ColLivMod: &#34;24R&#34;,
+		Responsive: true,
+		ShowResultsOnMap: true,
+		OnParcelShopSelected: function (data) {
+			const zoneInfo = document.getElementById(&#34;relai-selectionne&#34;);
+			const champ = document.getElementById(&#34;info-relai&#34;);
+			if (!zoneInfo || !champ) return;
+
+			const fullName = `&lt;strong&gt;${data.Nom}&lt;/strong&gt;&lt;br&gt;${data.Adresse1}, ${data.CP} ${data.Ville}`;
+			champ.innerHTML = fullName;
+			zoneInfo.style.display = &#34;block&#34;;
+
+			window._pointRelaisAdresse = `${data.Nom}, ${data.Adresse1}, ${data.CP} ${data.Ville}`;
+			window._pointRelaisId = data.ID;
+
+			// Active l’étape 3
+			document.getElementById(&#34;step-3&#34;).classList.add(&#34;actif&#34;);
+			document.getElementById(&#34;checkout-button&#34;).classList.remove(&#34;bouton-verrouille&#34;);
+		}
+	});
 
 	//Affichage du contenu du panier
 	afficherPanierDansCheckout();
@@ -369,8 +403,8 @@ function surveillerEtape1() {
   if (etape_1_complete) {
     etape2.classList.add(&#34;actif&#34;);
 	  // Affiche ou masque les points relais
-		const boutonrelai = document.getElementById(&#34;bouton-relai&#34;);
-		boutonrelai.style.display = &#34;inline-block&#34;;
+		# const boutonrelai = document.getElementById(&#34;bouton-relai&#34;);
+		# boutonrelai.style.display = &#34;inline-block&#34;;
   } else {
     etape2.classList.remove(&#34;actif&#34;);
   }
@@ -435,25 +469,31 @@ window.addEventListener(&#34;panierMisAJour&#34;, function () {
               &lt;input type=&#34;text&#34; id=&#34;code-postal&#34; name=&#34;code-postal&#34; maxlength=&#34;5&#34; style=&#34;display:none;&#34;&gt;
               &lt;input type=&#34;text&#34; id=&#34;ville&#34; name=&#34;ville&#34;  style=&#34;display:none;&#34;&gt;
           &lt;/div&gt;
-					&lt;!-- Bouton pour lancer le widget --&gt;
-					&lt;button type=&#34;button&#34; id=&#34;bouton-relai&#34; class=&#34;bouton-relai&#34; style=&#34;display:none;&#34;&gt;📍 Choisir un Point Relais&lt;/button&gt;
+					# &lt;!-- Bouton pour lancer le widget --&gt;
+					# &lt;button type=&#34;button&#34; id=&#34;bouton-relai&#34; class=&#34;bouton-relai&#34; style=&#34;display:none;&#34;&gt;📍 Choisir un Point Relais&lt;/button&gt;
 					&lt;!-- Zone d&#39;affichage du point relais choisi --&gt;
 					&lt;div id=&#34;relai-selectionne&#34; style=&#34;display:none; margin-top:0.5em; margin-bottom:0em;&#34;&gt;
 						&lt;div id=&#34;titre-relai-selectionne&#34;&gt;&lt;strong&gt;Relais sélectionné :&lt;/strong&gt;&lt;/div&gt;
 						&lt;div id=&#34;info-relai&#34;&gt;&lt;/div&gt;
 					&lt;/div&gt;
-        &lt;/div&gt;
-			&lt;/fieldset&gt;
-      &lt;!-- Étape 3 : Paiement --&gt;
-      &lt;fieldset id=&#34;step-3&#34; class=&#34;etape&#34;&gt;
-        &lt;legend&gt;&lt;span class=&#34;etape-numero&#34;&gt;3&lt;/span&gt; Paiement&lt;/legend&gt;
-        &lt;div id=&#34;prix-total&#34;&gt;Total : ... €&lt;/div&gt;
-				&lt;button type=&#34;button&#34; id=&#34;checkout-button&#34; class=&#34;bouton-checkout  bouton-verrouille&#34;&gt;
-          Payer avec Stripe
-        &lt;/button&gt;
-				&lt;script src=&#34;https://js.stripe.com/v3/&#34;&gt;&lt;/script&gt;
-      &lt;/fieldset&gt;
-    &lt;/form&gt;
+					&lt;!-- Zone d’intégration directe du widget Mondial Relay --&gt;
+					&lt;div id=&#34;zone-widget-relai&#34; style=&#34;margin-top:1em;&#34;&gt;
+						&lt;div id=&#34;Zone_Widget&#34;&gt;&lt;/div&gt;
+						&lt;input type=&#34;hidden&#34; id=&#34;Target_Widget&#34; name=&#34;point-relay&#34; /&gt;
+					&lt;/div&gt;
+&lt;pre&gt;&lt;code&gt;    &amp;lt;/div&amp;gt;
+		&amp;lt;/fieldset&amp;gt;
+  &amp;lt;!-- Étape 3 : Paiement --&amp;gt;
+  &amp;lt;fieldset id=&amp;quot;step-3&amp;quot; class=&amp;quot;etape&amp;quot;&amp;gt;
+    &amp;lt;legend&amp;gt;&amp;lt;span class=&amp;quot;etape-numero&amp;quot;&amp;gt;3&amp;lt;/span&amp;gt; Paiement&amp;lt;/legend&amp;gt;
+    &amp;lt;div id=&amp;quot;prix-total&amp;quot;&amp;gt;Total : ... €&amp;lt;/div&amp;gt;
+			&amp;lt;button type=&amp;quot;button&amp;quot; id=&amp;quot;checkout-button&amp;quot; class=&amp;quot;bouton-checkout  bouton-verrouille&amp;quot;&amp;gt;
+      Payer avec Stripe
+    &amp;lt;/button&amp;gt;
+			&amp;lt;script src=&amp;quot;https://js.stripe.com/v3/&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;/fieldset&amp;gt;
+&amp;lt;/form&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
   &lt;/div&gt;
 	&lt;!-- Résumé commande --&gt;
 	&lt;div class=&#34;checkout-right&#34;&gt;

@@ -245,8 +245,10 @@ window.addEventListener("DOMContentLoaded", () => {
 			if (index >= 0) {
 			
 				const nouvelleQuantite = panier[index].quantite + delta;
-				if (!verifierQuantiteDisponible(panier[index].stripeProduct, nouvelleQuantite)) {
-					return;
+				if (delta > 0) {
+					if (!verifierQuantiteDisponible(panier[index].stripeProduct, nouvelleQuantite)) {
+						return;
+					}
 				}
 				
 				panier[index].quantite += delta;
@@ -554,6 +556,7 @@ window.addEventListener("DOMContentLoaded", () => {
 				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
 				const data = await response.json();
 				stockDisponible = parseInt(data.inventory, 10);
+				console.log(`Stock pour le stripeProduct ${stripeProduct} :  ${stockDisponible} `);
 
 				return stockDisponible;
 		}
@@ -573,7 +576,6 @@ window.addEventListener("DOMContentLoaded", () => {
 								bouton.textContent = "Stock épuisé";
 						}
 				}
-
 		}
 
 		fetchInventoryCurrentProduct();

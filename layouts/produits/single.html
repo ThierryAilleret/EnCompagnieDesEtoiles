@@ -238,6 +238,7 @@
 				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
 				const data = await response.json();
 				stockDisponible = parseInt(data.inventory, 10);
+				console.log(`Stock pour le stripeProduct ${stripeProduct} :  ${stockDisponible} `);
 
 				return stockDisponible;
 		}
@@ -257,7 +258,6 @@
 								bouton.textContent = "Stock épuisé";
 						}
 				}
-
 		}
 
 		fetchInventoryCurrentProduct();

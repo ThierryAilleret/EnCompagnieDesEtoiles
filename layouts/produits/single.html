@@ -238,6 +238,13 @@
 				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
 				const data = await response.json();
 				stockDisponible = parseInt(data.inventory, 10);
+
+				return stockDisponible;
+		}
+
+		//Récupération du stock sur Stripe
+		async function fetchInventoryCurrentProduct() {
+				const stockDisponible = fetchInventory("{{ .Params.stripeProduct }}")
 				document.getElementById("stock-display").textContent = stockDisponible;
 				
 				if (stockDisponible <= 0) {
@@ -250,6 +257,6 @@
 
 		}
 
-		fetchInventory("{{ .Params.stripeProduct }}");
+		fetchInventoryCurrentProduct();
 </script>
 {{ end }}

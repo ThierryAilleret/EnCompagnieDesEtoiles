@@ -246,7 +246,7 @@ window.addEventListener("DOMContentLoaded", () => {
 			if (index >= 0) {
 			
 				const nouvelleQuantite = panier[index].quantite + delta;
-				if (!verifierQuantiteDisponible(nom, nouvelleQuantite)) {
+				if (!verifierQuantiteDisponible(panier[index].stripeProduct, nouvelleQuantite)) {
 					return;
 				}
 				

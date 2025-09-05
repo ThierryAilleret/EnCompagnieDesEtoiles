@@ -529,7 +529,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 		}
 
-		function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
+		async function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
 
 				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);

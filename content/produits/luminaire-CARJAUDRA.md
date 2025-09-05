@@ -1,5 +1,6 @@
 +++
 product = "CARJAUDRA"
+stripeProduct = "prod_SzsotNIdMOc9tS"
 title = "Luminaire Manga"
 thumbnail = "/images/CARJAUDRA_1.jpg"
 thumbnail_alt = "Description de l'image miniature du Luminaire Manga"

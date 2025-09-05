@@ -208,7 +208,7 @@
 
 	//Récupération du stock sur Stripe
   async function fetchInventory(productId) {
-		const produit = "{{ .Params.product }}";
+		const produit = "{{ .Params.stripeProduct }}";
     const response = await fetch(`/.netlify/functions/getInventory?product=`+produit);
     const data = await response.json();
     document.getElementById("stock-display").textContent = data.inventory;

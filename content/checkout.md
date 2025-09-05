@@ -323,6 +323,7 @@ window.addEventListener("panierMisAJour", function () {
 
 <script>
 document.getElementById("validation-relais-button").addEventListener("click", function (event) {
+	event.preventDefault(); // Empêche la soumission du formulaire
 	// On passe à l'étape 3
 	const etape3 = document.getElementById("step-3");
 	etape3.classList.add("actif");
@@ -331,7 +332,7 @@ document.getElementById("validation-relais-button").addEventListener("click", fu
 	boutonPaiement.classList.remove("bouton-verrouille");
 	boutonPaiement.style.display = "block";
 	
-}
+});
 document.getElementById("checkout-button").addEventListener("click", function (event) {
   event.preventDefault(); // Empêche la soumission du formulaire
 

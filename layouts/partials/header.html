@@ -332,7 +332,7 @@ window.addEventListener("DOMContentLoaded", () => {
 			if (index >= 0) {
 			
 				const nouvelleQuantite = panier[index].quantite + delta;
-				if (!verifierQuantiteDisponible(nomProduit, nouvelleQuantite)) {
+				if (!verifierQuantiteDisponible(nom, nouvelleQuantite)) {
 					return;
 				}
 				

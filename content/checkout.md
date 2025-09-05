@@ -295,7 +295,6 @@ window.addEventListener("panierMisAJour", function () {
           </div>
 					<!-- Bouton pour lancer le widget -->
 					<!--<button type="button" id="bouton-relai" class="bouton-relai" style="display:none;">📍 Choisir un Point Relais</button>-->
-
 					<!-- Zone d’intégration directe du widget Mondial Relay -->
 					<div id="zone-widget-relai" style="display:none; margin-top:1em;">
 						<div id="Zone_Widget"></div>

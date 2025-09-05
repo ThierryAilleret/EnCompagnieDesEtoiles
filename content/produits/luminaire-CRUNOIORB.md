@@ -1,4 +1,7 @@
 +++
+stripeProductPRD = "pas encore créé en prod" # Clé Stripe à activer au passage en production
+stripeProduct = "prod_SzufHqMM0yfWhP"
+priceIdStripe = "price_1S3uqPGEPWcc8pKF9OQCbkQi"
 product = "CRUNOIORB"
 title = "Luminaire Nuit Étoilée"
 thumbnail = "/images/CRUNOIORB_1.jpg"

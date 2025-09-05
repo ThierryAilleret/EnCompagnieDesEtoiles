@@ -175,7 +175,6 @@
 		function ajouterAuPanier() {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
 
-				const produit = "{{ .Params.product }}";
 				const priceIdStripe = "{{ .Params.priceIdStripe }}";
 				const nom = "{{ .Params.title }}";//document.querySelector("h1")?.textContent.trim() || "";
 				const description = "{{ .Params.description }}";//document.querySelector("h3")?.textContent.trim() || "";
@@ -203,7 +202,7 @@
 				if (index >= 0) {
 						panier[index].quantite += 1;
 				} else {
-						panier.push({ produit, priceIdStripe, nom, description, prix, monnaie, image, quantite: 1 });
+						panier.push({ nom, description, prix ,priceIdStripe, monnaie, image, quantite: 1 });
 				}
 
 				localStorage.setItem("panier", JSON.stringify(panier));

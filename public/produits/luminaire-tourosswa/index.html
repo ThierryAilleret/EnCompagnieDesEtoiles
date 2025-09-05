@@ -485,8 +485,7 @@ window.addEventListener("DOMContentLoaded", () => {
 		function ajouterAuPanier() {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
 
-				const produit = "TOUROSSWA";
-				const priceIdStripe = "";
+				const priceIdStripe = "price_1S3utWGEPWcc8pKFDltICRV1";
 				const nom = "Luminaire du Côté de chez Swann";
 				const description = "Sphère lumineuse en carton coloré et feuilles du Côté de chez Swann";
 				const prix = parseFloat("150");
@@ -513,7 +512,7 @@ window.addEventListener("DOMContentLoaded", () => {
 				if (index >= 0) {
 						panier[index].quantite += 1;
 				} else {
-						panier.push({ produit, priceIdStripe, nom, description, prix, monnaie, image, quantite: 1 });
+						panier.push({ nom, description, prix ,priceIdStripe, monnaie, image, quantite: 1 });
 				}
 
 				localStorage.setItem("panier", JSON.stringify(panier));
@@ -545,7 +544,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 	
 	async function fetchInventory(productId) {
-			const produit = "";
+			const produit = "prod_SzuiT9mIfW0bYZ";
 			const response = await fetch(`/.netlify/functions/getInventory?product=` + produit);
 			const data = await response.json();
 			stockDisponible = parseInt(data.inventory, 10);

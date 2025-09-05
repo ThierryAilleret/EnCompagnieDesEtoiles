@@ -1,4 +1,7 @@
 +++
+stripeProductPRD = "pas encore créé en prod" # Clé Stripe à activer au passage en production
+stripeProduct = "prod_SzuiT9mIfW0bYZ"
+priceIdStripe = "price_1S3utWGEPWcc8pKFDltICRV1"
 product = "TOUROSSWA"
 title = "Luminaire du Côté de chez Swann"
 thumbnail = "/images/TOUROSSWA_1.jpg"

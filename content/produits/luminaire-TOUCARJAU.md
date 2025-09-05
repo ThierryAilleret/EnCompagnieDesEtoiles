@@ -1,4 +1,7 @@
 +++
+stripeProductPRD = "pas encore créé en prod" # Clé Stripe à activer au passage en production
+stripeProduct = "prod_SzuhOIYOtvalWd"
+priceIdStripe = "price_1S3usVGEPWcc8pKFBUzxyJ9f"
 product = "TOUCARJAU"
 title = "Luminaire Carte vintage"
 thumbnail = "/images/TOUCARJAU_1.jpg"

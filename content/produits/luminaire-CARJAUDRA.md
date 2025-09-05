@@ -1,7 +1,7 @@
 +++
-product = "CARJAUDRA"
-stripeProductPRD = "prod_SzsotNIdMOc9tS"
+stripeProductPRD = "prod_SzsotNIdMOc9tS" # Clé Stripe à activer au passage en production
 stripeProduct = "prod_Szt6zvf1SoR67P"
+priceIdStripe = "price_1S3tKlGEPWcc8pKF3ByVuVck"
 title = "Luminaire Manga"
 thumbnail = "/images/CARJAUDRA_1.jpg"
 thumbnail_alt = "Description de l'image miniature du Luminaire Manga"
@@ -17,6 +17,5 @@ ampoule = "E27, LED 20 W max (ampoule non fournie)"
 normes = "CE"
 price = 150
 currency = "€"
-priceIdStripe = "price_1S3tKlGEPWcc8pKF3ByVuVck"
 new = true
 +++

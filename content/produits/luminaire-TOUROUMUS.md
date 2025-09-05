@@ -1,4 +1,7 @@
 +++
+stripeProductPRD = "pas encore créé en prod" # Clé Stripe à activer au passage en production
+stripeProduct = "prod_SzukvjrRoDqbfv"
+priceIdStripe = "price_1S3uuaGEPWcc8pKF8RU6WlPp"
 product = "TOUROUMUS"
 title = "Luminaire Lyra"
 thumbnail = "/images/TOUROUMUS_1.jpg"

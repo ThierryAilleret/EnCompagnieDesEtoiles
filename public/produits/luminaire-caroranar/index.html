@@ -3,7 +3,7 @@
 
 <head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luminaire Naruto</title>
+<title>Luminaire Manga 2</title>
 <meta name="description" content="Sphère lumineuse en carton coloré et planches de manga (Naruto)">
 
 
@@ -312,7 +312,7 @@ window.addEventListener("DOMContentLoaded", () => {
 	<div class="single-container">
 		<article>
 		
-			<h1>Luminaire Naruto</h1>
+			<h1>Luminaire Manga 2</h1>
 			<h3>Sphère lumineuse en carton coloré et planches de manga (Naruto)</h3>
 
 			
@@ -328,8 +328,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
 				<div class="gallery">
 					
-						<img src="/images/CARORANAR_1.jpg" alt="Description de l&#39;image miniature du Luminaire Naruto"
-								 onclick="openModal('\/images\/CARORANAR_1.jpg','Description de l\u0027image miniature du Luminaire Naruto')">
+						<img src="/images/CARORANAR_1.jpg" alt="Description de l&#39;image miniature du Luminaire Manga 2"
+								 onclick="openModal('\/images\/CARORANAR_1.jpg','Description de l\u0027image miniature du Luminaire Manga 2')">
 					
 					
 						<img src="/images/CARORANAR_2.jpg" alt=""
@@ -352,7 +352,7 @@ window.addEventListener("DOMContentLoaded", () => {
 			</div>
 
 			<div class="fiche-texte">
-				<p>Le <b>luminaire Naruto</b> est une pièce unique en carton coloré, habillée de planches d'un vieux manga récupéré en fin de vide grenier (pour les experts, c'est Naruto).<br>Assemblé à partir de 60 éléments identiques, il forme une sphère parfaite dont les entrelacements dessinent un motif en étoile, visible de jour comme de nuit.<br>Éteint, c’est un objet de décoration sculptural. Éclairé, il révèle son intérieur et projette un discret ciel étoilé au plafond.</p>
+				<p>Le <b>luminaire Manga 2</b> est une pièce unique en carton coloré, habillée de planches d'un vieux manga récupéré en fin de vide grenier.<br>Assemblé à partir de 60 éléments identiques, il forme une sphère parfaite dont les entrelacements dessinent un motif en étoile, visible de jour comme de nuit.<br>Éteint, c’est un objet de décoration sculptural. Éclairé, il révèle son intérieur et projette un discret ciel étoilé au plafond.</p>
 				<ul>
 					<li><strong>Dimensions :</strong> diamètre 30 cm</li>
 					<li><strong>Matériaux :</strong> carton, planches de manga, clips plastique</li>
@@ -488,9 +488,8 @@ window.addEventListener("DOMContentLoaded", () => {
 		function ajouterAuPanier() {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
 
-				const produit = "CARORANAR";
-				const priceIdStripe = "";
-				const nom = "Luminaire Naruto";
+				const priceIdStripe = "price_1S3uoRGEPWcc8pKFvhiD75pt";
+				const nom = "Luminaire Manga 2";
 				const description = "Sphère lumineuse en carton coloré et planches de manga (Naruto)";
 				const prix = parseFloat("150");
 				const monnaie = "€";
@@ -516,7 +515,7 @@ window.addEventListener("DOMContentLoaded", () => {
 				if (index >= 0) {
 						panier[index].quantite += 1;
 				} else {
-						panier.push({ produit, priceIdStripe, nom, description, prix, monnaie, image, quantite: 1 });
+						panier.push({ nom, description, prix ,priceIdStripe, monnaie, image, quantite: 1 });
 				}
 
 				localStorage.setItem("panier", JSON.stringify(panier));
@@ -548,7 +547,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 	
 	async function fetchInventory(productId) {
-			const produit = "";
+			const produit = "prod_SzudRYgaYvQ4M9";
 			const response = await fetch(`/.netlify/functions/getInventory?product=` + produit);
 			const data = await response.json();
 			stockDisponible = parseInt(data.inventory, 10);

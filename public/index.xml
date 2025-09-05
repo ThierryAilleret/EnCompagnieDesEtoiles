@@ -454,6 +454,13 @@ window.addEventListener(&#34;panierMisAJour&#34;, function () {
 		&lt;p id=&#34;total-commande&#34;&gt;&lt;strong&gt;Total :&lt;/strong&gt; ... €&lt;/p&gt;</description>
     </item>
     <item>
+      <title>Luminaire BD</title>
+      <link>https://encompagniedesetoiles.fr/produits/luminaire-touroutin/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://encompagniedesetoiles.fr/produits/luminaire-touroutin/</guid>
+      <description>Sphère lumineuse en carton coloré et planches de bande dessinée</description>
+    </item>
+    <item>
       <title>Luminaire Carte vintage</title>
       <link>https://encompagniedesetoiles.fr/produits/luminaire-toucarjau/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -489,7 +496,7 @@ window.addEventListener(&#34;panierMisAJour&#34;, function () {
       <description>Sphère lumineuse en carton coloré et planches de manga</description>
     </item>
     <item>
-      <title>Luminaire Naruto</title>
+      <title>Luminaire Manga 2</title>
       <link>https://encompagniedesetoiles.fr/produits/luminaire-caroranar/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://encompagniedesetoiles.fr/produits/luminaire-caroranar/</guid>
@@ -501,13 +508,6 @@ window.addEventListener(&#34;panierMisAJour&#34;, function () {
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://encompagniedesetoiles.fr/produits/luminaire-crunoiorb/</guid>
       <description>Sphère lumineuse en carton coloré et intérieur doré</description>
-    </item>
-    <item>
-      <title>Luminaire Tintin</title>
-      <link>https://encompagniedesetoiles.fr/produits/luminaire-touroutin/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/produits/luminaire-touroutin/</guid>
-      <description>Sphère lumineuse en carton coloré et planches du Lotus Bleu</description>
     </item>
     <item>
       <title>Mentions légales</title>

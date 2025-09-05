@@ -3,8 +3,8 @@
 
 <head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luminaire Tintin</title>
-<meta name="description" content="Sphère lumineuse en carton coloré et planches du Lotus Bleu">
+<title>Luminaire BD</title>
+<meta name="description" content="Sphère lumineuse en carton coloré et planches de bande dessinée">
 
 
 <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
@@ -312,8 +312,8 @@ window.addEventListener("DOMContentLoaded", () => {
 	<div class="single-container">
 		<article>
 		
-			<h1>Luminaire Tintin</h1>
-			<h3>Sphère lumineuse en carton coloré et planches du Lotus Bleu</h3>
+			<h1>Luminaire BD</h1>
+			<h3>Sphère lumineuse en carton coloré et planches de bande dessinée</h3>
 
 			
 			<div class="gallery-container">
@@ -349,7 +349,7 @@ window.addEventListener("DOMContentLoaded", () => {
 			</div>
 
 			<div class="fiche-texte">
-				<p>Le <b>luminaire Tintin</b> est une pièce unique en carton coloré, habillée de planches du Lotus Bleu, célèbre aventure de Tintin.<br>Assemblé à partir de 60 éléments identiques, il forme une sphère parfaite dont les entrelacements dessinent un motif en étoile, visible de jour comme de nuit.<br>Éteint, c’est un objet de décoration sculptural. Éclairé, il révèle son intérieur et projette un discret ciel étoilé au plafond.</p>
+				<p>Le <b>luminaire BD</b> est une pièce unique en carton coloré, habillée de planches de bande dessinée.<br>Assemblé à partir de 60 éléments identiques, il forme une sphère parfaite dont les entrelacements dessinent un motif en étoile, visible de jour comme de nuit.<br>Éteint, c’est un objet de décoration sculptural. Éclairé, il révèle son intérieur et projette un discret ciel étoilé au plafond.</p>
 				<ul>
 					<li><strong>Dimensions :</strong> diamètre 30 cm</li>
 					<li><strong>Matériaux :</strong> carton, planches de bande dessinées chinées, clips plastique</li>
@@ -485,10 +485,9 @@ window.addEventListener("DOMContentLoaded", () => {
 		function ajouterAuPanier() {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
 
-				const produit = "TOUROUTIN";
-				const priceIdStripe = "";
-				const nom = "Luminaire Tintin";
-				const description = "Sphère lumineuse en carton coloré et planches du Lotus Bleu";
+				const priceIdStripe = "price_1S3ulwGEPWcc8pKF4lTyCE4u";
+				const nom = "Luminaire BD";
+				const description = "Sphère lumineuse en carton coloré et planches de bande dessinée";
 				const prix = parseFloat("150");
 				const monnaie = "€";
 				const image = "\/images\/TOUROUTIN_1.jpg".startsWith("http")
@@ -513,7 +512,7 @@ window.addEventListener("DOMContentLoaded", () => {
 				if (index >= 0) {
 						panier[index].quantite += 1;
 				} else {
-						panier.push({ produit, priceIdStripe, nom, description, prix, monnaie, image, quantite: 1 });
+						panier.push({ nom, description, prix ,priceIdStripe, monnaie, image, quantite: 1 });
 				}
 
 				localStorage.setItem("panier", JSON.stringify(panier));
@@ -545,7 +544,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 	
 	async function fetchInventory(productId) {
-			const produit = "";
+			const produit = "prod_SzubaOJZIo0g4L";
 			const response = await fetch(`/.netlify/functions/getInventory?product=` + produit);
 			const data = await response.json();
 			stockDisponible = parseInt(data.inventory, 10);

@@ -77,21 +77,68 @@ document.addEventListener("DOMContentLoaded", () => {
 		Responsive: true,
 		ShowResultsOnMap: true,
 		OnParcelShopSelected: function (data) {
-			const zoneInfo = document.getElementById("relai-selectionne");
-			const champ = document.getElementById("info-relai");
-			if (!zoneInfo || !champ) return;
+      const zoneInfo = document.getElementById("relai-selectionne");
+      const champ = document.getElementById("info-relai");
+      if (!zoneInfo || !champ) return;
 
-			const fullName = `<strong>${data.Nom}</strong><br>${data.Adresse1}, ${data.CP} ${data.Ville}`;
-			champ.innerHTML = fullName;
-			zoneInfo.style.display = "block";
+      const fullName = `<strong>${data.Nom}</strong><br>${data.Adresse1}, ${data.CP} ${data.Ville}`;
+      let horaires = "";
 
-			window._pointRelaisAdresse = `${data.Nom}, ${data.Adresse1}, ${data.CP} ${data.Ville}`;
-			window._pointRelaisId = data.ID;
+      if (data.HoursHtmlTable) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(data.HoursHtmlTable, "text/html");
+        const rows = doc.querySelectorAll("table tr");
+        const horairesBruts = [];
 
-			// Active l’étape 3
-			document.getElementById("step-3").classList.add("actif");
-			document.getElementById("checkout-button").classList.remove("bouton-verrouille");
-		}
+        rows.forEach(row => {
+          const jour = row.querySelector("th")?.textContent?.trim()?.slice(0, 3);
+          const tds = row.querySelectorAll("td");
+          const heures = Array.from(tds).map(td => td.textContent.trim()).filter(Boolean).join(" / ");
+          if (jour) horairesBruts.push({ jour, horaires: heures || "-" });
+        });
+
+        const groupes = {};
+        horairesBruts.forEach(({ jour, horaires }) => {
+          if (!groupes[horaires]) groupes[horaires] = [];
+          groupes[horaires].push(jour);
+        });
+
+        const joursFR = { Mon: "Lun", Tue: "Mar", Wed: "Mer", Thu: "Jeu", Fri: "Ven", Sat: "Sam", Sun: "Dim" };
+
+        const lignes = Object.entries(groupes).map(([horaires, jours]) => {
+          const trad = jours.map(j => joursFR[j] || j);
+          const etiquette = trad.length === 1 ? trad[0] : `${trad[0]}–${trad[trad.length - 1]}`;
+          return `<div id="horaires-relai"><strong>${etiquette}</strong> : ${horaires}</div>`;
+        });
+
+        horaires = lignes.join("");
+      }
+
+      const html = `
+        <div class="carte-relai">
+          <div class="entete-relai"><span class="icone-carte">📍</span><strong>${data.Nom}</strong></div>
+          <div class="adresse-relai">${data.Adresse1}<br>${data.CP} ${data.Ville}</div>
+          <div class="horaire-relai">
+            <div class="horloge">🕒 Horaires :</div>
+            <div class="table-horaire">${horaires}</div>
+          </div>
+        </div>
+      `;
+
+      champ.innerHTML = html;
+      zoneInfo.style.display = "block";
+
+      window._pointRelaisAdresse = `${data.Nom}, ${data.Adresse1}, ${data.CP} ${data.Ville}`;
+      window._pointRelaisId = data.ID;
+			
+			// On passe à l'étape 3
+			const etape3 = document.getElementById("step-3");
+			etape3.classList.add("actif");
+			
+			const boutonPaiement = document.getElementById("checkout-button");
+			boutonPaiement.classList.remove("bouton-verrouille");
+
+    }
 	});
 
 	//Affichage du contenu du panier
@@ -366,6 +413,9 @@ function surveillerEtape1() {
 		widgetrelai.style.display = "inline-block";
   } else {
     etape2.classList.remove("actif");
+		const widgetrelai = document.getElementById("zone-widget-relai");
+		widgetrelai.style.display = "hidden";
+
   }
 }
 

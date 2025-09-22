@@ -1,7 +1,9 @@
 +++
-stripeProductPRD = "pas encore créé en prod" # Clé Stripe à activer au passage en production
-stripeProduct = "prod_SzuhOIYOtvalWd"
-priceIdStripe = "price_1S3usVGEPWcc8pKFBUzxyJ9f"
+stripeProductTest = "prod_SzuhOIYOtvalWd"
+stripeProductLive = "prod_T6REuDNunr9Fnb"
+priceIdStripeTest = "price_1S3usVGEPWcc8pKFBUzxyJ9f"
+priceIdStripeLive = "price_1SAELlGEPWcc8pKFpfr4YshI"
+
 product = "TOUCARJAU"
 title = "Luminaire Carte vintage"
 thumbnail = "/images/TOUCARJAU_1.jpg"

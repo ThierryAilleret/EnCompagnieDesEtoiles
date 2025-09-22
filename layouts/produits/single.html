@@ -75,6 +75,8 @@
 
   <!-- Script -->
   <script>
+		const stripeEnv = "{{ .Site.Params.stripeEnv }}"; // injecté depuis Netlify	
+	
     let stockDisponible = 0;
 		let currentImageIndex = 0;
     let images = [];
@@ -175,8 +177,16 @@
 		async function ajouterAuPanier() {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
 
-				const stripeProduct = "{{ .Params.stripeProduct }}";
-				const priceIdStripe = "{{ .Params.priceIdStripe }}";
+				const stripeEnv = window.stripeEnv || "test"; // fallback si non défini
+
+				const stripeProduct = stripeEnv === "live"
+					? "{{ .Params.stripeProductLive }}"
+					: "{{ .Params.stripeProductTest }}";
+
+				const priceIdStripe = stripeEnv === "live"
+					? "{{ .Params.priceIdStripeLive }}"
+					: "{{ .Params.priceIdStripeTest }}";
+
 				const nom = "{{ .Params.title }}";//document.querySelector("h1")?.textContent.trim() || "";
 				const description = "{{ .Params.description }}";//document.querySelector("h3")?.textContent.trim() || "";
 				const prix = parseFloat("{{ .Params.price }}");

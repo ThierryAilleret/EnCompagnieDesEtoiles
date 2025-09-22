@@ -1,7 +1,10 @@
 +++
-stripeProductPRD = "prod_SzsotNIdMOc9tS" # Clé Stripe à activer au passage en production
-stripeProduct = "prod_Szt6zvf1SoR67P"
-priceIdStripe = "price_1S3tKlGEPWcc8pKF3ByVuVck"
+
+stripeProductTest = "prod_Szt6zvf1SoR67P"
+stripeProductLive = "prod_T6RTF3v7xtrTtW"
+priceIdStripeTest = "price_1S3tKlGEPWcc8pKF3ByVuVck"
+priceIdStripeLive = "price_1SAEaFGEPWcc8pKFDxEJfZV4"
+
 title = "Luminaire Manga"
 thumbnail = "/images/CARJAUDRA_1.jpg"
 thumbnail_alt = "Description de l'image miniature du Luminaire Manga"

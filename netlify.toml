@@ -1,2 +1,11 @@
 [functions]
 directory = "functions"
+
+[context.production.environment]
+STRIPE_ENV = "live"
+
+[context.deploy-preview.environment]
+STRIPE_ENV = "test"
+
+[context.branch-deploy.environment]
+STRIPE_ENV = "test"

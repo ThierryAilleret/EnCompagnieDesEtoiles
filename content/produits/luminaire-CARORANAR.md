@@ -1,7 +1,10 @@
 +++
-stripeProductPRD = "pas encore créé en prod" # Clé Stripe à activer au passage en production
-stripeProduct = "prod_SzudRYgaYvQ4M9"
-priceIdStripe = "price_1S3uoRGEPWcc8pKFvhiD75pt"
+
+stripeProductTest = "prod_SzudRYgaYvQ4M9"
+stripeProductLive = "prod_T6RQfetJP9tB6W"
+priceIdStripeTest = "price_1S3uoRGEPWcc8pKFvhiD75pt"
+priceIdStripeLive = "price_1SAEXlGEPWcc8pKF3tMdzfpq"
+
 product = "CARORANAR"
 title = "Luminaire Manga 2"
 thumbnail = "/images/CARORANAR_1.jpg"

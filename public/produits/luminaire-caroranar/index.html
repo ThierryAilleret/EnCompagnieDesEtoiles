@@ -389,6 +389,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
   
   <script>
+		const stripeEnv = ""; 
+	
     let stockDisponible = 0;
 		let currentImageIndex = 0;
     let images = [];
@@ -489,8 +491,16 @@ window.addEventListener("DOMContentLoaded", () => {
 		async function ajouterAuPanier() {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
 
-				const stripeProduct = "prod_SzudRYgaYvQ4M9";
-				const priceIdStripe = "price_1S3uoRGEPWcc8pKFvhiD75pt";
+				const stripeEnv = window.stripeEnv || "test"; 
+
+				const stripeProduct = stripeEnv === "live"
+					? "prod_T6RQfetJP9tB6W"
+					: "prod_SzudRYgaYvQ4M9";
+
+				const priceIdStripe = stripeEnv === "live"
+					? "price_1SAEXlGEPWcc8pKF3tMdzfpq"
+					: "price_1S3uoRGEPWcc8pKFvhiD75pt";
+
 				const nom = "Luminaire Manga 2";
 				const description = "Sphère lumineuse en carton coloré et planches de manga (Naruto)";
 				const prix = parseFloat("150");
@@ -554,7 +564,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 		
 		async function fetchInventoryCurrentProduct() {
-				const response = await fetch(`/.netlify/functions/getInventory?product=` + "prod_SzudRYgaYvQ4M9");
+				const response = await fetch(`/.netlify/functions/getInventory?product=` + "");
 				const data = await response.json();
 				stockDisponible = parseInt(data.inventory, 10);
 				

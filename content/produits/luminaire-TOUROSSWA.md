@@ -1,7 +1,10 @@
 +++
-stripeProductPRD = "pas encore créé en prod" # Clé Stripe à activer au passage en production
-stripeProduct = "prod_SzuiT9mIfW0bYZ"
-priceIdStripe = "price_1S3utWGEPWcc8pKFDltICRV1"
+
+stripeProductTest = "prod_SzuiT9mIfW0bYZ"
+stripeProductLive = "prod_T6RJgwcUbth58n"
+priceIdStripeTest = "price_1S3utWGEPWcc8pKFDltICRV1"
+priceIdStripeLive = "price_1SAEQzGEPWcc8pKFsEoBoBrZ"
+
 product = "TOUROSSWA"
 title = "Luminaire du Côté de chez Swann"
 thumbnail = "/images/TOUROSSWA_1.jpg"

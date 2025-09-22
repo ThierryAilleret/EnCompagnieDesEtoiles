@@ -1,7 +1,10 @@
 +++
-stripeProductPRD = "pas encore créé en prod" # Clé Stripe à activer au passage en production
-stripeProduct = "prod_SzukvjrRoDqbfv"
-priceIdStripe = "price_1S3uuaGEPWcc8pKF8RU6WlPp"
+
+stripeProductTest = "prod_SzukvjrRoDqbfv"
+stripeProductLive = "prod_T6RH6zHZXroFr9"
+priceIdStripeTest = "price_1S3uuaGEPWcc8pKF8RU6WlPp"
+priceIdStripeLive = "price_1SAEPOGEPWcc8pKFKV0uAtFi"
+
 product = "TOUROUMUS"
 title = "Luminaire Lyra"
 thumbnail = "/images/TOUROUMUS_1.jpg"

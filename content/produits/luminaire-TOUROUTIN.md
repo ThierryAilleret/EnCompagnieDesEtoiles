@@ -1,7 +1,10 @@
 +++
-stripeProductPRD = "pas encore créé en prod" # Clé Stripe à activer au passage en production
-stripeProduct = "prod_SzubaOJZIo0g4L"
-priceIdStripe = "price_1S3ulwGEPWcc8pKF4lTyCE4u"
+
+stripeProductTest = "prod_SzubaOJZIo0g4L"
+stripeProductLive = "prod_T6RSxQVzqHDMgk"
+priceIdStripeTest = "price_1S3ulwGEPWcc8pKF4lTyCE4u"
+priceIdStripeLive = "price_1SAEZBGEPWcc8pKFzZRbYYgS"
+
 product = "TOUROUTIN"
 title = "Luminaire BD"
 thumbnail = "/images/TOUROUTIN_1.jpg"

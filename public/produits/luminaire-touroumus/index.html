@@ -392,6 +392,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
   
   <script>
+		const stripeEnv = ""; 
+	
     let stockDisponible = 0;
 		let currentImageIndex = 0;
     let images = [];
@@ -492,8 +494,16 @@ window.addEventListener("DOMContentLoaded", () => {
 		async function ajouterAuPanier() {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
 
-				const stripeProduct = "prod_SzukvjrRoDqbfv";
-				const priceIdStripe = "price_1S3uuaGEPWcc8pKF8RU6WlPp";
+				const stripeEnv = window.stripeEnv || "test"; 
+
+				const stripeProduct = stripeEnv === "live"
+					? "prod_T6RH6zHZXroFr9"
+					: "prod_SzukvjrRoDqbfv";
+
+				const priceIdStripe = stripeEnv === "live"
+					? "price_1SAEPOGEPWcc8pKFKV0uAtFi"
+					: "price_1S3uuaGEPWcc8pKF8RU6WlPp";
+
 				const nom = "Luminaire Lyra";
 				const description = "Sphère lumineuse en carton coloré et partitions anciennes";
 				const prix = parseFloat("150");
@@ -557,7 +567,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 		
 		async function fetchInventoryCurrentProduct() {
-				const response = await fetch(`/.netlify/functions/getInventory?product=` + "prod_SzukvjrRoDqbfv");
+				const response = await fetch(`/.netlify/functions/getInventory?product=` + "");
 				const data = await response.json();
 				stockDisponible = parseInt(data.inventory, 10);
 				

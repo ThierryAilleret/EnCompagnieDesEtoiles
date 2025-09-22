@@ -1,7 +1,10 @@
 +++
-stripeProductPRD = "pas encore créé en prod" # Clé Stripe à activer au passage en production
-stripeProduct = "prod_SzugCw7Z7hLsg8"
-priceIdStripe = "price_1S3urNGEPWcc8pKFghwGyJGZ"
+
+stripeProductTest = "prod_SzugCw7Z7hLsg8"
+stripeProductLive = "prod_T6RJgwcUbth58n"
+priceIdStripeTest = "price_1S3urNGEPWcc8pKFghwGyJGZ"
+priceIdStripeLive = "price_1SAEQzGEPWcc8pKFsEoBoBrZ"
+
 product = "SERBLEMUS"
 title = "Luminaire Maestro"
 thumbnail = "/images/SERBLEMUS_1.jpg"

@@ -676,7 +676,7 @@ document.getElementById("checkout-button").addEventListener("click", function (e
   }
 
   // Envoi au backend
-  fetch("https://encompagniedesetoiles.fr/.netlify/functions/creer-session-checkout", {
+  fetch("/.netlify/functions/creer-session-checkout", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ panier, client })
@@ -694,7 +694,14 @@ document.getElementById("checkout-button").addEventListener("click", function (e
 
 
     // Redirection vers Stripe Checkout
-    const stripe = Stripe("pk_test_51RkqVwGEPWcc8pKFZevbWerlrXRo1mIBwK9XfkO2eFBn9ulLVVXhpvozeHjDM7D3Xdu9hm3oUdTLhMO9UZfbPIYI00OmhDMt0o");
+		const stripeEnv = window.stripeEnv || "test";
+
+		const stripePublicKey = stripeEnv === "live"
+			? "{{ .Site.Params.stripePublicKeyLive }}"
+			: "{{ .Site.Params.stripePublicKeyTest }}";
+
+		const stripe = Stripe(stripePublicKey);
+
     stripe.redirectToCheckout({ sessionId: data.sessionId });
   })
   .catch(error => {

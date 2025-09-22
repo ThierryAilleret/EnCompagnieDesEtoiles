@@ -2,6 +2,9 @@
 title = "Finaliser ma commande"  
 url    = "/checkout.html"  
 layout = "checkout"  
+stripePublicKeyTest = "pk_test_51RkqVwGEPWcc8pKFZevbWerlrXRo1mIBwK9XfkO2eFBn9ulLVVXhpvozeHjDM7D3Xdu9hm3oUdTLhMO9UZfbPIYI00OmhDMt0o"
+stripePublicKeyLive = "pk_live_51RkqVwGEPWcc8pKFt4kyM2omMjxPn6kFon60S0n9phoX5ILWVa1fmqtGlOiI6ua7RyT1TA9IJpm7mP1ga5TGIW5p00QaJKKGiZ"
+
 +++
 <!-- Pour Mondial Relay -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
@@ -371,7 +374,7 @@ document.getElementById("checkout-button").addEventListener("click", function (e
   }
 
   // Envoi au backend
-  fetch("https://encompagniedesetoiles.fr/.netlify/functions/creer-session-checkout", {
+  fetch("/.netlify/functions/creer-session-checkout", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ panier, client })
@@ -389,7 +392,14 @@ document.getElementById("checkout-button").addEventListener("click", function (e
 
 
     // Redirection vers Stripe Checkout
-    const stripe = Stripe("pk_test_51RkqVwGEPWcc8pKFZevbWerlrXRo1mIBwK9XfkO2eFBn9ulLVVXhpvozeHjDM7D3Xdu9hm3oUdTLhMO9UZfbPIYI00OmhDMt0o");
+		const stripeEnv = window.stripeEnv || "test";
+
+		const stripePublicKey = stripeEnv === "live"
+			? "{{ .Site.Params.stripePublicKeyLive }}"
+			: "{{ .Site.Params.stripePublicKeyTest }}";
+
+		const stripe = Stripe(stripePublicKey);
+
     stripe.redirectToCheckout({ sessionId: data.sessionId });
   })
   .catch(error => {

@@ -58,176 +58,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   });
 
-	document.getElementById("bouton-relai").addEventListener("click", afficherPopupMondialRelay);
+	// document.getElementById("bouton-relai").addEventListener("click", afficherPopupMondialRelay);
 
-	//Affichage du contenu du panier
-	afficherPanierDansCheckout();
-});
+	const cp = localStorage.getItem('codePostal')?.trim() || "";
+	const ville = localStorage.getItem('ville')?.trim() || "";
 
-window.addEventListener("panierMisAJour", () => {
-  afficherPanierDansCheckout();
-});
-
-function afficherPanierDansCheckout() {
-	const panierJSON = localStorage.getItem("panier");
-	if (!panierJSON) return;
-
-	let total = 0;
-	const panier = JSON.parse(panierJSON);
-	const ul = document.getElementById("panier-resume");
-
-	ul.innerHTML = "";
-	panier.forEach(article => {
-		const li = document.createElement("li");
-		li.innerHTML = `
-			<div style="display:flex; gap:10px; margin-bottom:10px;">
-				<img src="${article.image}" alt="${article.nom}" style="height:48px; width:auto; border-radius:4px;">
-				<div>
-					<strong>${article.nom}</strong><br>
-					<span style="font-size:0.9em;">${article.description}</span><br>
-					<span>${article.quantite} × ${article.prix}${article.monnaie}</span>
-				</div>
-			</div>
-		`;
-		ul.appendChild(li);
-		total += article.prix * article.quantite;
-	});
-
-	document.getElementById("total-commande").innerHTML = `<strong>Total :</strong> ${total} €`;
-  const totalPaiement = document.getElementById("prix-total");
-  if (totalPaiement) {
-    totalPaiement.innerHTML = `Total : ${total} €`;
-  }
-}
-
-function afficherPopupMondialRelay() {
-  const cp = localStorage.getItem('codePostal')?.trim() || "";
-  const ville = localStorage.getItem('ville')?.trim() || "";
-
-  if (!cp || !ville) {
-    alert("Veuillez renseigner l'adresse avant.");
-    return;
-  }
-
-  // Création de la pop-up
-  const popup = document.createElement("div");
-  popup.id = "popup-overlay";
-  popup.style.cssText = `
-    position:fixed; top:0; left:0; width:100vw; height:100vh;
-    background:rgba(0,0,0,0.6); z-index:1000;
-    display:flex; justify-content:center; align-items:center;
-  `;
-
-  const conteneur = document.createElement("div");
-  conteneur.style.cssText = `
-    background:#fff; padding:20px; width:90%; max-width:800px;
-    max-height:90vh; overflow-y:auto; border-radius:6px;
-  `;
-	conteneur.style.position = "relative";
-
-  // Création dynamique d’un widget frais
-  const popupWidget = document.createElement("div");
-  popupWidget.id = "popup-widget";
-  popupWidget.style.display = "block";
-
-  const zoneWidget = document.createElement("div");
-  zoneWidget.id = "Zone_Widget";
-
-  const inputHidden = document.createElement("input");
-  inputHidden.type = "text";
-  inputHidden.id = "Target_Widget";
-  inputHidden.name = "point-relay";
-  inputHidden.hidden = true;
-
-  popupWidget.appendChild(zoneWidget);
-  popupWidget.appendChild(inputHidden);
-  conteneur.appendChild(popupWidget);
-
-	// Bouton de fermeture
-	const close = document.createElement("button");
-	close.innerHTML = `
-		<svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-			<line x1="10" y1="10" x2="20" y2="20" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-			<line x1="20" y1="10" x2="10" y2="20" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-		</svg>
-	`;
-	close.style.cssText = `
-		position: absolute;
-		top: 12px;
-		right: 12px;
-		z-index: 1001;
-		width: 30px;
-		height: 30px;
-		border-radius: 50%;
-		background: #d32f2f;
-		border: none;
-		padding: 0;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		cursor: pointer;
-		box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-		transition: transform 0.2s ease, background 0.3s;
-	`;
-	close.onmouseover = () => {
-		close.style.transform = "scale(1.05)";
-		close.style.background = "#b71c1c";
-	};
-	close.onmouseout = () => {
-		close.style.transform = "scale(1)";
-		close.style.background = "#d32f2f";
-	};
-	conteneur.appendChild(close);
-
-	close.className = "bouton-fermer";
-
-  close.onclick = () => {
-    document.body.removeChild(popup);
-  };
-  conteneur.insertBefore(close, conteneur.firstChild);
-
-  popup.appendChild(conteneur);
-  document.body.appendChild(popup);
-
-	// Fermeture si clic à l'extérieur du conteneur
-	popup.addEventListener("click", function(e) {
-		const estDansWidget = conteneur.contains(e.target);
-		const conteneurAuto = document.querySelector(".PR-AutoCplCity");
-		const estDansAutocomplete = conteneurAuto?.contains(e.target);
-
-		const estDansSuggestion = e.target.closest(".PR-City") !== null;
-
-		if (!estDansWidget && !estDansAutocomplete && !estDansSuggestion) {
-			close.click();
-		}
-	});
-
-
-
-
-	// Fermeture avec Échap ou Entrée
-	window.addEventListener("keydown", function(e) {
-		if (e.key === "Escape" || e.key === "Enter") {
-			close.click();
-		}
-	});
-
-
-  // Initialisation du widget Mondial Relay
-  $("#Zone_Widget").MR_ParcelShopPicker({
-    Target: "#Target_Widget",
-    Brand: "CC23JV2D",
-    Country: "FR",
+	$("#Zone_Widget").MR_ParcelShopPicker({
+		Target: "#Target_Widget",
+		Brand: "CC23JV2D",
+		Country: "FR",
 		AllowedCountries: "FR",
 		Language: "FR",
 		EnableGeolocalisatedSearch: "Yes",
-    PostCode: cp,
-    City: ville,
-    NbResults: "10",
-    ColLivMod: "24R",
-    Responsive: true,
-    ShowResultsOnMap: true,
-    OnParcelShopSelected: function (data) {
+		PostCode: cp,
+		City: ville,
+		NbResults: "10",
+		ColLivMod: "24R",
+		Responsive: true,
+		ShowResultsOnMap: false,
+		OnParcelShopSelected: function (data) {
       const zoneInfo = document.getElementById("relai-selectionne");
       const champ = document.getElementById("info-relai");
       if (!zoneInfo || !champ) return;
@@ -281,16 +130,58 @@ function afficherPopupMondialRelay() {
 
       window._pointRelaisAdresse = `${data.Nom}, ${data.Adresse1}, ${data.CP} ${data.Ville}`;
       window._pointRelaisId = data.ID;
-			
-			// On passe à l'étape 3
-			const etape3 = document.getElementById("step-3");
-			etape3.classList.add("actif");
-			
-			const boutonPaiement = document.getElementById("checkout-button");
-			boutonPaiement.classList.remove("bouton-verrouille");
 
+			// On affiche le bouton de validation du relais
+			const boutonValidationRelais = document.getElementById("validation-relais-button");
+			boutonValidationRelais.classList.remove("bouton-verrouille");
+			boutonValidationRelais.style.display = "block";
+			
+			// On désactive le bouton de paiment (juste pour donner l'impression au client qu'il doit valider son relais
+			const etape3 = document.getElementById("step-3");
+			etape3.classList.remove("actif");
+			const boutonPaiement = document.getElementById("checkout-button");
+			boutonPaiement.classList.add("bouton-verrouille");
     }
-  });
+	});
+
+	//Affichage du contenu du panier
+	afficherPanierDansCheckout();
+});
+
+window.addEventListener("panierMisAJour", () => {
+  afficherPanierDansCheckout();
+});
+
+function afficherPanierDansCheckout() {
+	const panierJSON = localStorage.getItem("panier");
+	if (!panierJSON) return;
+
+	let total = 0;
+	const panier = JSON.parse(panierJSON);
+	const ul = document.getElementById("panier-resume");
+
+	ul.innerHTML = "";
+	panier.forEach(article => {
+		const li = document.createElement("li");
+		li.innerHTML = `
+			<div style="display:flex; gap:10px; margin-bottom:10px;">
+				<img src="${article.image}" alt="${article.nom}" style="height:48px; width:auto; border-radius:4px;">
+				<div>
+					<strong>${article.nom}</strong><br>
+					<span style="font-size:0.9em;">${article.description}</span><br>
+					<span>${article.quantite} × ${article.prix}${article.monnaie}</span>
+				</div>
+			</div>
+		`;
+		ul.appendChild(li);
+		total += article.prix * article.quantite;
+	});
+
+	document.getElementById("total-commande").innerHTML = `<strong>Total :</strong> ${total} €`;
+  const totalPaiement = document.getElementById("prix-total");
+  if (totalPaiement) {
+    totalPaiement.innerHTML = `Total : ${total} €`;
+  }
 }
 
 function remplirAdresseGeo(item) {
@@ -306,8 +197,6 @@ function remplirAdresseGeo(item) {
 	localStorage.setItem('codePostal', cp);
 	localStorage.setItem('ville', ville);
 
-
-
   window.adresseGoogleValidee = true;
 
 }
@@ -320,16 +209,25 @@ function surveillerEtape1() {
 
   const etape1 = document.getElementById("step-1");
   const etape2 = document.getElementById("step-2");
+  const etape3 = document.getElementById("step-3");
 
   const etape_1_complete = nom && prenom && adresse && mail;
 
   if (etape_1_complete) {
     etape2.classList.add("actif");
 	  // Affiche ou masque les points relais
-		const boutonrelai = document.getElementById("bouton-relai");
-		boutonrelai.style.display = "inline-block";
+		// const boutonrelai = document.getElementById("bouton-relai");
+		// boutonrelai.style.display = "inline-block";
+		const widgetrelai = document.getElementById("zone-widget-relai");
+		widgetrelai.style.display = "inline-block";
   } else {
     etape2.classList.remove("actif");
+		const widgetrelai = document.getElementById("zone-widget-relai");
+		widgetrelai.style.display = "none";
+
+		etape3.classList.remove("actif");
+		const boutonPaiement = document.getElementById("checkout-button");
+		boutonPaiement.classList.add("bouton-verrouille");
   }
 }
 
@@ -393,20 +291,26 @@ window.addEventListener("panierMisAJour", function () {
               <input type="text" id="code-postal" name="code-postal" maxlength="5" style="display:none;">
               <input type="text" id="ville" name="ville"  style="display:none;">
           </div>
-					<!-- Bouton pour lancer le widget -->
-					<button type="button" id="bouton-relai" class="bouton-relai" style="display:none;">📍 Choisir un Point Relais</button>
+					<!-- Zone d’intégration directe du widget Mondial Relay -->
+					<div id="zone-widget-relai" style="display:none; margin-top:0em;">
+						<div id="Zone_Widget"></div>
+						<input type="hidden" id="Target_Widget" name="point-relay" />
+					</div>
 					<!-- Zone d'affichage du point relais choisi -->
-					<div id="relai-selectionne" style="display:none; margin-top:0.5em; margin-bottom:0em;">
+					<div id="relai-selectionne" style="display:none; margin-top:0.5em; margin-bottom:0.5em;">
 						<div id="titre-relai-selectionne"><strong>Relais sélectionné :</strong></div>
 						<div id="info-relai"></div>
 					</div>
+					<button type="button" id="validation-relais-button" class="bouton-validation-relai  bouton-verrouille" style="display:none">
+						Choisir ce point relais
+					</button>
         </div>
 			</fieldset>
       <!-- Étape 3 : Paiement -->
       <fieldset id="step-3" class="etape">
         <legend><span class="etape-numero">3</span> Paiement</legend>
-        <div id="prix-total">Total : ... €</div>
-				<button type="button" id="checkout-button" class="bouton-checkout  bouton-verrouille">
+        <div id="prix-total" style="display:none">Total : ... €</div>
+				<button type="button" id="checkout-button" class="bouton-checkout  bouton-verrouille" style="display:none">
           Payer avec Stripe
         </button>
 				<script src="https://js.stripe.com/v3/"></script>
@@ -422,6 +326,20 @@ window.addEventListener("panierMisAJour", function () {
 </div>
 
 <script>
+document.getElementById("validation-relais-button").addEventListener("click", function (event) {
+	event.preventDefault(); // Empêche la soumission du formulaire
+	// On passe à l'étape 3
+	const etape3 = document.getElementById("step-3");
+	etape3.classList.add("actif");
+	
+	const prixTotal = document.getElementById("prix-total");
+	prixTotal.style.display = "block";
+
+	const boutonPaiement = document.getElementById("checkout-button");
+	boutonPaiement.classList.remove("bouton-verrouille");
+	boutonPaiement.style.display = "block";
+
+});
 document.getElementById("checkout-button").addEventListener("click", function (event) {
   event.preventDefault(); // Empêche la soumission du formulaire
 
@@ -453,7 +371,7 @@ document.getElementById("checkout-button").addEventListener("click", function (e
   }
 
   // Envoi au backend
-  fetch("https://encompagniedesetoiles.fr/.netlify/functions/creer-session-checkout", {
+  fetch("/.netlify/functions/creer-session-checkout", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ panier, client })

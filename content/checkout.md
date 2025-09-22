@@ -329,6 +329,8 @@ window.addEventListener("panierMisAJour", function () {
 </div>
 
 <script>
+const stripeEnv = "{{ .Site.Params.stripeEnv }}"; // injecté depuis Netlify	
+
 document.getElementById("validation-relais-button").addEventListener("click", function (event) {
 	event.preventDefault(); // Empêche la soumission du formulaire
 	// On passe à l'étape 3

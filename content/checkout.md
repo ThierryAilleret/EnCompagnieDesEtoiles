@@ -329,9 +329,6 @@ window.addEventListener("panierMisAJour", function () {
 </div>
 
 <script>
-window.stripeEnv = "{{ getenv "STRIPE_ENV" }}";
-window.stripePublicKey = "{{ if eq (getenv "STRIPE_ENV") "live" }}{{ .Site.Params.stripePublicKeyLive }}{{ else }}{{ .Site.Params.stripePublicKeyTest }}{{ end }}";
-
 document.getElementById("validation-relais-button").addEventListener("click", function (event) {
 	event.preventDefault(); // Empêche la soumission du formulaire
 	// On passe à l'étape 3
@@ -346,6 +343,11 @@ document.getElementById("validation-relais-button").addEventListener("click", fu
 	boutonPaiement.style.display = "block";
 
 });
+
+
+window.stripeEnv = "{{ getenv "STRIPE_ENV" }}";
+window.stripePublicKey = "{{ if eq (getenv "STRIPE_ENV") "live" }}{{ .Site.Params.stripePublicKeyLive }}{{ else }}{{ .Site.Params.stripePublicKeyTest }}{{ end }}";
+
 document.getElementById("checkout-button").addEventListener("click", function (event) {
   event.preventDefault(); // Empêche la soumission du formulaire
 
@@ -393,10 +395,13 @@ document.getElementById("checkout-button").addEventListener("click", function (e
     localStorage.setItem("stripeSessionId", data.sessionId);
 		console.log("Session enregistrée :", data.sessionId);
 
-
+		if (!window.stripePublicKey || !window.stripePublicKey.startsWith("pk_")) {
+			alert("Clé Stripe invalide ou manquante.");
+			console.error("❌ Clé Stripe non valide :", window.stripePublicKey);
+			return;
+		}
     // Redirection vers Stripe Checkout
 		const stripe = Stripe(window.stripePublicKey);
-
     stripe.redirectToCheckout({ sessionId: data.sessionId });
   })
   .catch(error => {

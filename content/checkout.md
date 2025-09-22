@@ -329,7 +329,8 @@ window.addEventListener("panierMisAJour", function () {
 </div>
 
 <script>
-const stripeEnv = "{{ .Site.Params.stripeEnv }}"; // injecté depuis Netlify	
+window.stripeEnv = "{{ getenv "STRIPE_ENV" }}";
+window.stripePublicKey = "{{ if eq (getenv "STRIPE_ENV") "live" }}{{ .Site.Params.stripePublicKeyLive }}{{ else }}{{ .Site.Params.stripePublicKeyTest }}{{ end }}";
 
 document.getElementById("validation-relais-button").addEventListener("click", function (event) {
 	event.preventDefault(); // Empêche la soumission du formulaire
@@ -394,13 +395,7 @@ document.getElementById("checkout-button").addEventListener("click", function (e
 
 
     // Redirection vers Stripe Checkout
-		const stripeEnv = window.stripeEnv || "test";
-
-		const stripePublicKey = stripeEnv === "live"
-			? "{{ .Site.Params.stripePublicKeyLive }}"
-			: "{{ .Site.Params.stripePublicKeyTest }}";
-
-		const stripe = Stripe(stripePublicKey);
+		const stripe = Stripe(window.stripePublicKey);
 
     stripe.redirectToCheckout({ sessionId: data.sessionId });
   })

@@ -644,8 +644,6 @@ document.getElementById("validation-relais-button").addEventListener("click", fu
 	boutonPaiement.style.display = "block";
 
 });
-window.stripeEnv = "{{ getenv "STRIPE_ENV" }}";
-window.stripePublicKey = "{{ if eq (getenv "STRIPE_ENV") "live" }}{{ .Site.Params.stripePublicKeyLive }}{{ else }}{{ .Site.Params.stripePublicKeyTest }}{{ end }}";
 document.getElementById("checkout-button").addEventListener("click", function (event) {
   event.preventDefault(); // Empêche la soumission du formulaire
 

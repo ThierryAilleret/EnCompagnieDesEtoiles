@@ -1,4 +1,0 @@
-<script>
-  window.stripeEnv = "{{ getenv "STRIPE_ENV" }}";
-  window.stripePublicKey = "{{ if eq (getenv "STRIPE_ENV") "live" }}{{ .Site.Params.stripePublicKeyLive }}{{ else }}{{ .Site.Params.stripePublicKeyTest }}{{ end }}";
-</script>

@@ -328,7 +328,6 @@ window.addEventListener("panierMisAJour", function () {
 <script>
 document.getElementById("validation-relais-button").addEventListener("click", function (event) {
 	event.preventDefault(); // Empêche la soumission du formulaire
-	console.log("appui sur le bouton");
 	// On passe à l'étape 3
 	const etape3 = document.getElementById("step-3");
 	etape3.classList.add("actif");

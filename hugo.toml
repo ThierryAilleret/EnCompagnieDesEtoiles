@@ -6,3 +6,7 @@ theme = "PaperMod"
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
+
+
+[security.funcs]
+getenv = ['^STRIPE_', '^HUGO_', '^CI$']

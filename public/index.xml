@@ -66,7 +66,8 @@ document.addEventListener(&#34;DOMContentLoaded&#34;, () =&gt; {
 
   const adresseInput = document.getElementById(&#34;adresse&#34;);
   const cpInput      = document.getElementById(&#34;code-postal&#34;);
-
+	window.stripeEnv = &#34;{{ getenv &#34;STRIPE_ENV&#34; }}&#34;;
+	window.stripePublicKey = &#34;{{ if eq (getenv &#34;STRIPE_ENV&#34;) &#34;live&#34; }}{{ .Site.Params.stripePublicKeyLive }}{{ else }}{{ .Site.Params.stripePublicKeyTest }}{{ end }}&#34;;
   adresseInput.addEventListener(&#34;input&#34;, async e =&gt; {
 
 

@@ -25,7 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const adresseInput = document.getElementById("adresse");
   const cpInput      = document.getElementById("code-postal");
-
+	window.stripeEnv = "{{ getenv "STRIPE_ENV" }}";
+	window.stripePublicKey = "{{ if eq (getenv "STRIPE_ENV") "live" }}{{ .Site.Params.stripePublicKeyLive }}{{ else }}{{ .Site.Params.stripePublicKeyTest }}{{ end }}";
   adresseInput.addEventListener("input", async e => {
 
 
@@ -343,8 +344,8 @@ document.getElementById("validation-relais-button").addEventListener("click", fu
 	boutonPaiement.style.display = "block";
 
 });
-window.stripeEnv = "{{ getenv "STRIPE_ENV" }}";
-window.stripePublicKey = "{{ if eq (getenv "STRIPE_ENV") "live" }}{{ .Site.Params.stripePublicKeyLive }}{{ else }}{{ .Site.Params.stripePublicKeyTest }}{{ end }}";
+//window.stripeEnv = "{{ getenv "STRIPE_ENV" }}";
+//window.stripePublicKey = "{{ if eq (getenv "STRIPE_ENV") "live" }}{{ .Site.Params.stripePublicKeyLive }}{{ else }}{{ .Site.Params.stripePublicKeyTest }}{{ end }}";
 document.getElementById("checkout-button").addEventListener("click", function (event) {
   event.preventDefault(); // Empêche la soumission du formulaire
 

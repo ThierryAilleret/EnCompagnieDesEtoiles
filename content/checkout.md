@@ -2,8 +2,6 @@
 title = "Finaliser ma commande"  
 url    = "/checkout.html"  
 layout = "checkout"  
-stripePublicKeyTest = "pk_test_51RkqVwGEPWcc8pKFZevbWerlrXRo1mIBwK9XfkO2eFBn9ulLVVXhpvozeHjDM7D3Xdu9hm3oUdTLhMO9UZfbPIYI00OmhDMt0o"
-stripePublicKeyLive = "pk_live_51RkqVwGEPWcc8pKFt4kyM2omMjxPn6kFon60S0n9phoX5ILWVa1fmqtGlOiI6ua7RyT1TA9IJpm7mP1ga5TGIW5p00QaJKKGiZ"
 +++
 <!-- Pour Mondial Relay -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>

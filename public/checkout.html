@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
@@ -6,17 +7,18 @@
 <title>Finaliser ma commande</title>
 <meta name="description" content="">
 
-
 <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
 
-
 <link rel="stylesheet" href="/css/style.css">
-
 
 
   <meta name="robots" content="noindex, follow">
 
 
+		<script>
+			window.stripeEnv = "test";
+			window.stripePublicKey = "pk_test_123456";
+		</script>
 </head>
 
 <body class="" id="top">
@@ -310,6 +312,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 </script>
 <main class="main">
+		blabla
 <main>
   <!-- Pour Mondial Relay -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
@@ -330,10 +333,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const adresseInput = document.getElementById("adresse");
   const cpInput      = document.getElementById("code-postal");
-
-  adresseInput.addEventListener("input", async e => {
-
-
+  
+	adresseInput.addEventListener("input", async e => {
     const q = e.target.value.trim();
     if (q.length < 3) return;
 
@@ -676,7 +677,7 @@ document.getElementById("checkout-button").addEventListener("click", function (e
   }
 
   // Envoi au backend
-  fetch("https://encompagniedesetoiles.fr/.netlify/functions/creer-session-checkout", {
+  fetch("/.netlify/functions/creer-session-checkout", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ panier, client })
@@ -692,9 +693,13 @@ document.getElementById("checkout-button").addEventListener("click", function (e
     localStorage.setItem("stripeSessionId", data.sessionId);
 		console.log("Session enregistrée :", data.sessionId);
 
-
+		if (!window.stripePublicKey || !window.stripePublicKey.startsWith("pk_")) {
+			alert("Clé Stripe invalide ou manquante.");
+			console.error("❌ Clé Stripe non valide :", window.stripePublicKey);
+			return;
+		}
     // Redirection vers Stripe Checkout
-    const stripe = Stripe("pk_test_51RkqVwGEPWcc8pKFZevbWerlrXRo1mIBwK9XfkO2eFBn9ulLVVXhpvozeHjDM7D3Xdu9hm3oUdTLhMO9UZfbPIYI00OmhDMt0o");
+		const stripe = Stripe(window.stripePublicKey);
     stripe.redirectToCheckout({ sessionId: data.sessionId });
   })
   .catch(error => {
@@ -747,19 +752,6 @@ document.getElementById("checkout-button").addEventListener("click", function (e
             }
         });
     });
-
-</script>
-<script>
-    var mybutton = document.getElementById("top-link");
-    window.onscroll = function () {
-        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
-            mybutton.style.visibility = "visible";
-            mybutton.style.opacity = "1";
-        } else {
-            mybutton.style.visibility = "hidden";
-            mybutton.style.opacity = "0";
-        }
-    };
 
 </script>
 <script>

@@ -66,10 +66,8 @@ document.addEventListener(&#34;DOMContentLoaded&#34;, () =&gt; {
 
   const adresseInput = document.getElementById(&#34;adresse&#34;);
   const cpInput      = document.getElementById(&#34;code-postal&#34;);
-
-  adresseInput.addEventListener(&#34;input&#34;, async e =&gt; {
-
-
+  
+	adresseInput.addEventListener(&#34;input&#34;, async e =&gt; {
     const q = e.target.value.trim();
     if (q.length &lt; 3) return;
 

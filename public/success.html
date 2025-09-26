@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
@@ -6,17 +7,18 @@
 <title>Commande validée</title>
 <meta name="description" content="">
 
-
 <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
 
-
 <link rel="stylesheet" href="/css/style.css">
-
 
 
   <meta name="robots" content="noindex, follow">
 
 
+		<script>
+			window.stripeEnv = "test";
+			window.stripePublicKey = "pk_test_123456";
+		</script>
 </head>
 
 <body class="" id="top">
@@ -310,6 +312,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 </script>
 <main class="main">
+		blabla
   <section class="main-content">
     <div class="content-wrapper">
       <div class="content-text">
@@ -371,19 +374,6 @@ window.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
-
-</script>
-<script>
-    var mybutton = document.getElementById("top-link");
-    window.onscroll = function () {
-        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
-            mybutton.style.visibility = "visible";
-            mybutton.style.opacity = "1";
-        } else {
-            mybutton.style.visibility = "hidden";
-            mybutton.style.opacity = "0";
-        }
-    };
 
 </script>
 <script>

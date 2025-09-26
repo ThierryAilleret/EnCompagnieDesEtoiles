@@ -1,13 +1,31 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async (event) => {
+  const allowedOrigins = [
+    "https://encompagniedesetoiles.fr",
+    "https://www.encompagniedesetoiles.fr"
+  ];
+
+  const origin = event.headers.origin || "";
+  const isAllowedOrigin = allowedOrigins.includes(origin) || origin.startsWith("https://deploy-preview");
+
+  // 🔧 Réponse à la requête OPTIONS (préflight CORS)
+  if (event.httpMethod === "OPTIONS") {
+    return {
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": isAllowedOrigin ? origin : "https://encompagniedesetoiles.fr",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Methods": "POST, OPTIONS"
+      },
+      body: "Preflight OK"
+    };
+  }
+
   try {
     const { panier, client } = JSON.parse(event.body);
-
-    // Détection de l'environnement Stripe
     const isLive = process.env.STRIPE_ENV === "live";
 
-    // Création de la session de paiement
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
@@ -37,9 +55,10 @@ exports.handler = async (event) => {
     return {
       statusCode: 200,
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": isAllowedOrigin ? origin : "https://encompagniedesetoiles.fr"
       },
-      body: JSON.stringify({ sessionId: session.id }),
+      body: JSON.stringify({ sessionId: session.id })
     };
   } catch (err) {
     console.error("Stripe error:", err);
@@ -47,10 +66,10 @@ exports.handler = async (event) => {
     return {
       statusCode: 500,
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": isAllowedOrigin ? origin : "https://encompagniedesetoiles.fr"
       },
       body: JSON.stringify({ error: err.message || "Erreur inconnue" })
     };
   }
 };
-	

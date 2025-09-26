@@ -23,8 +23,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const adresseInput = document.getElementById("adresse");
   const cpInput      = document.getElementById("code-postal");
-  
-	adresseInput.addEventListener("input", async e => {
+
+  adresseInput.addEventListener("input", async e => {
+
+
     const q = e.target.value.trim();
     if (q.length < 3) return;
 
@@ -385,13 +387,9 @@ document.getElementById("checkout-button").addEventListener("click", function (e
     localStorage.setItem("stripeSessionId", data.sessionId);
 		console.log("Session enregistrée :", data.sessionId);
 
-		if (!window.stripePublicKey || !window.stripePublicKey.startsWith("pk_")) {
-			alert("Clé Stripe invalide ou manquante.");
-			console.error("❌ Clé Stripe non valide :", window.stripePublicKey);
-			return;
-		}
+
     // Redirection vers Stripe Checkout
-		const stripe = Stripe(window.stripePublicKey);
+    const stripe = Stripe("pk_test_51RkqVwGEPWcc8pKFZevbWerlrXRo1mIBwK9XfkO2eFBn9ulLVVXhpvozeHjDM7D3Xdu9hm3oUdTLhMO9UZfbPIYI00OmhDMt0o");
     stripe.redirectToCheckout({ sessionId: data.sessionId });
   })
   .catch(error => {

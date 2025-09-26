@@ -23,7 +23,6 @@
 " id="top">
     {{- partialCached "header.html" . .Page -}}
     <main class="main">
-		blablabla
         {{- block "main" . }}{{ end }}
     </main>
     {{ partialCached "footer.html" . .Layout .Kind (.Param "hideFooter") (.Param "ShowCodeCopyButtons") -}}

@@ -1,3 +1,8 @@
+[build]
+  publish = "public"
+  command = "hugo"
+  environment = { HUGO_VERSION = "0.146.0" }
+	
 [functions]
 directory = "functions"
 
@@ -12,8 +17,3 @@ STRIPE_PUBLIC_KEY_TEST = "pk_test_51RkqVwGEPWcc8pKFZevbWerlrXRo1mIBwK9XfkO2eFBn9
 [context.branch-deploy.environment]
 STRIPE_ENV = "test"
 STRIPE_PUBLIC_KEY_TEST = "pk_test_51RkqVwGEPWcc8pKFZevbWerlrXRo1mIBwK9XfkO2eFBn9ulLVVXhpvozeHjDM7D3Xdu9hm3oUdTLhMO9UZfbPIYI00OmhDMt0o"
-
-[build]
-  publish = "public"
-  command = "hugo"
-  environment = { HUGO_VERSION = "0.146.0" }

@@ -1,5 +1,4 @@
 +++
-
 stripeProductTest = "prod_SzubaOJZIo0g4L"
 stripeProductLive = "prod_T6RSxQVzqHDMgk"
 priceIdStripeTest = "price_1S3ulwGEPWcc8pKF4lTyCE4u"

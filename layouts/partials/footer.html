@@ -9,7 +9,7 @@
 		<a href="/mentions-legales/">Mentions légales</a> ·  
 		<a href="/conditions-generales-vente/">CGV</a> · 
 		<a href="/politique-confidentialite/">Confidentialité</a>
-		<span id="info-cookie"  class="info-cookie">
+		<span id="info-cookie"  class="info-cookie" display=none>
 			 · Zéro cookie, zéro suivi
 			<span class="tooltip">Ce site ne dépose aucun cookie.<br>Le panier fonctionne uniquement via le stockage local du navigateur.</span>
 		</span>
@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Lecture du cookie tarteaucitron
     const cookie = document.cookie.split('; ').find(row => row.startsWith('tarteaucitron='));
+		console.log(cookie);
     if (!cookie) {
         // Aucun choix encore fait → on peut afficher ou masquer selon ta préférence
         infoCookie.style.display = 'none';

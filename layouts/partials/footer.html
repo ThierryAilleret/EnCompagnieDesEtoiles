@@ -31,18 +31,15 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!infoCookie) return;
 
     // Lecture du cookie tarteaucitron
-    const cookie = document.cookie.split('; ').find(row => row.startsWith('tarteaucitron='));
-
-    if (!cookie) {
-        // Aucun choix encore fait → on peut afficher ou masquer selon ta préférence
+    const rawCookie = document.cookie.split('; ').find(row => row.startsWith('tarteaucitron='));
+    if (!rawCookie) {
         infoCookie.style.display = 'none';
         return;
     }
 
-    const value = decodeURIComponent(cookie.split('=')[1]);
-		console.log(cookie);
-		console.log(value);
-    // Si l'utilisateur a refusé gtag → on affiche
+    const value = decodeURIComponent(rawCookie.split('=')[1]);
+
+    // Vérifie explicitement la présence de "!gtag=false"
     if (value.includes('!gtag=false')) {
         infoCookie.style.display = 'inline';
     } else {
@@ -50,6 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 </script>
+
 
 {{- partial "extend_footer.html" . }}
 

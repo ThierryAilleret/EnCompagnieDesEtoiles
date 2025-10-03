@@ -674,17 +674,14 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!infoCookie) return;
 
     
-    const cookie = document.cookie.split('; ').find(row => row.startsWith('tarteaucitron='));
-
-    if (!cookie) {
-        
+    const rawCookie = document.cookie.split('; ').find(row => row.startsWith('tarteaucitron='));
+    if (!rawCookie) {
         infoCookie.style.display = 'none';
         return;
     }
 
-    const value = decodeURIComponent(cookie.split('=')[1]);
-		console.log(cookie);
-		console.log(value);
+    const value = decodeURIComponent(rawCookie.split('=')[1]);
+
     
     if (value.includes('!gtag=false')) {
         infoCookie.style.display = 'inline';

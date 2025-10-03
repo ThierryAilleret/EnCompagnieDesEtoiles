@@ -16,8 +16,8 @@
 
 
 		<script>
-			window.stripeEnv = "test";
-			window.stripePublicKey = "pk_test_123456";
+			window.stripeEnv = "";
+			window.stripePublicKey = "";
 		</script>
 </head>
 
@@ -226,7 +226,7 @@ window.addEventListener("DOMContentLoaded", () => {
 				conteneur.appendChild(bloc);
 			});
 
-			document.getElementById("total-panier").textContent = `Total : ${total.toFixed(2)} € hors frais de port`;
+			document.getElementById("total-panier").textContent = `Total : ${total.toFixed(2)} € frais de port inclus`;
 
 			const btnCommander = document.querySelector(".btn-commander");
 			if (btnCommander) {
@@ -484,7 +484,7 @@ function afficherPanierDansCheckout() {
 		total += article.prix * article.quantite;
 	});
 
-	document.getElementById("total-commande").innerHTML = `<strong>Total :</strong> ${total} €`;
+	document.getElementById("total-commande").innerHTML = `<strong>Total :</strong> ${total} €, frais de port inclus`;
   const totalPaiement = document.getElementById("prix-total");
   if (totalPaiement) {
     totalPaiement.innerHTML = `Total : ${total} €`;
@@ -627,7 +627,7 @@ window.addEventListener("panierMisAJour", function () {
 	<div class="checkout-right">
 		<h3>Résumé de la commande</h3>
 		<ul id="panier-resume"></ul>
-		<p id="total-commande"><strong>Total :</strong> ... €</p>
+		<p id="total-commande"><strong>Total :</strong> ... €, frais de port inclus</p>
 	</div>
 </div>
 <script>

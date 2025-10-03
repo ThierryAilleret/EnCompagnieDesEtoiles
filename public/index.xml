@@ -218,7 +218,7 @@ function afficherPanierDansCheckout() {
 		total += article.prix * article.quantite;
 	});
 
-	document.getElementById(&#34;total-commande&#34;).innerHTML = `&lt;strong&gt;Total :&lt;/strong&gt; ${total} €`;
+	document.getElementById(&#34;total-commande&#34;).innerHTML = `&lt;strong&gt;Total :&lt;/strong&gt; ${total} €, frais de port inclus`;
   const totalPaiement = document.getElementById(&#34;prix-total&#34;);
   if (totalPaiement) {
     totalPaiement.innerHTML = `Total : ${total} €`;
@@ -361,7 +361,7 @@ window.addEventListener(&#34;panierMisAJour&#34;, function () {
 	&lt;div class=&#34;checkout-right&#34;&gt;
 		&lt;h3&gt;Résumé de la commande&lt;/h3&gt;
 		&lt;ul id=&#34;panier-resume&#34;&gt;&lt;/ul&gt;
-		&lt;p id=&#34;total-commande&#34;&gt;&lt;strong&gt;Total :&lt;/strong&gt; ... €&lt;/p&gt;</description>
+		&lt;p id=&#34;total-commande&#34;&gt;&lt;strong&gt;Total :&lt;/strong&gt; ... €, frais de port inclus&lt;/p&gt;</description>
     </item>
     <item>
       <title>Luminaire BD</title>

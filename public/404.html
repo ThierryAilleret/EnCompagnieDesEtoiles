@@ -386,39 +386,41 @@ window.addEventListener("DOMContentLoaded", () => {
 		<a href="/mentions-legales/">Mentions légales</a> ·  
 		<a href="/conditions-generales-vente/">CGV</a> · 
 		<a href="/politique-confidentialite/">Confidentialité</a>
-		<span id="info-cookie"  class="info-cookie" style="display: none;">
+		<span id="info-cookie"  class="info-cookie">
 			 · Zéro cookie, zéro suivi
 			<span class="tooltip">Ce site ne dépose aucun cookie.<br>Le panier fonctionne uniquement via le stockage local du navigateur.</span>
 		</span>
 	</div>
 </footer>
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+function updateFooterDisplay() {
     const infoCookie = document.getElementById('info-cookie');
-		const footer = document.getElementById('footer');
-    if (!infoCookie) return;
+    const footer = document.getElementById('footer');
+    if (!infoCookie || !footer) return;
 
-    
     const rawCookie = document.cookie.split('; ').find(row => row.startsWith('tarteaucitron='));
     if (!rawCookie) {
         infoCookie.style.display = 'inline';
-				footer.style.removeProperty('display');
+        footer.classList.add('visible');
         return;
     }
 
-    
     const cookieValue = decodeURIComponent(rawCookie.substring('tarteaucitron='.length));
 
-    
     if (cookieValue.includes('!gtag=false')) {
         infoCookie.style.display = 'inline';
     } else {
         infoCookie.style.display = 'none';
     }
-		
-		footer.style.removeProperty('display');
-		
-});
+
+    footer.classList.add('visible');
+}
+
+
+document.addEventListener('DOMContentLoaded', updateFooterDisplay);
+
+
+document.addEventListener('tac.root_available', updateFooterDisplay);
 </script>
 
 <script>

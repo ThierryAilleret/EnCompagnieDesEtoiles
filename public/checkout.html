@@ -782,7 +782,7 @@ document.getElementById("checkout-button").addEventListener("click", function (e
 		<a href="/mentions-legales/">Mentions légales</a> ·  
 		<a href="/conditions-generales-vente/">CGV</a> · 
 		<a href="/politique-confidentialite/">Confidentialité</a>
-		<span id="info-cookie"  class="info-cookie" display=none>
+		<span id="info-cookie"  class="info-cookie" style="display: none;">
 			 · Zéro cookie, zéro suivi
 			<span class="tooltip">Ce site ne dépose aucun cookie.<br>Le panier fonctionne uniquement via le stockage local du navigateur.</span>
 		</span>
@@ -795,7 +795,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     
     const cookie = document.cookie.split('; ').find(row => row.startsWith('tarteaucitron='));
-		console.log(cookie);
+
     if (!cookie) {
         
         infoCookie.style.display = 'none';
@@ -803,6 +803,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const value = decodeURIComponent(cookie.split('=')[1]);
+		console.log(cookie);
+		console.log(value);
     
     if (value.includes('!gtag=false')) {
         infoCookie.style.display = 'inline';

@@ -470,7 +470,7 @@ Elles peuvent être transmises à des prestataires techniques (hébergeur, solut
     </main>
     
 <footer class="footer">
-	<div class="footer-container">
+	<div id="footer" class="footer-container" style="display: none;">
 		<span>&copy; 2025 <a href="https://encompagniedesetoiles.fr/">En Compagnie des Étoiles</a></span> · 
 		<a href="/mentions-legales/">Mentions légales</a> ·  
 		<a href="/conditions-generales-vente/">CGV</a> · 
@@ -489,7 +489,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
     const rawCookie = document.cookie.split('; ').find(row => row.startsWith('tarteaucitron='));
     if (!rawCookie) {
-        infoCookie.style.display = 'none';
+        infoCookie.style.display = 'inline';
         return;
     }
 
@@ -502,6 +502,10 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
         infoCookie.style.display = 'none';
     }
+		
+		const footer = document.getElementById('footer');
+		footer.style.display = 'inline';
+		
 });
 </script>
 

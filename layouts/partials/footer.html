@@ -37,17 +37,18 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    const value = decodeURIComponent(rawCookie.split('=')[1]);
-		console.log(rawCookie);
-		console.log(value);
+    // Récupération de la valeur complète du cookie
+    const cookieValue = decodeURIComponent(rawCookie.substring('tarteaucitron='.length));
+
     // Vérifie explicitement la présence de "!gtag=false"
-    if (value.includes('!gtag=false')) {
+    if (cookieValue.includes('!gtag=false')) {
         infoCookie.style.display = 'inline';
     } else {
         infoCookie.style.display = 'none';
     }
 });
 </script>
+
 
 
 {{- partial "extend_footer.html" . }}

@@ -453,7 +453,7 @@ Nom et prénom Adresse postale Adresse e-mail Informations de paiement (via pres
 		<a href="/politique-confidentialite/">Confidentialité</a>
 		<span id="info-cookie"  class="info-cookie" style="display: none;">
 			 · Zéro cookie, zéro suivi
-			<span class="tooltip">Ce site ne dépose aucun cookie.<br>Le panier fonctionne uniquement via le stockage local du navigateur.</span>
+			<span class="tooltip">Conformément à votre choix, aucun cookie publicitaire ou de mesure d'audience.<br>Seul un cookie technique est utilisé pour mémoriser votre choix de consentement.<br>Le panier fonctionne uniquement via le stockage local du navigateur.</span>
 		</span>
 	</div>
 </footer>
@@ -486,7 +486,6 @@ document.addEventListener('DOMContentLoaded', updateFooterDisplay);
 
 
 document.addEventListener('tac.consent_updated', () => {
-    console.log('🎯 Événement tac.consent_updated capté');
     updateFooterDisplay();
 });
 </script>

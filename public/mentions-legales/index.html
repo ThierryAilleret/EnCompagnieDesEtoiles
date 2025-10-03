@@ -451,41 +451,37 @@ Toute anomalie, erreur ou contenu litigieux peut être signalé à l’éditeur 
 	</div>
 </footer>
 <script>
-(function () {
-    function updateFooterDisplay() {
-        const infoCookie = document.getElementById('info-cookie');
-        const footer = document.getElementById('footer');
-        if (!infoCookie || !footer) return;
+function updateFooterDisplay() {
+    const infoCookie = document.getElementById('info-cookie');
+    const footer = document.getElementById('footer');
+    if (!infoCookie || !footer) return;
 
-        const rawCookie = document.cookie.split('; ').find(row => row.startsWith('tarteaucitron='));
-        if (!rawCookie) {
-            infoCookie.style.display = 'inline';
-            footer.classList.add('visible');
-            return;
-        }
-
-        const cookieValue = decodeURIComponent(rawCookie.substring('tarteaucitron='.length));
-
-        if (cookieValue.includes('!gtag=false')) {
-            infoCookie.style.display = 'inline';
-        } else {
-            infoCookie.style.display = 'none';
-        }
-
+    const rawCookie = document.cookie.split('; ').find(row => row.startsWith('tarteaucitron='));
+    if (!rawCookie) {
+        infoCookie.style.display = 'inline';
         footer.classList.add('visible');
+        return;
     }
 
-    
-    document.addEventListener('DOMContentLoaded', updateFooterDisplay);
+    const cookieValue = decodeURIComponent(rawCookie.substring('tarteaucitron='.length));
 
-    
-    let checkTarteaucitronReady = setInterval(() => {
-        if (typeof tarteaucitron !== 'undefined' && typeof tarteaucitron.events !== 'undefined') {
-            clearInterval(checkTarteaucitronReady);
-            tarteaucitron.events.on('root_available', updateFooterDisplay);
-        }
-    }, 100);
-})();
+    if (cookieValue.includes('!gtag=false')) {
+        infoCookie.style.display = 'inline';
+    } else {
+        infoCookie.style.display = 'none';
+    }
+
+    footer.classList.add('visible');
+}
+
+
+document.addEventListener('DOMContentLoaded', updateFooterDisplay);
+
+
+document.addEventListener('tac.root_available', function () {
+    console.log('✅ Événement tac.root_available reçu');
+    updateFooterDisplay();
+});
 </script>
 
 <script>

@@ -550,6 +550,15 @@ animation: pulse 0.3s ease;
   font-size: 13px; /* uniformise la taille du texte du footer */
   color: #666;      /* optionnel : pour harmoniser avec info-cookie */
 }
+
+#footer {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+#footer.visible {
+  opacity: 1;
+}
+
 .info-cookie {
   position: relative;
   border-bottom: 1px dotted #aaa;

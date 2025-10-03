@@ -801,7 +801,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const value = decodeURIComponent(rawCookie.split('=')[1]);
-
+		console.log(cookie);
+		console.log(value);
     
     if (value.includes('!gtag=false')) {
         infoCookie.style.display = 'inline';

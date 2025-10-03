@@ -26,36 +26,43 @@
 </footer>
 {{- end }}
 <script>
-function updateFooterDisplay() {
-		console.log("Exécution");
-    const infoCookie = document.getElementById('info-cookie');
-    const footer = document.getElementById('footer');
-    if (!infoCookie || !footer) return;
+(function () {
+    function updateFooterDisplay() {
+        const infoCookie = document.getElementById('info-cookie');
+        const footer = document.getElementById('footer');
+        if (!infoCookie || !footer) return;
 
-    const rawCookie = document.cookie.split('; ').find(row => row.startsWith('tarteaucitron='));
-    if (!rawCookie) {
-        infoCookie.style.display = 'inline';
+        const rawCookie = document.cookie.split('; ').find(row => row.startsWith('tarteaucitron='));
+        if (!rawCookie) {
+            infoCookie.style.display = 'inline';
+            footer.classList.add('visible');
+            return;
+        }
+
+        const cookieValue = decodeURIComponent(rawCookie.substring('tarteaucitron='.length));
+
+        if (cookieValue.includes('!gtag=false')) {
+            infoCookie.style.display = 'inline';
+        } else {
+            infoCookie.style.display = 'none';
+        }
+
         footer.classList.add('visible');
-        return;
     }
 
-    const cookieValue = decodeURIComponent(rawCookie.substring('tarteaucitron='.length));
+    // Exécution immédiate
+    document.addEventListener('DOMContentLoaded', updateFooterDisplay);
 
-    if (cookieValue.includes('!gtag=false')) {
-        infoCookie.style.display = 'inline';
-    } else {
-        infoCookie.style.display = 'none';
-    }
-
-    footer.classList.add('visible');
-}
-
-// Exécution au chargement initial
-document.addEventListener('DOMContentLoaded', updateFooterDisplay);
-
-// Réexécution dès que l’utilisateur accepte ou refuse
-document.addEventListener('tac.root_available', updateFooterDisplay);
+    // Attente active si tarteaucitron n'est pas encore chargé
+    let checkTarteaucitronReady = setInterval(() => {
+        if (typeof tarteaucitron !== 'undefined' && typeof tarteaucitron.events !== 'undefined') {
+            clearInterval(checkTarteaucitronReady);
+            tarteaucitron.events.on('root_available', updateFooterDisplay);
+        }
+    }, 100);
+})();
 </script>
+
 
 {{- partial "extend_footer.html" . }}
 

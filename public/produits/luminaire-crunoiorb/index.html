@@ -658,13 +658,35 @@ window.addEventListener("DOMContentLoaded", () => {
 		<span>&copy; 2025 <a href="https://encompagniedesetoiles.fr/">En Compagnie des Étoiles</a></span> · 
 		<a href="/mentions-legales/">Mentions légales</a> ·  
 		<a href="/conditions-generales-vente/">CGV</a> · 
-		<a href="/politique-confidentialite/">Confidentialité</a> ·
-		<span class="info-cookie">
-			Zéro cookie, zéro suivi
+		<a href="/politique-confidentialite/">Confidentialité</a>
+		<span id="info-cookie"  class="info-cookie">
+			 · Zéro cookie, zéro suivi
 			<span class="tooltip">Ce site ne dépose aucun cookie.<br>Le panier fonctionne uniquement via le stockage local du navigateur.</span>
 		</span>
 	</div>
 </footer>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const infoCookie = document.getElementById('info-cookie');
+    if (!infoCookie) return;
+
+    
+    const cookie = document.cookie.split('; ').find(row => row.startsWith('tarteaucitron='));
+    if (!cookie) {
+        
+        infoCookie.style.display = 'none';
+        return;
+    }
+
+    const value = decodeURIComponent(cookie.split('=')[1]);
+    
+    if (value.includes('!gtag=false')) {
+        infoCookie.style.display = 'inline';
+    } else {
+        infoCookie.style.display = 'none';
+    }
+});
+</script>
 
 <script>
     let menu = document.getElementById('menu')

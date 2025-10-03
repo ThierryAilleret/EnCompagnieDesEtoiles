@@ -8,9 +8,9 @@
 		<span>&copy; {{ now.Year }} <a href="{{ "" | absLangURL }}">{{ site.Title }}</a></span> · 
 		<a href="/mentions-legales/">Mentions légales</a> ·  
 		<a href="/conditions-generales-vente/">CGV</a> · 
-		<a href="/politique-confidentialite/">Confidentialité</a> ·
-		<span class="info-cookie">
-			Zéro cookie, zéro suivi
+		<a href="/politique-confidentialite/">Confidentialité</a>
+		<span id="info-cookie"  class="info-cookie">
+			 · Zéro cookie, zéro suivi
 			<span class="tooltip">Ce site ne dépose aucun cookie.<br>Le panier fonctionne uniquement via le stockage local du navigateur.</span>
 		</span>
 
@@ -25,6 +25,28 @@
 	</div>
 </footer>
 {{- end }}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const infoCookie = document.getElementById('info-cookie');
+    if (!infoCookie) return;
+
+    // Lecture du cookie tarteaucitron
+    const cookie = document.cookie.split('; ').find(row => row.startsWith('tarteaucitron='));
+    if (!cookie) {
+        // Aucun choix encore fait → on peut afficher ou masquer selon ta préférence
+        infoCookie.style.display = 'none';
+        return;
+    }
+
+    const value = decodeURIComponent(cookie.split('=')[1]);
+    // Si l'utilisateur a refusé gtag → on affiche
+    if (value.includes('!gtag=false')) {
+        infoCookie.style.display = 'inline';
+    } else {
+        infoCookie.style.display = 'none';
+    }
+});
+</script>
 
 {{- partial "extend_footer.html" . }}
 

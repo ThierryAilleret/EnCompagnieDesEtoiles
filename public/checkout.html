@@ -816,8 +816,8 @@ function updateFooterDisplay() {
 document.addEventListener('DOMContentLoaded', updateFooterDisplay);
 
 
-document.addEventListener('tac.root_available', function () {
-    console.log('✅ Événement tac.root_available reçu');
+document.addEventListener('tac.consent_updated', () => {
+    console.log('🎯 Événement tac.consent_updated capté');
     updateFooterDisplay();
 });
 </script>

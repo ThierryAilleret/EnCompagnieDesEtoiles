@@ -453,12 +453,14 @@ Toute anomalie, erreur ou contenu litigieux peut être signalé à l’éditeur 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const infoCookie = document.getElementById('info-cookie');
+		const footer = document.getElementById('footer');
     if (!infoCookie) return;
 
     
     const rawCookie = document.cookie.split('; ').find(row => row.startsWith('tarteaucitron='));
     if (!rawCookie) {
         infoCookie.style.display = 'inline';
+				footer.style.removeProperty('display');
         return;
     }
 
@@ -472,7 +474,6 @@ document.addEventListener('DOMContentLoaded', function () {
         infoCookie.style.display = 'none';
     }
 		
-		const footer = document.getElementById('footer');
 		footer.style.removeProperty('display');
 		
 });

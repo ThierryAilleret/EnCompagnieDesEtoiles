@@ -459,6 +459,7 @@ Nom et prénom Adresse postale Adresse e-mail Informations de paiement (via pres
 </footer>
 <script>
 function updateFooterDisplay() {
+		console.log("Exécution");
     const infoCookie = document.getElementById('info-cookie');
     const footer = document.getElementById('footer');
     if (!infoCookie || !footer) return;

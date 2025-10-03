@@ -85,10 +85,16 @@ Conformément au RGPD, chaque utilisateur dispose des droits suivants :
 ---
 
 ## 8. Cookies et stockage local
-Le site encompagniedesetoiles.fr n’utilise aucun cookie.
+Le site encompagniedesetoiles.fr ne dépose aucun cookie tant que l’utilisateur n’a pas exprimé son choix via le bandeau de consentement.
 
-Un mécanisme de panier est proposé à l'utilisateur, et celui-ci repose uniquement sur le stockage local du navigateur (localStorage). Ce système permet de conserver temporairement les produits ajoutés au panier, sans collecte de données personnelles, et sans transmission à des tiers.
+Un seul cookie technique, nommé tarteaucitron, peut être installé dès l’arrivée sur le site. Il sert uniquement à mémoriser le choix de l’utilisateur (acceptation ou refus des cookies soumis à consentement). Ce cookie ne collecte aucune donnée personnelle et ne permet aucun suivi.
 
-🧭 Aucune donnée n’est utilisée à des fins de suivi, de mesure d’audience, ou de ciblage publicitaire.
+➡️ Si l’utilisateur refuse les cookies ou ne répond pas, aucun autre cookie n’est installé, notamment ceux liés à la mesure d’audience ou au ciblage.
 
-🚫 Aucun consentement n’est requis, conformément aux recommandations de la CNIL pour les dispositifs strictement nécessaires au service.
+➡️ Si l’utilisateur accepte, des cookies tiers peuvent être déposés, notamment ceux de Google Analytics, dans le but de mesurer l’audience du site.
+
+Par ailleurs, le panier repose exclusivement sur le stockage local du navigateur (localStorage). Ce système permet de conserver temporairement les produits ajoutés au panier, sans transmission à des tiers ni collecte d’informations personnelles.
+
+🧭 Aucune donnée n’est utilisée à des fins de ciblage ou de profilage sans consentement explicite.
+
+🚫 Aucun consentement n’est requis pour le cookie tarteaucitron ni pour le stockage local, conformément aux recommandations de la CNIL pour les dispositifs strictement nécessaires au fonctionnement du service.

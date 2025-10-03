@@ -9,7 +9,6 @@ title = "Luminaire Iridescent bleu- vert"
 thumbnail = "/images/SERIRITRA_1.jpg"
 thumbnail_alt = "Description de l'image miniature du Luminaire Iridescent bleu vert"
 images = [
-  "/images/SERIRITRA_1.jpg",
 	"/images/SERIRITRA_2.jpg",
 	"/images/SERIRITRA_3.jpg",
 	"/images/SERIRITRA_4.jpg",

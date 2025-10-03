@@ -1,3 +1,68 @@
+<!-- 🌐 Chargement immédiat de gtag.js -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZQ2FL4130K"></script>
+
+<!-- 🎯 Initialisation gtag + consentement par défaut -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+
+  // Consentement par défaut : tout refusé
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    analytics_storage: 'denied'
+  });
+
+  gtag('js', new Date());
+  gtag('config', 'G-ZQ2FL4130K');
+</script>
+
+<!-- 🍪 Tarteaucitron : style + scripts -->
+<link rel="stylesheet" href="/js/tarteaucitron/css/tarteaucitron.custom.css">
+<script src="/js/tarteaucitron/tarteaucitron.js"></script>
+<script src="/js/tarteaucitron/tarteaucitron.services.js"></script>
+
+<script>
+  // Déclaration du service GA4 pour Tarteaucitron
+  tarteaucitron.user.gtagUa = 'G-ZQ2FL4130K';
+  tarteaucitron.job = tarteaucitron.job || [];
+  tarteaucitron.job.push('gtag');
+
+  tarteaucitron.init({
+    privacyUrl: "/politique-confidentialite/",
+    hashtag: "#tarteaucitron",
+    cookieName: "tarteaucitron",
+    orientation: "bottom",
+    showAlertSmall: false,
+    cookieslist: true,
+    showIcon: false,
+    iconPosition: "BottomRight",
+    DenyAllCta: true,
+    AcceptAllCta: true,
+    highPrivacy: true,
+    handleBrowserDNTRequest: false,
+    removeCredit: true,
+    moreInfoLink: true,
+    useExternalCss: true,
+    useExternalJs: false
+  });
+
+  // 🔁 Synchronisation consentement GA ↔ Tarteaucitron
+  document.addEventListener('tac.root_available', function () {
+    const cookie = tarteaucitron.cookie.read();
+
+    if (cookie.includes('!gtag=true')) {
+      gtag('consent', 'update', {
+        ad_storage: 'granted',
+        analytics_storage: 'granted'
+      });
+    } else if (cookie.includes('!gtag=false')) {
+      gtag('consent', 'update', {
+        ad_storage: 'denied',
+        analytics_storage: 'denied'
+      });
+    }
+  });
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{ .Title }}</title>

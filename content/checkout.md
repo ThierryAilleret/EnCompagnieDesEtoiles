@@ -175,7 +175,7 @@ function afficherPanierDansCheckout() {
 		total += article.prix * article.quantite;
 	});
 
-	document.getElementById("total-commande").innerHTML = `<strong>Total :</strong> ${total} €, frais de port inclus`;
+	document.getElementById("total-commande").innerHTML = `<strong>Total :</strong> ${total} € frais de port inclus`;
   const totalPaiement = document.getElementById("prix-total");
   if (totalPaiement) {
     totalPaiement.innerHTML = `Total : ${total} €`;
@@ -319,7 +319,7 @@ window.addEventListener("panierMisAJour", function () {
 	<div class="checkout-right">
 		<h3>Résumé de la commande</h3>
 		<ul id="panier-resume"></ul>
-		<p id="total-commande"><strong>Total :</strong> ... €, frais de port inclus</p>
+		<p id="total-commande"><strong>Total :</strong> ... € frais de port inclus</p>
 	</div>
 </div>
 

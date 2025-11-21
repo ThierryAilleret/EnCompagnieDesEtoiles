@@ -13,7 +13,7 @@ images = [
 ]
 description = "Sphère lumineuse en carton de pâtes"
 description_longue = "Mamma mia ! On a dû en manger des pâtes pour pouvoir vous le proposer, celui là !<br>Alla Carbonara, all'Arrabbiata, Cacio e Pepe, alla Bolognese, alla Norma, al Pesto Genovese, tout y est passé... on a vraiment joint l'utile à l'agréable 😋<br>Le <b>luminaire Al Dente</b> est une pièce unique en boîtes de pâtes réemployées.<br>Assemblé à partir de 60 éléments identiques, il forme une sphère parfaite dont les entrelacs dessinent un motif en étoile, visible de jour comme de nuit.<br>Éteint, c’est un objet de décoration sculptural. Éclairé, il révèle son intérieur et projette un discret ciel étoilé au plafond."
-dimensions = "diamètre 30 cm"
+dimensions = "diamètre 30 cmz"
 materiaux = "boîtes de pâtes, carton, clips plastique"
 ampoule = "E27, LED 20 W max (ampoule non fournie)"
 normes = "CE"

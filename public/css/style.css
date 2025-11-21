@@ -943,3 +943,13 @@ body.dark .carte-relai  {
 		padding:0em 0em;
 	}
 }
+
+.back-arrow {
+  text-decoration: none;   /* supprime le soulignement */
+  color: inherit;          /* évite le bleu par défaut */
+  display: inline-block;
+}
+
+.back-arrow svg {
+  vertical-align: middle;
+}

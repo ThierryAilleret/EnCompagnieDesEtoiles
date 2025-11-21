@@ -945,12 +945,9 @@ body.dark .carte-relai  {
 }
 
 .back-arrow {
-  color: #666;            /* gris moyen */
-  text-decoration: none;  /* supprime le soulignement */
-  font-weight: bold;      /* optionnel : en gras */
+  color: #666;               /* gris moyen */
+  text-decoration: none;     /* pas de soulignement */
+  font-weight: bold;         /* en gras */
+  cursor: pointer;           /* curseur main au survol */
+  user-select: none;         /* empêche la sélection du texte */
 }
-
-.back-arrow:hover {
-  color: #444;            /* un gris plus foncé au survol */
-}
-

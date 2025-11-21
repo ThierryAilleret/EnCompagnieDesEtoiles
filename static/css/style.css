@@ -945,11 +945,12 @@ body.dark .carte-relai  {
 }
 
 .back-arrow {
-  text-decoration: none;   /* supprime le soulignement */
-  color: inherit;          /* évite le bleu par défaut */
-  display: inline-block;
+  color: #666;            /* gris moyen */
+  text-decoration: none;  /* supprime le soulignement */
+  font-weight: bold;      /* optionnel : en gras */
 }
 
-.back-arrow svg {
-  vertical-align: middle;
+.back-arrow:hover {
+  color: #444;            /* un gris plus foncé au survol */
 }
+

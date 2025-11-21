@@ -951,3 +951,6 @@ body.dark .carte-relai  {
   cursor: pointer;           /* curseur main au survol */
   user-select: none;         /* empêche la sélection du texte */
 }
+.back-arrow:hober {
+  color: #333;               /* gris moyen */
+}

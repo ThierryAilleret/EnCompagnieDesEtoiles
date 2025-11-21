@@ -20,12 +20,6 @@ body:not(.dark) {
   color: #1a1a1a;
 }
 
-header, main {
-  margin: 0;
-  padding: 0;
-}
-
-
 .main-content {
 	max-width: 900px;
 	margin: 60px auto;

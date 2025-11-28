@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Bienvenue on En Compagnie des Étoiles</title>
+    <title>Bienvenue En Compagnie des Étoiles on En Compagnie des Étoiles</title>
     <link>https://encompagniedesetoiles.fr/</link>
-    <description>Recent content in Bienvenue on En Compagnie des Étoiles</description>
+    <description>Recent content in Bienvenue En Compagnie des Étoiles on En Compagnie des Étoiles</description>
     <generator>Hugo -- 0.147.9</generator>
     <language>FR-fr</language>
     <atom:link href="https://encompagniedesetoiles.fr/index.xml" rel="self" type="application/rss+xml" />
@@ -13,6 +13,16 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://encompagniedesetoiles.fr/produits/luminaire-toubarbla/</guid>
       <description>Sphère lumineuse en boîtes de pâtes</description>
+    </item>
+    <item>
+      <title>Bienvenue</title>
+      <link>https://encompagniedesetoiles.fr/_index_old_backup/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://encompagniedesetoiles.fr/_index_old_backup/</guid>
+      <description>&lt;p&gt;Bienvenue &lt;strong&gt;En Compagnie des Étoiles !&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Des luminaires artisanaux conçus comme des pièces uniques, à la croisée du design, de l’artisanat et de la géométrie.&lt;/p&gt;
+&lt;p&gt;Chaque création est composée de 60 pièces identiques, assemblées à la main pour former une sphère parfaite. Un défi géométrique rendu possible grâce à pas mal de calcul et de lignes de code informatique. Oui, c’est de l’art… et un peu de maths aussi !&lt;/p&gt;
+&lt;p&gt;Deux collections, un même esprit :&lt;/p&gt;</description>
     </item>
     <item>
       <title>Commande annulée</title>

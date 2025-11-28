@@ -23,12 +23,13 @@ body:not(.dark) {
 .main-content {
 	max-width: 900px;
 	margin: 60px auto;
+	margin-top: 10px;
 	padding: 0 20px;
 }
 
 h1, h2, h3 {
 	font-weight: 600;
-	margin-top: 40px;
+	margin-top: 10px;
 	margin-bottom: 10px;
 }
 
@@ -962,4 +963,59 @@ body.dark .carte-relai  {
   user-select: none;
   cursor: pointer;
 }
+
+/*Pour la nouvelle page d'accueil */
+.grid-luminaires {
+  display: flex;
+  flex-wrap: wrap;
+}
+.item {
+  flex: 1 1 45%;
+  margin: 1rem;
+  display: flex;
+  align-items: center;
+}
+.item img:not(.logo-ce) {
+  width: 50%;
+}
+.item .text {
+  width: 50%;
+  padding: 1rem;
+  font-size: 1.2rem;
+}
+@media (max-width: 768px) {
+  .item {
+    flex-direction: column;
+  }
+  .item img, .item .text {
+    width: 100%;
+  }
+}
+
+.logo-ce {
+  display: inline-block;
+  height: 1em;
+  width: 1.4em;
+  vertical-align: middle;
+  margin-left: 0.3em;
+}
+.hero-img {
+  width: 100%;
+  height: auto;
+  max-height: 60vh;
+  object-fit: cover;
+}
+.link-modern {
+  color: #ff8c00;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  transition: color 0.2s ease;
+}
+
+.link-modern:hover {
+  color: #ffd700;
+}
+
 

@@ -1,22 +1,70 @@
 +++
-title = "Bienvenue"
+title = "Bienvenue En Compagnie des Étoiles"
+description = "Des sphères lumineuses, entre art et géométrie — luminaires artisanaux conçus en France."
 draft = false
+# Optionnel: définir comme page d'accueil
+type = "homepage"
+# SEO basique
+[params.seo]
+  image = "/images/SERIRITRA_5.jpg"
 +++
-Bienvenue **En Compagnie des Étoiles !**
+<section class="hero">
+  <img src="/images/Bandeau.jpg" alt="Luminaire étoilé — sphère lumineuse" class="hero-img">
+  <div class="hero-text">
+    <h1>Bienvenue En Compagnie des Étoiles</h1>
+		<p>
+			Découvrez nos créations pour illuminer votre univers, 
+			<a href="/produits/" class="link-modern">explorez la galerie</a>.
+		</p>
+  </div>
+</section>
 
-Des luminaires artisanaux conçus comme des pièces uniques, à la croisée du design, de l’artisanat et de la géométrie.
+<section class="values">
+  <h2>Nos luminaires sont…</h2>
 
-Chaque création est composée de 60 pièces identiques, assemblées à la main pour former une sphère parfaite. Un défi géométrique rendu possible grâce à pas mal de calcul et de lignes de code informatique. Oui, c’est de l’art… et un peu de maths aussi !
+  <div class="grid-luminaires">
+    <article class="item alt">
+      <img src="/images/SERBLEMUS_1.jpg">
+      <div class="text">
+        <h3>Fabriqués en France</h3>
+        <p>Imaginés et assemblés dans notre atelier, avec des matériaux sourcés localement.</p>
+      </div>
+    </article>
+    <article class="item alt">
+      <img src="/images/TOUCARJAU_3.jpg" alt="Poétiques — jeux de lumière">
+      <div class="text">
+        <h3>Poétiques</h3>
+        <p>De jour, objets singuliers. La nuit, un ciel étoilé se dessine en projection.</p>
+      </div>
+    </article>
+    <article class="item">
+      <img src="/images/TOUROUMUS_1.jpg">
+      <div class="text">
+        <h3>Ingénieux</h3>
+        <p>60 pièces identiques, un assemblage précis, et une lumière qui révèle la structure.</p>
+      </div>
+    </article>
+    <article class="item">
+      <img src="/images/TOUBARBLA_1.jpg">
+      <div class="text">
+        <h3>Responsables</h3>
+        <p>Cartons colorés, décors chinés... rien ne se perd, tout s’illumine.</p>
+      </div>
+    </article>
+    <article class="item alt">
+      <img src="/images/CRUNOIORB_1.jpg" alt="Conformes CE — sécurité et fiabilité">
+      <div class="text">
+        <h3>Conformes CE</h3>
+        <p>Composants certifiés et montage soigné pour une lumière sûre et durable.</p>
+      </div>
+    </article>
+    <article class="item alt">
+      <img src="/images/SERIRITRA_5.jpg" alt="Poétiques — jeux de lumière">
+      <div class="text">
+        <h3>Lumineux !</h3>
+        <p>Quand un rayon de soleil s'invite sur nos modèles iridescents, votre intérieur flamboie.</p>
+      </div>
+    </article>
 
-Deux collections, un même esprit :
-
-- Des modèles en **carton coloré**, habillés de décors chinés : partitions oubliées, cartes d’école, bandes dessinées vintage… Rien ne se perd, tout s'illumine.
-
-- D’autres en **plexiglas transparent**, où la lumière danse sur des films irisés ou givrés.
-
-Et lorsque la nuit tombe, la magie opère : illuminés de l’intérieur, les luminaires révèlent un second visage. Le décor extérieur s’efface pour laisser place à un jeu de transparence et de projections. Sur le plafond, un ciel étoilé prend forme - comme une constellation privée.
-
-Des objets lumineux et singuliers, pensés pour apporter une touche d’élégance et de personnalité à votre intérieur, de jour comme de nuit.
-
-Prêt à illuminer votre univers ?  
-[Découvrez notre galerie](/produits/index.html)
+  </div>
+</section>

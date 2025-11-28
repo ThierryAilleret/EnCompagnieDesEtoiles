@@ -1,23 +1,92 @@
-{{- /* theme-toggle is enabled */}}
-{{- if (not site.Params.disableThemeToggle) }}
-{{- /* theme is light */}}
-{{- if (eq site.Params.defaultTheme "light") }}
-<script>
-    if (localStorage.getItem("pref-theme") === "dark") {
-        document.body.classList.add('dark');
-    }
 
-</script>
-{{- /* theme is dark */}}
-{{- else if (eq site.Params.defaultTheme "dark") }}
-<script>
-    if (localStorage.getItem("pref-theme") === "light") {
-        document.body.classList.remove('dark')
-    }
+<!DOCTYPE html>
+<html lang="en" dir="auto">
 
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZQ2FL4130K"></script>
+
+
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+
+  
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    analytics_storage: 'denied'
+  });
+
+  gtag('js', new Date());
+  gtag('config', 'G-ZQ2FL4130K');
 </script>
-{{- else }}
-{{- /* theme is auto */}}
+
+
+<link rel="stylesheet" href="/js/tarteaucitron/css/tarteaucitron.custom.css">
+<script src="/js/tarteaucitron/tarteaucitron.js"></script>
+<script src="/js/tarteaucitron/tarteaucitron.services.js"></script>
+
+<script>
+  
+  tarteaucitron.user.gtagUa = 'G-ZQ2FL4130K';
+  tarteaucitron.job = tarteaucitron.job || [];
+  tarteaucitron.job.push('gtag');
+
+  tarteaucitron.init({
+    privacyUrl: "/politique-confidentialite/",
+    hashtag: "#tarteaucitron",
+    cookieName: "tarteaucitron",
+    orientation: "bottom",
+    showAlertSmall: false,
+    cookieslist: true,
+    showIcon: false,
+    iconPosition: "BottomRight",
+    DenyAllCta: true,
+    AcceptAllCta: true,
+    highPrivacy: true,
+    handleBrowserDNTRequest: false,
+    removeCredit: true,
+    moreInfoLink: true,
+    useExternalCss: true,
+    useExternalJs: false
+  });
+
+  
+  document.addEventListener('tac.root_available', function () {
+    const cookie = tarteaucitron.cookie.read();
+
+    if (cookie.includes('!gtag=true')) {
+      gtag('consent', 'update', {
+        ad_storage: 'granted',
+        analytics_storage: 'granted'
+      });
+    } else if (cookie.includes('!gtag=false')) {
+      gtag('consent', 'update', {
+        ad_storage: 'denied',
+        analytics_storage: 'denied'
+      });
+    }
+  });
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bienvenue</title>
+<meta name="description" content="">
+
+<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+  <meta name="robots" content="noindex, follow">
+
+
+		<script>
+			window.stripeEnv = "";
+			window.stripePublicKey = "";
+		</script>
+</head>
+
+<body class="" id="top">
 <script>
     if (localStorage.getItem("pref-theme") === "dark") {
         document.body.classList.add('dark');
@@ -28,16 +97,6 @@
     }
 
 </script>
-{{- end }}
-{{- /* theme-toggle is disabled and theme is auto */}}
-{{- else if (and (ne site.Params.defaultTheme "light") (ne site.Params.defaultTheme "dark"))}}
-<script>
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.body.classList.add('dark');
-    }
-
-</script>
-{{- end }}
 <script>
 class PanierManager {
     constructor() {
@@ -57,7 +116,7 @@ class PanierManager {
 
 				window.addEventListener("pageshow", () => this.mettreAJourCompteur());
 
-				// ✅ Ajout ici :
+				
 				window.addEventListener("panierMisAJour", () => this.mettreAJourCompteur());
 		}
 
@@ -116,37 +175,9 @@ window.addEventListener("DOMContentLoaded", () => {
 	<div class="header-container">
     <nav class="nav">
         <div class="logo">
-            {{- $label_text := (site.Params.label.text | default site.Title) }}
-            {{- if site.Title }}
 
 						<div class="site-header-content">
-								<a href="{{ "/" | relURL }}" accesskey="h" class="site-title" title="{{ $label_text }} (Alt + H)">
-										{{- if site.Params.label.icon }}
-										{{- $img := resources.Get site.Params.label.icon }}
-										{{- if $img }}
-												{{- $processableFormats := (slice "jpg" "jpeg" "png" "tif" "bmp" "gif") -}}
-												{{- if hugo.IsExtended -}}
-														{{- $processableFormats = $processableFormats | append "webp" -}}
-												{{- end -}}
-												{{- $prod := (hugo.IsProduction | or (eq site.Params.env "production")) }}
-												{{- if and (in $processableFormats $img.MediaType.SubType) (eq $prod true)}}
-														{{- if site.Params.label.iconHeight }}
-																{{- $img = $img.Resize (printf "x%d" site.Params.label.iconHeight) }}
-														{{ else }}
-																{{- $img = $img.Resize "x30" }}
-														{{- end }}
-												{{- end }}
-												<img src="{{ $img.Permalink }}" alt="" aria-label="logo"
-														height="{{- site.Params.label.iconHeight | default "30" -}}">
-										{{- else }}
-										<img src="{{- site.Params.label.icon | absURL -}}" alt="" aria-label="logo"
-												height="{{- site.Params.label.iconHeight | default "30" -}}">
-										{{- end -}}
-										{{- else if hasPrefix site.Params.label.iconSVG "<svg" }}
-												{{ site.Params.label.iconSVG | safeHTML }}
-										{{- end -}}
-										{{- $label_text -}}
-								</a>							<button id="theme-toggle" accesskey="t" title="Basculer le thème (Alt + T)" aria-label="Basculer le thème">
+								<a href="/" accesskey="h" class="site-title" title="En Compagnie des Étoiles (Alt + H)">En Compagnie des Étoiles</a>							<button id="theme-toggle" accesskey="t" title="Basculer le thème (Alt + T)" aria-label="Basculer le thème">
 								<svg id="moon-icon" class="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 									<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
 								</svg>
@@ -163,37 +194,9 @@ window.addEventListener("DOMContentLoaded", () => {
 								</svg>
 							</button>
 							</div>
-            {{- end }}
             <div class="logo-switches">
-                {{- if (not site.Params.disableThemeToggle) }}
-
-
-                {{- end }}
-
-                {{- $lang := .Lang}}
-                {{- $separator := or $label_text (not site.Params.disableThemeToggle)}}
-                {{- with site.Home.Translations }}
-                <ul class="lang-switch">
-                    {{- if $separator }}<li>|</li>{{ end }}
-                    {{- range . -}}
-                    {{- if ne $lang .Lang }}
-                    <li>
-                        <a href="{{- .Permalink -}}" title="{{ .Language.Params.languageAltTitle | default (.Language.LanguageName | emojify) | default (.Lang | title) }}"
-                            aria-label="{{ .Language.LanguageName | default (.Lang | title) }}">
-                            {{- if (and site.Params.displayFullLangName (.Language.LanguageName)) }}
-                            {{- .Language.LanguageName | emojify -}}
-                            {{- else }}
-                            {{- .Lang | title -}}
-                            {{- end -}}
-                        </a>
-                    </li>
-                    {{- end -}}
-                    {{- end}}
-                </ul>
-                {{- end }}
             </div>
         </div>
-        {{- $currentPage := . }}
     </nav>
 
 		<button
@@ -204,14 +207,14 @@ window.addEventListener("DOMContentLoaded", () => {
 		>
 				🛒<span id="panier-compte">0</span>
 		</button>
-		<!-- Volet latéral du panier -->
+		
 		<div id="mini-panier" class="volet-panier">
 			<div class="entete-panier">
 				<h2>Mon panier</h2>
 				<button class="btn-fermer" onclick="fermerPanier()">×</button>
 			</div>
 			<div id="contenu-panier" class="contenu-panier">
-				<!-- Contenu JS ici -->
+				
 			</div>
 			<div class="footer-panier">
 				<p id="total-panier">Total : 0 €</p>
@@ -224,16 +227,16 @@ window.addEventListener("DOMContentLoaded", () => {
 </header>
 
 <script>
-		/* Pour le panier */
+		 
 		function ouvrirOuFermerPanier() {
 			const volet = document.getElementById('mini-panier');
 			const indicateur = document.getElementById('panier-toggle');
 
 			if (volet.classList.contains('actif')) {
-				// 🔒 Volet déjà ouvert → on le ferme
+				
 				volet.classList.remove('actif');
 			} else {
-				// 🔓 Volet fermé → on l’ouvre
+				
 				volet.classList.add('actif', 'slide-in');
 				afficherMiniPanier();
 				setTimeout(() => volet.classList.remove('slide-in'), 300);
@@ -244,7 +247,7 @@ window.addEventListener("DOMContentLoaded", () => {
 			const indicateur = document.getElementById('panier-toggle');
 
 			if (!volet.classList.contains('actif')) {
-				// 🔓 Volet fermé → on l’ouvre
+				
 				volet.classList.add('actif', 'slide-in');
 				afficherMiniPanier();
 				setTimeout(() => volet.classList.remove('slide-in'), 300);
@@ -347,10 +350,10 @@ window.addEventListener("DOMContentLoaded", () => {
 			const volet = document.getElementById("mini-panier");
 			const toggle = document.getElementById("panier-toggle");
 
-			// Bouton "Ajouter au panier"
+			
 			const ajouterBtn = event.target.closest(".btn-add-to-cart");
 
-			// Boutons quantité et corbeille
+			
 			const quantiteBtn = event.target.closest(".quantite-controls");
 			const supprimerBtn = event.target.closest(".btn-supprimer");
 
@@ -363,11 +366,139 @@ window.addEventListener("DOMContentLoaded", () => {
 				quantiteBtn ||
 				supprimerBtn
 			) {
-				return; // 👉 ne rien faire si l’élément est dans la liste
+				return; 
 			}
 
-			// Sinon → fermeture du volet
+			
 			fermerPanier();
 		});
 
 </script>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Bienvenue
+    </h1>
+    <div class="post-meta">
+
+</div>
+  </header> 
+  <div class="post-content"><p>Bienvenue <strong>En Compagnie des Étoiles !</strong></p>
+<p>Des luminaires artisanaux conçus comme des pièces uniques, à la croisée du design, de l’artisanat et de la géométrie.</p>
+<p>Chaque création est composée de 60 pièces identiques, assemblées à la main pour former une sphère parfaite. Un défi géométrique rendu possible grâce à pas mal de calcul et de lignes de code informatique. Oui, c’est de l’art… et un peu de maths aussi !</p>
+<p>Deux collections, un même esprit :</p>
+<ul>
+<li>
+<p>Des modèles en <strong>carton coloré</strong>, habillés de décors chinés : partitions oubliées, cartes d’école, bandes dessinées vintage… Rien ne se perd, tout s&rsquo;illumine.</p>
+</li>
+<li>
+<p>D’autres en <strong>plexiglas transparent</strong>, où la lumière danse sur des films irisés ou givrés.</p>
+</li>
+</ul>
+<p>Et lorsque la nuit tombe, la magie opère : illuminés de l’intérieur, les luminaires révèlent un second visage. Le décor extérieur s’efface pour laisser place à un jeu de transparence et de projections. Sur le plafond, un ciel étoilé prend forme - comme une constellation privée.</p>
+<p>Des objets lumineux et singuliers, pensés pour apporter une touche d’élégance et de personnalité à votre intérieur, de jour comme de nuit.</p>
+<p>Prêt à illuminer votre univers ?<br>
+<a href="/produits/index.html">Découvrez notre galerie</a></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+	<div id="footer" class="footer-container">
+		<span>&copy; 2025 <a href="https://encompagniedesetoiles.fr/">En Compagnie des Étoiles</a></span> · 
+		<a href="/mentions-legales/">Mentions légales</a> ·  
+		<a href="/conditions-generales-vente/">CGV</a> · 
+		<a href="/politique-confidentialite/">Confidentialité</a>
+		<span id="info-cookie"  class="info-cookie" style="display: none;">
+			 · Zéro cookie, zéro suivi
+			<span class="tooltip">Conformément à votre choix, aucun cookie publicitaire ou de mesure d'audience.<br>Seul un cookie technique est utilisé pour mémoriser votre choix de consentement.<br>Le panier fonctionne uniquement via le stockage local du navigateur.</span>
+		</span>
+	</div>
+</footer>
+<script>
+function updateFooterDisplay() {
+    const infoCookie = document.getElementById('info-cookie');
+    const footer = document.getElementById('footer');
+    if (!infoCookie || !footer) return;
+
+    const rawCookie = document.cookie.split('; ').find(row => row.startsWith('tarteaucitron='));
+    if (!rawCookie) {
+        infoCookie.style.display = 'inline';
+        footer.classList.add('visible');
+        return;
+    }
+
+    const cookieValue = decodeURIComponent(rawCookie.substring('tarteaucitron='.length));
+
+    if (cookieValue.includes('!gtag=false')) {
+        infoCookie.style.display = 'inline';
+    } else {
+        infoCookie.style.display = 'none';
+    }
+
+    footer.classList.add('visible');
+}
+
+
+document.addEventListener('DOMContentLoaded', updateFooterDisplay);
+
+
+document.addEventListener('tac.consent_updated', () => {
+    updateFooterDisplay();
+});
+</script>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

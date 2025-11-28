@@ -975,7 +975,7 @@ body.dark .carte-relai  {
   display: flex;
   align-items: center;
 }
-.item img:not(.logo-ce) {
+.item img {
   width: 50%;
 }
 .item .text {
@@ -992,13 +992,28 @@ body.dark .carte-relai  {
   }
 }
 
-.logo-ce {
-  display: inline-block;
-  height: 1em;
-  width: 1.4em;
-  vertical-align: middle;
-  margin-left: 0.3em;
+.item a {
+  width: 50%;
+	flex: 0 0 auto;      /* le lien prend seulement la largeur de son contenu */
+  display: flex;       /* pour que l’image s’aligne correctement */
+  text-decoration: none;   /* enlève le soulignement */
+  color: inherit;          /* hérite de la couleur du parent, évite le bleu par défaut */
+  border: none;            /* enlève tout cadre éventuel */
+  outline: none;           /* enlève le contour au focus */
 }
+.item a:focus,
+.item a:active,
+.item a:hover {
+  text-decoration: none;   /* pas de soulignement au survol ou focus */
+  color: inherit;          /* pas de changement de couleur */
+}
+
+.item a img {
+  width: 100%;
+  display: block;
+}
+
+
 .hero-img {
   width: 100%;
   height: auto;

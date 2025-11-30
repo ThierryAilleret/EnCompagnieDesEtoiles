@@ -131,7 +131,7 @@ document.addEventListener(&#34;DOMContentLoaded&#34;, () =&gt; {
 		PostCode: cp,
 		City: ville,
 		NbResults: &#34;10&#34;,
-		ColLivMod: &#34;24R&#34;,
+		ColLivMod: &#34;XL&#34;,
 		Responsive: true,
 		ShowResultsOnMap: false,
 		OnParcelShopSelected: function (data) {

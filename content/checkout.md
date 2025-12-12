@@ -319,6 +319,7 @@ document.getElementById("checkout-button").addEventListener("click", function (e
   };
 
 	console.log(client);
+	console.log(panier);
 	
   // Vérification des adresses mail
   if (!client.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(client.email)) {

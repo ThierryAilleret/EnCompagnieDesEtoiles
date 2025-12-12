@@ -243,7 +243,7 @@ window.addEventListener("panierMisAJour", function () {
     <form id="checkout-form">
       <!-- Étape 1 : Facturation -->
       <fieldset id="step-1" class="etape actif">
-        <legend><span class="etape-numero">1</span> Facturation v3</legend>
+        <legend><span class="etape-numero">1</span> Facturation v8</legend>
         <label>Nom :<br><input type="text" name="nom" id="nom" required /></label>
         <label>Prénom :<br><input type="text" name="prenom" id="prenom" required /></label>
 				<div style="position:relative;">

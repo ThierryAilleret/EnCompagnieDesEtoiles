@@ -41,10 +41,12 @@ exports.handler = async (event) => {
 			const baseUrl = process.env.CONTEXT === "production"
 				? process.env.URL
 				: process.env.DEPLOY_URL;
+			
+			console.log(baseUrl);
 
 			const session = await stripe.checkout.sessions.create({
-				success_url: "${baseUrl}/success",
-				cancel_url: "${baseUrl}/cancel",
+				success_url: '${baseUrl}/success',
+				cancel_url: '${baseUrl}/cancel',
 			});
 
 

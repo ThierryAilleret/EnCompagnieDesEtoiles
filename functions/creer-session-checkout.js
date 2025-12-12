@@ -22,6 +22,12 @@ exports.handler = async (event) => {
     };
   }
 
+	const baseUrl =
+		process.env.CONTEXT === "production"
+			? process.env.URL
+			: process.env.DEPLOY_URL;
+	console.log("Base URL:", baseUrl);
+	
   try {
     const { panier, client } = JSON.parse(event.body);
     const isLive = process.env.STRIPE_ENV === "live";
@@ -36,21 +42,9 @@ exports.handler = async (event) => {
         price: item.priceIdStripe,
         quantity: item.quantite || 1,
       })),
-			
 
-			const baseUrl =
-				process.env.CONTEXT === "production"
-					? process.env.URL
-					: process.env.DEPLOY_URL;
-
-			console.log("Base URL:", baseUrl);
-
-			const session = await stripe.checkout.sessions.create({
-				success_url: `${baseUrl}/success`,
-				cancel_url: `${baseUrl}/cancel`,
-			});
-
-
+			success_url: `${baseUrl}/success`,
+			cancel_url: `${baseUrl}/cancel`,
 
       // success_url: "https://encompagniedesetoiles.fr/success",
       // cancel_url: "https://encompagniedesetoiles.fr/cancel",

@@ -66,6 +66,8 @@ document.addEventListener(&#34;DOMContentLoaded&#34;, () =&gt; {
     }
   });
 
+	document.getElementById(&#34;copier-coordonnees&#34;).addEventListener(&#34;change&#34;, copierCoordonnees);
+
 	// Autocomplétion adresse
   const adresseInput = document.getElementById(&#34;adresse&#34;);
 	adresseInput.addEventListener(&#34;input&#34;, async e =&gt; {
@@ -231,7 +233,8 @@ function surveillerEtapes() {
   }
 }
 
-document.getElementById(&#34;copier-coordonnees&#34;).addEventListener(&#34;change&#34;, function() {
+
+function copierCoordonnees() {
   if (this.checked) {
     // Copier les champs facturation vers livraison
     document.getElementById(&#34;nom_exp&#34;).value = document.getElementById(&#34;nom&#34;).value.trim();
@@ -254,7 +257,7 @@ document.getElementById(&#34;copier-coordonnees&#34;).addEventListener(&#34;chan
     document.getElementById(&#34;complement_adresse_exp&#34;).readOnly = false;
     document.getElementById(&#34;mail_exp&#34;).readOnly = false;
   }
-});
+}
 
 function verifierEtatPaiement() {
   const panier = JSON.parse(localStorage.getItem(&#34;panier&#34;)) || [];
@@ -281,13 +284,15 @@ window.addEventListener(&#34;panierMisAJour&#34;, function () {
     verifierEtatPaiement();
 });
 
+
+
 &lt;/script&gt;
 &lt;div class=&#34;checkout-wrapper&#34;&gt;
   &lt;div class=&#34;checkout-left&#34;&gt;
     &lt;form id=&#34;checkout-form&#34;&gt;
       &lt;!-- Étape 1 : Facturation --&gt;
       &lt;fieldset id=&#34;step-1&#34; class=&#34;etape actif&#34;&gt;
-        &lt;legend&gt;&lt;span class=&#34;etape-numero&#34;&gt;1&lt;/span&gt; Facturation v6&lt;/legend&gt;
+        &lt;legend&gt;&lt;span class=&#34;etape-numero&#34;&gt;1&lt;/span&gt; Facturation v3&lt;/legend&gt;
         &lt;label&gt;Nom :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;nom&#34; id=&#34;nom&#34; required /&gt;&lt;/label&gt;
         &lt;label&gt;Prénom :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;prenom&#34; id=&#34;prenom&#34; required /&gt;&lt;/label&gt;
 				&lt;div style=&#34;position:relative;&#34;&gt;
@@ -305,7 +310,7 @@ window.addEventListener(&#34;panierMisAJour&#34;, function () {
         &lt;legend&gt;&lt;span class=&#34;etape-numero&#34;&gt;2&lt;/span&gt; Livraison&lt;/legend&gt;
 				&lt;label&gt;
 					&lt;input type=&#34;checkbox&#34; id=&#34;copier-coordonnees&#34; /&gt;
-					Utiliser les mêmes coordonnées que la facturation
+					Utiliser les mêmes coordonnées que pour la facturation
 				&lt;/label&gt;
         &lt;label&gt;Nom :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;nom_exp&#34; id=&#34;nom_exp&#34; required /&gt;&lt;/label&gt;
         &lt;label&gt;Prénom :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;prenom_exp&#34; id=&#34;prenom_exp&#34; required /&gt;&lt;/label&gt;

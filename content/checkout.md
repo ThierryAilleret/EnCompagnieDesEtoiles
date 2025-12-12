@@ -16,6 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+	document.getElementById("copier-coordonnees").addEventListener("change", copierCoordonnees);
+
 	// Autocomplétion adresse
   const adresseInput = document.getElementById("adresse");
 	adresseInput.addEventListener("input", async e => {
@@ -181,7 +183,8 @@ function surveillerEtapes() {
   }
 }
 
-document.getElementById("copier-coordonnees").addEventListener("change", function() {
+
+function copierCoordonnees() {
   if (this.checked) {
     // Copier les champs facturation vers livraison
     document.getElementById("nom_exp").value = document.getElementById("nom").value.trim();
@@ -204,7 +207,7 @@ document.getElementById("copier-coordonnees").addEventListener("change", functio
     document.getElementById("complement_adresse_exp").readOnly = false;
     document.getElementById("mail_exp").readOnly = false;
   }
-});
+}
 
 function verifierEtatPaiement() {
   const panier = JSON.parse(localStorage.getItem("panier")) || [];
@@ -231,6 +234,8 @@ window.addEventListener("panierMisAJour", function () {
     verifierEtatPaiement();
 });
 
+
+
 </script>
 
 <div class="checkout-wrapper">
@@ -238,7 +243,7 @@ window.addEventListener("panierMisAJour", function () {
     <form id="checkout-form">
       <!-- Étape 1 : Facturation -->
       <fieldset id="step-1" class="etape actif">
-        <legend><span class="etape-numero">1</span> Facturation v6</legend>
+        <legend><span class="etape-numero">1</span> Facturation v3</legend>
         <label>Nom :<br><input type="text" name="nom" id="nom" required /></label>
         <label>Prénom :<br><input type="text" name="prenom" id="prenom" required /></label>
 				<div style="position:relative;">
@@ -256,7 +261,7 @@ window.addEventListener("panierMisAJour", function () {
         <legend><span class="etape-numero">2</span> Livraison</legend>
 				<label>
 					<input type="checkbox" id="copier-coordonnees" />
-					Utiliser les mêmes coordonnées que la facturation
+					Utiliser les mêmes coordonnées que pour la facturation
 				</label>
         <label>Nom :<br><input type="text" name="nom_exp" id="nom_exp" required /></label>
         <label>Prénom :<br><input type="text" name="prenom_exp" id="prenom_exp" required /></label>

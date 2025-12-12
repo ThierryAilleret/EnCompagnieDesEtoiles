@@ -159,7 +159,7 @@ function surveillerEtapes() {
   const etape_1_complete = nom && prenom && adresse && mail && checkmail;
   if (etape_1_complete) {
     etape2.classList.add("actif");
-		const checkmail_exp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mai_exp);
+		const checkmail_exp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail_exp);
 	  const etape_2_complete = nom_exp && prenom_exp && adresse_exp && mail_exp && checkmail_exp;
 		if (etape_2_complete) {
 			etape3.classList.add("actif");
@@ -213,7 +213,7 @@ window.addEventListener("panierMisAJour", function () {
     <form id="checkout-form">
       <!-- Étape 1 : Facturation -->
       <fieldset id="step-1" class="etape actif">
-        <legend><span class="etape-numero">1</span> Facturation v3</legend>
+        <legend><span class="etape-numero">1</span> Facturation v4</legend>
         <label>Nom :<br><input type="text" name="nom" id="nom" required /></label>
         <label>Prénom :<br><input type="text" name="prenom" id="prenom" required /></label>
 				<div style="position:relative;">
@@ -221,7 +221,7 @@ window.addEventListener("panierMisAJour", function () {
 						<input type="text" id="adresse" name="adresse" autocomplete="off" required
 									 placeholder="Saisissez une adresse" />
 					</label>
-					<div id="autocomplete-container"></div>
+					<div id="autocomplete-container" class="autocomplete-container"></div>
 				</div>
         <label>Complément d'addresse :<br><input type="text" name="complement_adresse" id="complement_adresse"/></label>
         <label>Mail :<br><input type="text" name="mail" id="mail" required /></label>
@@ -236,7 +236,7 @@ window.addEventListener("panierMisAJour", function () {
 						<input type="text" id="adresse_exp" name="adresse_exp" autocomplete="off" required
 									 placeholder="Saisissez une adresse" />
 					</label>
-					<div id="autocomplete-container_exp"></div>
+					<div id="autocomplete-container_exp" class="autocomplete-container"></div>
 				</div>
         <label>Complément d'addresse :<br><input type="text" name="complement_adresse_exp" id="complement_adresse_exp"/></label>
         <label>Mail :<br><input type="text" name="mail_exp" id="mail_exp" required /></label>

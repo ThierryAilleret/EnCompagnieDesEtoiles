@@ -654,7 +654,7 @@ body.dark .product-item p {
 
 /* pour checkout.md */
 
-#autocomplete-container {
+.autocomplete-container {
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
@@ -667,13 +667,14 @@ body.dark .product-item p {
   overflow-y: auto;
   font-size: 0.9em;
 }
-body.dark #autocomplete-container  {
+body.dark .autocomplete-container  {
   background-color: #333; /* gris foncé chic */
   color: #f5f5f5; /* texte clair pour contraster */
 }
-#autocomplete-container:empty {
+.autocomplete-container:empty {
   display: none;
 }
+
 
 .suggestion {
   padding: 5px;

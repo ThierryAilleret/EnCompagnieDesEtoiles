@@ -16,7 +16,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-	document.getElementById("copier-coordonnees").addEventListener("change", copierCoordonnees);
+	const checkbox = document.getElementById("copier-coordonnees");
+	if (checkbox) {
+		checkbox.addEventListener("change", copierCoordonnees);
+	}
+
 
 	// Autocomplétion adresse
   const adresseInput = document.getElementById("adresse");
@@ -126,7 +130,6 @@ function remplirAdresseGeo(item) {
 	// Stockage
 	localStorage.setItem('codePostal', cp);
 	localStorage.setItem('ville', ville);
-  window.adresseGoogleValidee = true;
 }
 
 function remplirAdresseExpGeo(item) {
@@ -139,7 +142,6 @@ function remplirAdresseExpGeo(item) {
 	// Stockage
 	localStorage.setItem('codePostal_exp', cp);
 	localStorage.setItem('ville_exp', ville);
-  window.adresse_expGoogleValidee = true;
 }
 
 function surveillerEtapes() {
@@ -184,8 +186,8 @@ function surveillerEtapes() {
 }
 
 
-function copierCoordonnees() {
-  if (this.checked) {
+function copierCoordonnees(e) {
+  if (e.target.checked) {
     // Copier les champs facturation vers livraison
     document.getElementById("nom_exp").value = document.getElementById("nom").value.trim();
     document.getElementById("prenom_exp").value = document.getElementById("prenom").value.trim();
@@ -207,6 +209,7 @@ function copierCoordonnees() {
     document.getElementById("complement_adresse_exp").readOnly = false;
     document.getElementById("mail_exp").readOnly = false;
   }
+	surveillerEtapes();
 }
 
 function verifierEtatPaiement() {
@@ -243,7 +246,7 @@ window.addEventListener("panierMisAJour", function () {
     <form id="checkout-form">
       <!-- Étape 1 : Facturation -->
       <fieldset id="step-1" class="etape actif">
-        <legend><span class="etape-numero">1</span> Facturation v9</legend>
+        <legend><span class="etape-numero">1</span> Facturation v10</legend>
         <label>Nom :<br><input type="text" name="nom" id="nom" required /></label>
         <label>Prénom :<br><input type="text" name="prenom" id="prenom" required /></label>
 				<div style="position:relative;">

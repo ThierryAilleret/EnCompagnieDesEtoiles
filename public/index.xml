@@ -66,7 +66,11 @@ document.addEventListener(&#34;DOMContentLoaded&#34;, () =&gt; {
     }
   });
 
-	document.getElementById(&#34;copier-coordonnees&#34;).addEventListener(&#34;change&#34;, copierCoordonnees);
+	const checkbox = document.getElementById(&#34;copier-coordonnees&#34;);
+	if (checkbox) {
+		checkbox.addEventListener(&#34;change&#34;, copierCoordonnees);
+	}
+
 
 	// Autocomplétion adresse
   const adresseInput = document.getElementById(&#34;adresse&#34;);
@@ -176,7 +180,6 @@ function remplirAdresseGeo(item) {
 	// Stockage
 	localStorage.setItem(&#39;codePostal&#39;, cp);
 	localStorage.setItem(&#39;ville&#39;, ville);
-  window.adresseGoogleValidee = true;
 }
 
 function remplirAdresseExpGeo(item) {
@@ -189,7 +192,6 @@ function remplirAdresseExpGeo(item) {
 	// Stockage
 	localStorage.setItem(&#39;codePostal_exp&#39;, cp);
 	localStorage.setItem(&#39;ville_exp&#39;, ville);
-  window.adresse_expGoogleValidee = true;
 }
 
 function surveillerEtapes() {
@@ -234,8 +236,8 @@ function surveillerEtapes() {
 }
 
 
-function copierCoordonnees() {
-  if (this.checked) {
+function copierCoordonnees(e) {
+  if (e.target.checked) {
     // Copier les champs facturation vers livraison
     document.getElementById(&#34;nom_exp&#34;).value = document.getElementById(&#34;nom&#34;).value.trim();
     document.getElementById(&#34;prenom_exp&#34;).value = document.getElementById(&#34;prenom&#34;).value.trim();
@@ -257,6 +259,7 @@ function copierCoordonnees() {
     document.getElementById(&#34;complement_adresse_exp&#34;).readOnly = false;
     document.getElementById(&#34;mail_exp&#34;).readOnly = false;
   }
+	surveillerEtapes();
 }
 
 function verifierEtatPaiement() {
@@ -292,7 +295,7 @@ window.addEventListener(&#34;panierMisAJour&#34;, function () {
     &lt;form id=&#34;checkout-form&#34;&gt;
       &lt;!-- Étape 1 : Facturation --&gt;
       &lt;fieldset id=&#34;step-1&#34; class=&#34;etape actif&#34;&gt;
-        &lt;legend&gt;&lt;span class=&#34;etape-numero&#34;&gt;1&lt;/span&gt; Facturation v9&lt;/legend&gt;
+        &lt;legend&gt;&lt;span class=&#34;etape-numero&#34;&gt;1&lt;/span&gt; Facturation v10&lt;/legend&gt;
         &lt;label&gt;Nom :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;nom&#34; id=&#34;nom&#34; required /&gt;&lt;/label&gt;
         &lt;label&gt;Prénom :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;prenom&#34; id=&#34;prenom&#34; required /&gt;&lt;/label&gt;
 				&lt;div style=&#34;position:relative;&#34;&gt;

@@ -15,16 +15,6 @@
       <description>Sphère lumineuse en... boîtes de pâtes !</description>
     </item>
     <item>
-      <title>Bienvenue</title>
-      <link>https://encompagniedesetoiles.fr/_index_old_backup/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/_index_old_backup/</guid>
-      <description>&lt;p&gt;Bienvenue &lt;strong&gt;En Compagnie des Étoiles !&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Des luminaires artisanaux conçus comme des pièces uniques, à la croisée du design, de l’artisanat et de la géométrie.&lt;/p&gt;
-&lt;p&gt;Chaque création est composée de 60 pièces identiques, assemblées à la main pour former une sphère parfaite. Un défi géométrique rendu possible grâce à pas mal de calcul et de lignes de code informatique. Oui, c’est de l’art… et un peu de maths aussi !&lt;/p&gt;
-&lt;p&gt;Deux collections, un même esprit :&lt;/p&gt;</description>
-    </item>
-    <item>
       <title>Commande annulée</title>
       <link>https://encompagniedesetoiles.fr/cancel.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -58,6 +48,264 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://encompagniedesetoiles.fr/conditions-generales-vente/</guid>
       <description>CGV applicables aux commandes sur le site encompagniedesetoiles.fr</description>
+    </item>
+    <item>
+      <title>Finaliser ma commande</title>
+      <link>https://encompagniedesetoiles.fr/checkout.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://encompagniedesetoiles.fr/checkout.html</guid>
+      <description>&lt;!-- Autocomplétion d&#39;adresse via Geoportail --&gt;
+&lt;script&gt;
+document.addEventListener(&#34;DOMContentLoaded&#34;, () =&gt; {
+
+  // 🔁 Surveille les champs nom, prénom, adresse, mail
+  [&#34;nom&#34;, &#34;prenom&#34;, &#34;adresse&#34;, &#34;mail&#34;, &#34;nom_exp&#34;, &#34;prenom_exp&#34;, &#34;adresse_exp&#34;, &#34;mail_exp&#34;].forEach(id =&gt; {
+    const champ = document.getElementById(id);
+    if (champ) {
+      champ.addEventListener(&#34;input&#34;, surveillerEtapes);
+    }
+  });
+
+	// Autocomplétion adresse
+  const adresseInput = document.getElementById(&#34;adresse&#34;);
+	adresseInput.addEventListener(&#34;input&#34;, async e =&gt; {
+    const q = e.target.value.trim();
+    if (q.length &lt; 3) return;
+		const res = await fetch(`https://data.geopf.fr/geocodage/completion?text=${encodeURIComponent(q)}&amp;limit=5&amp;terr=METROPOLE`);
+    const data = await res.json();
+		//console.log(&#34;🔵 Suggestions reçues :&#34;, data);
+    const cont = document.getElementById(&#34;autocomplete-container&#34;);
+		cont.innerHTML = &#34;&#34;;
+		cont.style.display = &#34;none&#34;;
+
+		let count = 0;
+		data.results?.forEach(item =&gt; {
+			const div = document.createElement(&#34;div&#34;);
+			div.className = &#34;suggestion&#34;;
+			div.textContent = item.fulltext || `${item.number} ${item.street} ${item.city}`;
+			div.addEventListener(&#34;click&#34;, () =&gt; {
+				adresseInput.value = div.textContent;
+				remplirAdresseGeo(item);
+				cont.innerHTML = &#34;&#34;;
+				cont.style.display = &#34;none&#34;;
+			});
+			cont.appendChild(div);
+			count++;
+		});
+		cont.style.display = count ? &#34;block&#34; : &#34;none&#34;
+  });
+	
+	// Autocomplétion adresse_exp
+  const adresseExpInput = document.getElementById(&#34;adresse_exp&#34;);
+	adresseExpInput.addEventListener(&#34;input&#34;, async e =&gt; {
+    const q = e.target.value.trim();
+    if (q.length &lt; 3) return;
+		const res = await fetch(`https://data.geopf.fr/geocodage/completion?text=${encodeURIComponent(q)}&amp;limit=5&amp;terr=METROPOLE`);
+    const data = await res.json();
+		//console.log(&#34;🔵 Suggestions reçues :&#34;, data);
+    const cont = document.getElementById(&#34;autocomplete-container&#34;);
+		cont.innerHTML = &#34;&#34;;
+		cont.style.display = &#34;none&#34;;
+
+		let count = 0;
+		data.results?.forEach(item =&gt; {
+			const div = document.createElement(&#34;div&#34;);
+			div.className = &#34;suggestion&#34;;
+			div.textContent = item.fulltext || `${item.number} ${item.street} ${item.city}`;
+			div.addEventListener(&#34;click&#34;, () =&gt; {
+				adresseExpInput.value = div.textContent;
+				remplirAdresseExpGeo(item);
+				cont.innerHTML = &#34;&#34;;
+				cont.style.display = &#34;none&#34;;
+			});
+			cont.appendChild(div);
+			count++;
+		});
+		cont.style.display = count ? &#34;block&#34; : &#34;none&#34;
+  });
+
+	//Affichage du contenu du panier
+	afficherPanierDansCheckout();
+});
+
+window.addEventListener(&#34;panierMisAJour&#34;, () =&gt; {
+  afficherPanierDansCheckout();
+});
+
+function afficherPanierDansCheckout() {
+	const panierJSON = localStorage.getItem(&#34;panier&#34;);
+	if (!panierJSON) return;
+
+	let total = 0;
+	const panier = JSON.parse(panierJSON);
+	const ul = document.getElementById(&#34;panier-resume&#34;);
+
+	ul.innerHTML = &#34;&#34;;
+	panier.forEach(article =&gt; {
+		const li = document.createElement(&#34;li&#34;);
+		li.innerHTML = `
+			&lt;div style=&#34;display:flex; gap:10px; margin-bottom:10px;&#34;&gt;
+				&lt;img src=&#34;${article.image}&#34; alt=&#34;${article.nom}&#34; style=&#34;height:48px; width:auto; border-radius:4px;&#34;&gt;
+				&lt;div&gt;
+					&lt;strong&gt;${article.nom}&lt;/strong&gt;&lt;br&gt;
+					&lt;span style=&#34;font-size:0.9em;&#34;&gt;${article.description}&lt;/span&gt;&lt;br&gt;
+					&lt;span&gt;${article.quantite} × ${article.prix}${article.monnaie}&lt;/span&gt;
+				&lt;/div&gt;
+			&lt;/div&gt;
+		`;
+		ul.appendChild(li);
+		total += article.prix * article.quantite;
+	});
+
+	document.getElementById(&#34;total-commande&#34;).innerHTML = `&lt;strong&gt;Total :&lt;/strong&gt; ${total} € frais de port inclus`;
+  const totalPaiement = document.getElementById(&#34;prix-total&#34;);
+  if (totalPaiement) {
+    totalPaiement.innerHTML = `Total : ${total} €`;
+  }
+}
+
+function remplirAdresseGeo(item) {
+  const cp    = item.zipcode || &#34;&#34;;
+  const ville = item.city || item.oldcity || &#34;&#34;;
+  const pays  = item.country || &#34;&#34;;
+  const adresse = item.fulltext || `${item.street}, ${cp} ${ville}`;
+  // Préremplit le champ Adresse
+  document.getElementById(&#34;adresse&#34;).value = adresse;
+	// Stockage
+	localStorage.setItem(&#39;codePostal&#39;, cp);
+	localStorage.setItem(&#39;ville&#39;, ville);
+  window.adresseGoogleValidee = true;
+}
+
+function remplirAdresseExpGeo(item) {
+  const cp    = item.zipcode || &#34;&#34;;
+  const ville = item.city || item.oldcity || &#34;&#34;;
+  const pays  = item.country || &#34;&#34;;
+  const adresse = item.fulltext || `${item.street}, ${cp} ${ville}`;
+  // Préremplit le champ Adresse
+  document.getElementById(&#34;adresse_exp&#34;).value = adresse;
+	// Stockage
+	localStorage.setItem(&#39;codePostal_exp&#39;, cp);
+	localStorage.setItem(&#39;ville_exp&#39;, ville);
+  window.adresse_expGoogleValidee = true;
+}
+
+function surveillerEtapes() {
+  const nom     = document.getElementById(&#34;nom&#34;).value.trim();
+  const prenom  = document.getElementById(&#34;prenom&#34;).value.trim();
+  const adresse = document.getElementById(&#34;adresse&#34;).value.trim();
+  const mail = document.getElementById(&#34;mail&#34;).value.trim();
+
+  const nom_exp     = document.getElementById(&#34;nom_exp&#34;).value.trim();
+  const prenom_exp  = document.getElementById(&#34;prenom_exp&#34;).value.trim();
+  const adresse_exp = document.getElementById(&#34;adresse_exp&#34;).value.trim();
+  const mail_exp    = document.getElementById(&#34;mail_exp&#34;).value.trim();
+
+  const etape1 = document.getElementById(&#34;step-1&#34;);
+  const etape2 = document.getElementById(&#34;step-2&#34;);
+  const etape3 = document.getElementById(&#34;step-3&#34;);
+
+  const checkmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail);
+  const etape_1_complete = nom &amp;&amp; prenom &amp;&amp; adresse &amp;&amp; mail &amp;&amp; checkmail;
+  if (etape_1_complete) {
+    etape2.classList.add(&#34;actif&#34;);
+		const checkmail_exp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mai_exp);
+	  const etape_2_complete = nom_exp &amp;&amp; prenom_exp &amp;&amp; adresse_exp &amp;&amp; mail_exp &amp;&amp; checkmail_exp;
+		if (etape_2_complete) {
+			etape3.classList.add(&#34;actif&#34;);
+			const prixTotal = document.getElementById(&#34;prix-total&#34;);
+			prixTotal.style.display = &#34;block&#34;;
+			const boutonPaiement = document.getElementById(&#34;checkout-button&#34;);
+			boutonPaiement.classList.remove(&#34;bouton-verrouille&#34;);
+			boutonPaiement.style.display = &#34;block&#34;;
+		} else {
+			etape3.classList.remove(&#34;actif&#34;);
+			const boutonPaiement = document.getElementById(&#34;checkout-button&#34;);
+			boutonPaiement.classList.add(&#34;bouton-verrouille&#34;)		
+		}
+  } else {
+    etape2.classList.remove(&#34;actif&#34;);
+		etape3.classList.remove(&#34;actif&#34;);
+		const boutonPaiement = document.getElementById(&#34;checkout-button&#34;);
+		boutonPaiement.classList.add(&#34;bouton-verrouille&#34;);
+  }
+}
+
+function verifierEtatPaiement() {
+  const panier = JSON.parse(localStorage.getItem(&#34;panier&#34;)) || [];
+  const boutonStripe = document.getElementById(&#34;checkout-button&#34;);
+
+  const steps = [
+    document.getElementById(&#34;step-1&#34;),
+    document.getElementById(&#34;step-2&#34;),
+    document.getElementById(&#34;step-3&#34;)
+  ];
+
+  if (!boutonStripe) return;
+
+  if (panier.length === 0) {
+    // ❌ Retire la classe actif pour les étapes
+    steps.forEach(step =&gt; step.classList.remove(&#34;actif&#34;));
+  } else {
+    // ✅ Ajoute actif pour les étapes si l&#39;adresse est remplie
+    surveillerEtapes(); // Cela réactive step-2 et step-3 si conditions sont remplies
+  }
+}
+
+window.addEventListener(&#34;panierMisAJour&#34;, function () {
+    verifierEtatPaiement();
+});
+
+&lt;/script&gt;
+&lt;div class=&#34;checkout-wrapper&#34;&gt;
+  &lt;div class=&#34;checkout-left&#34;&gt;
+    &lt;form id=&#34;checkout-form&#34;&gt;
+      &lt;!-- Étape 1 : Facturation --&gt;
+      &lt;fieldset id=&#34;step-1&#34; class=&#34;etape actif&#34;&gt;
+        &lt;legend&gt;&lt;span class=&#34;etape-numero&#34;&gt;1&lt;/span&gt; Coordonnées pour la facturation&lt;/legend&gt;
+        &lt;label&gt;Nom :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;nom&#34; id=&#34;nom&#34; required /&gt;&lt;/label&gt;
+        &lt;label&gt;Prénom :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;prenom&#34; id=&#34;prenom&#34; required /&gt;&lt;/label&gt;
+				&lt;div style=&#34;position:relative;&#34;&gt;
+					&lt;label&gt;Adresse :&lt;br&gt;
+						&lt;input type=&#34;text&#34; id=&#34;adresse&#34; name=&#34;adresse&#34; autocomplete=&#34;off&#34; required
+									 placeholder=&#34;Saisissez une adresse&#34; /&gt;
+					&lt;/label&gt;
+					&lt;div id=&#34;autocomplete-container&#34;&gt;&lt;/div&gt;
+				&lt;/div&gt;
+        &lt;label&gt;Complément d&#39;addresse :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;complement_adresse&#34; id=&#34;complement_adresse&#34;/&gt;&lt;/label&gt;
+        &lt;label&gt;Mail :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;mail&#34; id=&#34;mail&#34; required /&gt;&lt;/label&gt;
+			&lt;/fieldset&gt;
+      &lt;!-- Étape 2 : Livraison --&gt;
+      &lt;fieldset id=&#34;step-2&#34; class=&#34;etape&#34;&gt;
+        &lt;legend&gt;&lt;span class=&#34;etape-numero&#34;&gt;2&lt;/span&gt; Livraison&lt;/legend&gt;
+        &lt;label&gt;Nom :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;nom_exp&#34; id=&#34;nom_exp&#34; required /&gt;&lt;/label&gt;
+        &lt;label&gt;Prénom :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;prenom_exp&#34; id=&#34;prenom_exp&#34; required /&gt;&lt;/label&gt;
+				&lt;div style=&#34;position:relative;&#34;&gt;
+					&lt;label&gt;Adresse :&lt;br&gt;
+						&lt;input type=&#34;text&#34; id=&#34;adresse_exp&#34; name=&#34;adresse_exp&#34; autocomplete=&#34;off&#34; required
+									 placeholder=&#34;Saisissez une adresse&#34; /&gt;
+					&lt;/label&gt;
+					&lt;div id=&#34;autocomplete-container&#34;&gt;&lt;/div&gt;
+				&lt;/div&gt;
+        &lt;label&gt;Complément d&#39;addresse :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;complement_adresse_exp&#34; id=&#34;complement_adresse_exp&#34;/&gt;&lt;/label&gt;
+        &lt;label&gt;Mail :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;mail_exp&#34; id=&#34;mail_exp&#34; required /&gt;&lt;/label&gt;
+			&lt;/fieldset&gt;
+      &lt;!-- Étape 3 : Paiement --&gt;
+      &lt;fieldset id=&#34;step-3&#34; class=&#34;etape&#34;&gt;
+        &lt;legend&gt;&lt;span class=&#34;etape-numero&#34;&gt;3&lt;/span&gt; Paiement&lt;/legend&gt;
+        &lt;div id=&#34;prix-total&#34; style=&#34;display:none&#34;&gt;Total : ... €&lt;/div&gt;
+				&lt;button type=&#34;button&#34; id=&#34;checkout-button&#34; class=&#34;bouton-checkout  bouton-verrouille&#34; style=&#34;display:none&#34;&gt;
+          Payer avec Stripe
+        &lt;/button&gt;
+				&lt;script src=&#34;https://js.stripe.com/v3/&#34;&gt;&lt;/script&gt;
+      &lt;/fieldset&gt;
+    &lt;/form&gt;
+  &lt;/div&gt;
+	&lt;!-- Résumé commande --&gt;
+	&lt;div class=&#34;checkout-right&#34;&gt;
+		&lt;h3&gt;Résumé de la commande&lt;/h3&gt;
+		&lt;ul id=&#34;panier-resume&#34;&gt;&lt;/ul&gt;
+		&lt;p id=&#34;total-commande&#34;&gt;&lt;strong&gt;Total :&lt;/strong&gt; ... € frais de port inclus&lt;/p&gt;</description>
     </item>
     <item>
       <title>Finaliser ma commande</title>
@@ -362,264 +610,6 @@ window.addEventListener(&#34;panierMisAJour&#34;, function () {
 						Choisir ce point relais
 					&lt;/button&gt;
         &lt;/div&gt;
-			&lt;/fieldset&gt;
-      &lt;!-- Étape 3 : Paiement --&gt;
-      &lt;fieldset id=&#34;step-3&#34; class=&#34;etape&#34;&gt;
-        &lt;legend&gt;&lt;span class=&#34;etape-numero&#34;&gt;3&lt;/span&gt; Paiement&lt;/legend&gt;
-        &lt;div id=&#34;prix-total&#34; style=&#34;display:none&#34;&gt;Total : ... €&lt;/div&gt;
-				&lt;button type=&#34;button&#34; id=&#34;checkout-button&#34; class=&#34;bouton-checkout  bouton-verrouille&#34; style=&#34;display:none&#34;&gt;
-          Payer avec Stripe
-        &lt;/button&gt;
-				&lt;script src=&#34;https://js.stripe.com/v3/&#34;&gt;&lt;/script&gt;
-      &lt;/fieldset&gt;
-    &lt;/form&gt;
-  &lt;/div&gt;
-	&lt;!-- Résumé commande --&gt;
-	&lt;div class=&#34;checkout-right&#34;&gt;
-		&lt;h3&gt;Résumé de la commande&lt;/h3&gt;
-		&lt;ul id=&#34;panier-resume&#34;&gt;&lt;/ul&gt;
-		&lt;p id=&#34;total-commande&#34;&gt;&lt;strong&gt;Total :&lt;/strong&gt; ... € frais de port inclus&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Finaliser ma commande</title>
-      <link>https://encompagniedesetoiles.fr/checkout.html</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/checkout.html</guid>
-      <description>&lt;!-- Autocomplétion d&#39;adresse via Geoportail --&gt;
-&lt;script&gt;
-document.addEventListener(&#34;DOMContentLoaded&#34;, () =&gt; {
-
-  // 🔁 Surveille les champs nom, prénom, adresse, mail
-  [&#34;nom&#34;, &#34;prenom&#34;, &#34;adresse&#34;, &#34;mail&#34;, &#34;nom_exp&#34;, &#34;prenom_exp&#34;, &#34;adresse_exp&#34;, &#34;mail_exp&#34;].forEach(id =&gt; {
-    const champ = document.getElementById(id);
-    if (champ) {
-      champ.addEventListener(&#34;input&#34;, surveillerEtapes);
-    }
-  });
-
-	// Autocomplétion adresse
-  const adresseInput = document.getElementById(&#34;adresse&#34;);
-	adresseInput.addEventListener(&#34;input&#34;, async e =&gt; {
-    const q = e.target.value.trim();
-    if (q.length &lt; 3) return;
-		const res = await fetch(`https://data.geopf.fr/geocodage/completion?text=${encodeURIComponent(q)}&amp;limit=5&amp;terr=METROPOLE`);
-    const data = await res.json();
-		//console.log(&#34;🔵 Suggestions reçues :&#34;, data);
-    const cont = document.getElementById(&#34;autocomplete-container&#34;);
-		cont.innerHTML = &#34;&#34;;
-		cont.style.display = &#34;none&#34;;
-
-		let count = 0;
-		data.results?.forEach(item =&gt; {
-			const div = document.createElement(&#34;div&#34;);
-			div.className = &#34;suggestion&#34;;
-			div.textContent = item.fulltext || `${item.number} ${item.street} ${item.city}`;
-			div.addEventListener(&#34;click&#34;, () =&gt; {
-				adresseInput.value = div.textContent;
-				remplirAdresseGeo(item);
-				cont.innerHTML = &#34;&#34;;
-				cont.style.display = &#34;none&#34;;
-			});
-			cont.appendChild(div);
-			count++;
-		});
-		cont.style.display = count ? &#34;block&#34; : &#34;none&#34;
-  });
-	
-	// Autocomplétion adresse_exp
-  const adresseExpInput = document.getElementById(&#34;adresse_exp&#34;);
-	adresseExpInput.addEventListener(&#34;input&#34;, async e =&gt; {
-    const q = e.target.value.trim();
-    if (q.length &lt; 3) return;
-		const res = await fetch(`https://data.geopf.fr/geocodage/completion?text=${encodeURIComponent(q)}&amp;limit=5&amp;terr=METROPOLE`);
-    const data = await res.json();
-		//console.log(&#34;🔵 Suggestions reçues :&#34;, data);
-    const cont = document.getElementById(&#34;autocomplete-container&#34;);
-		cont.innerHTML = &#34;&#34;;
-		cont.style.display = &#34;none&#34;;
-
-		let count = 0;
-		data.results?.forEach(item =&gt; {
-			const div = document.createElement(&#34;div&#34;);
-			div.className = &#34;suggestion&#34;;
-			div.textContent = item.fulltext || `${item.number} ${item.street} ${item.city}`;
-			div.addEventListener(&#34;click&#34;, () =&gt; {
-				adresseExpInput.value = div.textContent;
-				remplirAdresseExpGeo(item);
-				cont.innerHTML = &#34;&#34;;
-				cont.style.display = &#34;none&#34;;
-			});
-			cont.appendChild(div);
-			count++;
-		});
-		cont.style.display = count ? &#34;block&#34; : &#34;none&#34;
-  });
-
-	//Affichage du contenu du panier
-	afficherPanierDansCheckout();
-});
-
-window.addEventListener(&#34;panierMisAJour&#34;, () =&gt; {
-  afficherPanierDansCheckout();
-});
-
-function afficherPanierDansCheckout() {
-	const panierJSON = localStorage.getItem(&#34;panier&#34;);
-	if (!panierJSON) return;
-
-	let total = 0;
-	const panier = JSON.parse(panierJSON);
-	const ul = document.getElementById(&#34;panier-resume&#34;);
-
-	ul.innerHTML = &#34;&#34;;
-	panier.forEach(article =&gt; {
-		const li = document.createElement(&#34;li&#34;);
-		li.innerHTML = `
-			&lt;div style=&#34;display:flex; gap:10px; margin-bottom:10px;&#34;&gt;
-				&lt;img src=&#34;${article.image}&#34; alt=&#34;${article.nom}&#34; style=&#34;height:48px; width:auto; border-radius:4px;&#34;&gt;
-				&lt;div&gt;
-					&lt;strong&gt;${article.nom}&lt;/strong&gt;&lt;br&gt;
-					&lt;span style=&#34;font-size:0.9em;&#34;&gt;${article.description}&lt;/span&gt;&lt;br&gt;
-					&lt;span&gt;${article.quantite} × ${article.prix}${article.monnaie}&lt;/span&gt;
-				&lt;/div&gt;
-			&lt;/div&gt;
-		`;
-		ul.appendChild(li);
-		total += article.prix * article.quantite;
-	});
-
-	document.getElementById(&#34;total-commande&#34;).innerHTML = `&lt;strong&gt;Total :&lt;/strong&gt; ${total} € frais de port inclus`;
-  const totalPaiement = document.getElementById(&#34;prix-total&#34;);
-  if (totalPaiement) {
-    totalPaiement.innerHTML = `Total : ${total} €`;
-  }
-}
-
-function remplirAdresseGeo(item) {
-  const cp    = item.zipcode || &#34;&#34;;
-  const ville = item.city || item.oldcity || &#34;&#34;;
-  const pays  = item.country || &#34;&#34;;
-  const adresse = item.fulltext || `${item.street}, ${cp} ${ville}`;
-  // Préremplit le champ Adresse
-  document.getElementById(&#34;adresse&#34;).value = adresse;
-	// Stockage
-	localStorage.setItem(&#39;codePostal&#39;, cp);
-	localStorage.setItem(&#39;ville&#39;, ville);
-  window.adresseGoogleValidee = true;
-}
-
-function remplirAdresseExpGeo(item) {
-  const cp    = item.zipcode || &#34;&#34;;
-  const ville = item.city || item.oldcity || &#34;&#34;;
-  const pays  = item.country || &#34;&#34;;
-  const adresse = item.fulltext || `${item.street}, ${cp} ${ville}`;
-  // Préremplit le champ Adresse
-  document.getElementById(&#34;adresse_exp&#34;).value = adresse;
-	// Stockage
-	localStorage.setItem(&#39;codePostal_exp&#39;, cp);
-	localStorage.setItem(&#39;ville_exp&#39;, ville);
-  window.adresse_expGoogleValidee = true;
-}
-
-function surveillerEtapes() {
-  const nom     = document.getElementById(&#34;nom&#34;).value.trim();
-  const prenom  = document.getElementById(&#34;prenom&#34;).value.trim();
-  const adresse = document.getElementById(&#34;adresse&#34;).value.trim();
-  const mail = document.getElementById(&#34;mail&#34;).value.trim();
-
-  const nom_exp     = document.getElementById(&#34;nom_exp&#34;).value.trim();
-  const prenom_exp  = document.getElementById(&#34;prenom_exp&#34;).value.trim();
-  const adresse_exp = document.getElementById(&#34;adresse_exp&#34;).value.trim();
-  const mail_exp    = document.getElementById(&#34;mail_exp&#34;).value.trim();
-
-  const etape1 = document.getElementById(&#34;step-1&#34;);
-  const etape2 = document.getElementById(&#34;step-2&#34;);
-  const etape3 = document.getElementById(&#34;step-3&#34;);
-
-  const checkmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail);
-  const etape_1_complete = nom &amp;&amp; prenom &amp;&amp; adresse &amp;&amp; mail &amp;&amp; checkmail;
-  if (etape_1_complete) {
-    etape2.classList.add(&#34;actif&#34;);
-		const checkmail_exp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mai_exp);
-	  const etape_2_complete = nom_exp &amp;&amp; prenom_exp &amp;&amp; adresse_exp &amp;&amp; mail_exp &amp;&amp; checkmail_exp;
-		if (etape_2_complete) {
-			etape3.classList.add(&#34;actif&#34;);
-			const prixTotal = document.getElementById(&#34;prix-total&#34;);
-			prixTotal.style.display = &#34;block&#34;;
-			const boutonPaiement = document.getElementById(&#34;checkout-button&#34;);
-			boutonPaiement.classList.remove(&#34;bouton-verrouille&#34;);
-			boutonPaiement.style.display = &#34;block&#34;;
-		} else {
-			etape3.classList.remove(&#34;actif&#34;);
-			const boutonPaiement = document.getElementById(&#34;checkout-button&#34;);
-			boutonPaiement.classList.add(&#34;bouton-verrouille&#34;)		
-		}
-  } else {
-    etape2.classList.remove(&#34;actif&#34;);
-		etape3.classList.remove(&#34;actif&#34;);
-		const boutonPaiement = document.getElementById(&#34;checkout-button&#34;);
-		boutonPaiement.classList.add(&#34;bouton-verrouille&#34;);
-  }
-}
-
-function verifierEtatPaiement() {
-  const panier = JSON.parse(localStorage.getItem(&#34;panier&#34;)) || [];
-  const boutonStripe = document.getElementById(&#34;checkout-button&#34;);
-
-  const steps = [
-    document.getElementById(&#34;step-1&#34;),
-    document.getElementById(&#34;step-2&#34;),
-    document.getElementById(&#34;step-3&#34;)
-  ];
-
-  if (!boutonStripe) return;
-
-  if (panier.length === 0) {
-    // ❌ Retire la classe actif pour les étapes
-    steps.forEach(step =&gt; step.classList.remove(&#34;actif&#34;));
-  } else {
-    // ✅ Ajoute actif pour les étapes si l&#39;adresse est remplie
-    surveillerEtapes(); // Cela réactive step-2 et step-3 si conditions sont remplies
-  }
-}
-
-window.addEventListener(&#34;panierMisAJour&#34;, function () {
-    verifierEtatPaiement();
-});
-
-&lt;/script&gt;
-&lt;div class=&#34;checkout-wrapper&#34;&gt;
-  &lt;div class=&#34;checkout-left&#34;&gt;
-    &lt;form id=&#34;checkout-form&#34;&gt;
-      &lt;!-- Étape 1 : Facturation --&gt;
-      &lt;fieldset id=&#34;step-1&#34; class=&#34;etape actif&#34;&gt;
-        &lt;legend&gt;&lt;span class=&#34;etape-numero&#34;&gt;1&lt;/span&gt; Coordonnées de facturation&lt;/legend&gt;
-        &lt;label&gt;Nom :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;nom&#34; id=&#34;nom&#34; required /&gt;&lt;/label&gt;
-        &lt;label&gt;Prénom :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;prenom&#34; id=&#34;prenom&#34; required /&gt;&lt;/label&gt;
-				&lt;div style=&#34;position:relative;&#34;&gt;
-					&lt;label&gt;Adresse :&lt;br&gt;
-						&lt;input type=&#34;text&#34; id=&#34;adresse&#34; name=&#34;adresse&#34; autocomplete=&#34;off&#34; required
-									 placeholder=&#34;Saisissez une adresse&#34; /&gt;
-					&lt;/label&gt;
-					&lt;div id=&#34;autocomplete-container&#34;&gt;&lt;/div&gt;
-				&lt;/div&gt;
-        &lt;label&gt;Complément d&#39;addresse :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;complement_adresse&#34; id=&#34;complement_adresse&#34;/&gt;&lt;/label&gt;
-        &lt;label&gt;Mail :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;mail&#34; id=&#34;mail&#34; required /&gt;&lt;/label&gt;
-			&lt;/fieldset&gt;
-      &lt;!-- Étape 2 : Livraison --&gt;
-      &lt;fieldset id=&#34;step-2&#34; class=&#34;etape&#34;&gt;
-        &lt;legend&gt;&lt;span class=&#34;etape-numero&#34;&gt;2&lt;/span&gt; Livraison&lt;/legend&gt;
-        &lt;label&gt;Nom :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;nom_exp&#34; id=&#34;nom_exp&#34; required /&gt;&lt;/label&gt;
-        &lt;label&gt;Prénom :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;prenom_exp&#34; id=&#34;prenom_exp&#34; required /&gt;&lt;/label&gt;
-				&lt;div style=&#34;position:relative;&#34;&gt;
-					&lt;label&gt;Adresse :&lt;br&gt;
-						&lt;input type=&#34;text&#34; id=&#34;adresse_exp&#34; name=&#34;adresse_exp&#34; autocomplete=&#34;off&#34; required
-									 placeholder=&#34;Saisissez une adresse&#34; /&gt;
-					&lt;/label&gt;
-					&lt;div id=&#34;autocomplete-container&#34;&gt;&lt;/div&gt;
-				&lt;/div&gt;
-        &lt;label&gt;Complément d&#39;addresse :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;complement_adresse_exp&#34; id=&#34;complement_adresse_exp&#34;/&gt;&lt;/label&gt;
-        &lt;label&gt;Mail :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;mail_exp&#34; id=&#34;mail_exp&#34; required /&gt;&lt;/label&gt;
 			&lt;/fieldset&gt;
       &lt;!-- Étape 3 : Paiement --&gt;
       &lt;fieldset id=&#34;step-3&#34; class=&#34;etape&#34;&gt;

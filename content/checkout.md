@@ -9,7 +9,7 @@ layout = "checkout"
     <form id="checkout-form">
       <!-- Étape 1 : Facturation -->
       <fieldset id="step-1" class="etape actif">
-        <legend><span class="etape-numero">1</span> Facturation v12</legend>
+        <legend><span class="etape-numero">1</span> Facturation v14</legend>
         <label>Nom :<br><input type="text" name="nom" id="nom" required /></label>
         <label>Prénom :<br><input type="text" name="prenom" id="prenom" required /></label>
 				<div style="position:relative;">
@@ -20,7 +20,7 @@ layout = "checkout"
 					<div id="autocomplete-container" class="autocomplete-container"></div>
 				</div>
         <label>Complément d'addresse :<br><input type="text" name="complement_adresse" id="complement_adresse"/></label>
-        <label>Mail :<br><input type="email" name="mail" id="mail" required /></label>
+        <label>Mail :<br><input type="email" name="mail" id="mail" required size="40" /></label>
 			</fieldset>
       <!-- Étape 2 : Livraison -->
       <fieldset id="step-2" class="etape">
@@ -39,7 +39,7 @@ layout = "checkout"
 					<div id="autocomplete-container_exp" class="autocomplete-container"></div>
 				</div>
         <label>Complément d'addresse :<br><input type="text" name="complement_adresse_exp" id="complement_adresse_exp"/></label>
-        <label>Mail :<br><input type="email" name="mail_exp" id="mail_exp" required /></label>
+        <label>Mail :<br><input type="email" name="mail_exp" id="mail_exp" required  size="40" /></label>
 			</fieldset>
       <!-- Étape 3 : Paiement -->
       <fieldset id="step-3" class="etape">
@@ -318,6 +318,8 @@ document.getElementById("checkout-button").addEventListener("click", function (e
     ville_exp: localStorage.getItem("ville_exp") || "",
   };
 
+	console.log(client);
+	
   // Vérification des adresses mail
   if (!client.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(client.email)) {
     alert("Veuillez entrer une adresse email valide pour la facturation.");
@@ -341,7 +343,7 @@ document.getElementById("checkout-button").addEventListener("click", function (e
   .then(data => {
     if (!data.sessionId) throw new Error("Session Stripe non reçue");
 
-    // ✅ Stocker l'ID de session pour la page success
+    // Stocker l'ID de session pour la page success
     localStorage.setItem("stripeSessionId", data.sessionId);
 		console.log("Session enregistrée :", data.sessionId);
 

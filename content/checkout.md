@@ -4,10 +4,64 @@ url    = "/checkout.html"
 layout = "checkout"  
 +++
 
-<!-- Autocomplétion d'adresse via Geoportail -->
+<div class="checkout-wrapper">
+  <div class="checkout-left">
+    <form id="checkout-form">
+      <!-- Étape 1 : Facturation -->
+      <fieldset id="step-1" class="etape actif">
+        <legend><span class="etape-numero">1</span> Facturation v12</legend>
+        <label>Nom :<br><input type="text" name="nom" id="nom" required /></label>
+        <label>Prénom :<br><input type="text" name="prenom" id="prenom" required /></label>
+				<div style="position:relative;">
+					<label>Adresse :<br>
+						<input type="text" id="adresse" name="adresse" autocomplete="off" required
+									 placeholder="Saisissez une adresse" />
+					</label>
+					<div id="autocomplete-container" class="autocomplete-container"></div>
+				</div>
+        <label>Complément d'addresse :<br><input type="text" name="complement_adresse" id="complement_adresse"/></label>
+        <label>Mail :<br><input type="email" name="mail" id="mail" required /></label>
+			</fieldset>
+      <!-- Étape 2 : Livraison -->
+      <fieldset id="step-2" class="etape">
+        <legend><span class="etape-numero">2</span> Livraison</legend>
+				<label>
+					<input type="checkbox" id="copier-coordonnees" />
+					Utiliser les mêmes coordonnées que pour la facturation
+				</label>
+        <label>Nom :<br><input type="text" name="nom_exp" id="nom_exp" required /></label>
+        <label>Prénom :<br><input type="text" name="prenom_exp" id="prenom_exp" required /></label>
+				<div style="position:relative;">
+					<label>Adresse :<br>
+						<input type="text" id="adresse_exp" name="adresse_exp" autocomplete="off" required
+									 placeholder="Saisissez une adresse" />
+					</label>
+					<div id="autocomplete-container_exp" class="autocomplete-container"></div>
+				</div>
+        <label>Complément d'addresse :<br><input type="text" name="complement_adresse_exp" id="complement_adresse_exp"/></label>
+        <label>Mail :<br><input type="email" name="mail_exp" id="mail_exp" required /></label>
+			</fieldset>
+      <!-- Étape 3 : Paiement -->
+      <fieldset id="step-3" class="etape">
+        <legend><span class="etape-numero">3</span> Paiement</legend>
+        <div id="prix-total" style="display:none">Total : ... €</div>
+				<button type="button" id="checkout-button" class="bouton-checkout  bouton-verrouille" style="display:none">
+          Payer avec Stripe
+        </button>
+				<script src="https://js.stripe.com/v3/"></script>
+      </fieldset>
+    </form>
+  </div>
+	<!-- Résumé commande -->
+	<div class="checkout-right">
+		<h3>Résumé de la commande</h3>
+		<ul id="panier-resume"></ul>
+		<p id="total-commande"><strong>Total :</strong> ... € frais de port inclus</p>
+	</div>
+</div>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-
   // Surveille les champs nom, prénom, adresse, mail
   ["nom", "prenom", "adresse", "mail", "nom_exp", "prenom_exp", "adresse_exp", "mail_exp"].forEach(id => {
     const champ = document.getElementById(id);
@@ -15,7 +69,6 @@ document.addEventListener("DOMContentLoaded", () => {
       champ.addEventListener("input", surveillerEtapes);
     }
   });
-
 	const checkbox = document.getElementById("copier-coordonnees");
 	if (checkbox) {
 		checkbox.addEventListener("change", copierCoordonnees);
@@ -234,69 +287,6 @@ function verifierEtatPaiement() {
 window.addEventListener("panierMisAJour", function () {
     verifierEtatPaiement();
 });
-
-
-
-</script>
-
-<div class="checkout-wrapper">
-  <div class="checkout-left">
-    <form id="checkout-form">
-      <!-- Étape 1 : Facturation -->
-      <fieldset id="step-1" class="etape actif">
-        <legend><span class="etape-numero">1</span> Facturation v11</legend>
-        <label>Nom :<br><input type="text" name="nom" id="nom" required /></label>
-        <label>Prénom :<br><input type="text" name="prenom" id="prenom" required /></label>
-				<div style="position:relative;">
-					<label>Adresse :<br>
-						<input type="text" id="adresse" name="adresse" autocomplete="off" required
-									 placeholder="Saisissez une adresse" />
-					</label>
-					<div id="autocomplete-container" class="autocomplete-container"></div>
-				</div>
-        <label>Complément d'addresse :<br><input type="text" name="complement_adresse" id="complement_adresse"/></label>
-        <label>Mail :<br><input type="text" name="mail" id="mail" required /></label>
-			</fieldset>
-      <!-- Étape 2 : Livraison -->
-      <fieldset id="step-2" class="etape">
-        <legend><span class="etape-numero">2</span> Livraison</legend>
-				<label>
-					<input type="checkbox" id="copier-coordonnees" />
-					Utiliser les mêmes coordonnées que pour la facturation
-				</label>
-        <label>Nom :<br><input type="text" name="nom_exp" id="nom_exp" required /></label>
-        <label>Prénom :<br><input type="text" name="prenom_exp" id="prenom_exp" required /></label>
-				<div style="position:relative;">
-					<label>Adresse :<br>
-						<input type="text" id="adresse_exp" name="adresse_exp" autocomplete="off" required
-									 placeholder="Saisissez une adresse" />
-					</label>
-					<div id="autocomplete-container_exp" class="autocomplete-container"></div>
-				</div>
-        <label>Complément d'addresse :<br><input type="text" name="complement_adresse_exp" id="complement_adresse_exp"/></label>
-        <label>Mail :<br><input type="text" name="mail_exp" id="mail_exp" required /></label>
-			</fieldset>
-      <!-- Étape 3 : Paiement -->
-      <fieldset id="step-3" class="etape">
-        <legend><span class="etape-numero">3</span> Paiement</legend>
-        <div id="prix-total" style="display:none">Total : ... €</div>
-				<button type="button" id="checkout-button" class="bouton-checkout  bouton-verrouille" style="display:none">
-          Payer avec Stripe
-        </button>
-				<script src="https://js.stripe.com/v3/"></script>
-      </fieldset>
-    </form>
-  </div>
-	<!-- Résumé commande -->
-	<div class="checkout-right">
-		<h3>Résumé de la commande</h3>
-		<ul id="panier-resume"></ul>
-		<p id="total-commande"><strong>Total :</strong> ... € frais de port inclus</p>
-	</div>
-</div>
-
-<script>
-
 document.getElementById("checkout-button").addEventListener("click", function (event) {
   event.preventDefault(); // Empêche la soumission du formulaire
 

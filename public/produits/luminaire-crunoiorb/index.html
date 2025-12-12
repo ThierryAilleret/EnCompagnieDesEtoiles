@@ -453,8 +453,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
   
   <script>
-		const stripeEnv = ""; 
-	
     let stockDisponible = 0;
 		let currentImageIndex = 0;
     let images = [];
@@ -628,6 +626,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
 		
 		async function fetchInventoryCurrentProduct() {
+				const stripeEnv = window.stripeEnv || "test"; 
+
 				const stripeProduct = stripeEnv === "live"
 					? "prod_T6RNFjX0USHEGP"
 					: "prod_SzufHqMM0yfWhP";

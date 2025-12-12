@@ -77,8 +77,6 @@
 
   <!-- Script -->
   <script>
-		const stripeEnv = "{{ .Site.Params.stripeEnv }}"; // injecté depuis Netlify	
-	
     let stockDisponible = 0;
 		let currentImageIndex = 0;
     let images = [];
@@ -252,6 +250,8 @@
 
 		//Récupération du stock sur Stripe
 		async function fetchInventoryCurrentProduct() {
+				const stripeEnv = window.stripeEnv || "test"; // fallback si non défini
+
 				const stripeProduct = stripeEnv === "live"
 					? "{{ .Params.stripeProductLive }}"
 					: "{{ .Params.stripeProductTest }}";

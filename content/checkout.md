@@ -9,7 +9,7 @@ layout = "checkout"
     <form id="checkout-form">
       <!-- Étape 1 : Facturation -->
       <fieldset id="step-1" class="etape actif">
-        <legend><span class="etape-numero">1</span> Facturation v15</legend>
+        <legend><span class="etape-numero">1</span> Facturation v16</legend>
         <label>Nom :<br><input type="text" name="nom" id="nom" required /></label>
         <label>Prénom :<br><input type="text" name="prenom" id="prenom" required /></label>
 				<div style="position:relative;">
@@ -44,7 +44,7 @@ layout = "checkout"
       <!-- Étape 3 : Paiement -->
       <fieldset id="step-3" class="etape">
         <legend><span class="etape-numero">3</span> Paiement</legend>
-        <div id="prix-total" style="display:none">Total : ... €</div>
+        <div id="prix-total" style="display:none">Total : ... € frais de port inclus</div>
 				<button type="button" id="checkout-button" class="bouton-checkout  bouton-verrouille" style="display:none">
           Payer avec Stripe
         </button>

@@ -8,7 +8,7 @@ layout = "checkout"
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  // 🔁 Surveille les champs nom, prénom, adresse, mail
+  // Surveille les champs nom, prénom, adresse, mail
   ["nom", "prenom", "adresse", "mail", "nom_exp", "prenom_exp", "adresse_exp", "mail_exp"].forEach(id => {
     const champ = document.getElementById(id);
     if (champ) {
@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		checkbox.addEventListener("change", copierCoordonnees);
 	}
 
-
 	// Autocomplétion adresse
   const adresseInput = document.getElementById("adresse");
 	adresseInput.addEventListener("input", async e => {
@@ -29,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (q.length < 3) return;
 		const res = await fetch(`https://data.geopf.fr/geocodage/completion?text=${encodeURIComponent(q)}&limit=5&terr=METROPOLE`);
     const data = await res.json();
-		//console.log("🔵 Suggestions reçues :", data);
+		// console.log("🔵 Suggestions reçues :", data);
     const cont = document.getElementById("autocomplete-container");
 		cont.innerHTML = "";
 		cont.style.display = "none";
@@ -58,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (q.length < 3) return;
 		const res = await fetch(`https://data.geopf.fr/geocodage/completion?text=${encodeURIComponent(q)}&limit=5&terr=METROPOLE`);
     const data = await res.json();
-		//console.log("🔵 Suggestions reçues :", data);
+		// console.log("🔵 Suggestions reçues :", data);
     const cont = document.getElementById("autocomplete-container_exp");
 		cont.innerHTML = "";
 		cont.style.display = "none";
@@ -80,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		cont.style.display = count ? "block" : "none"
   });
 
-	//Affichage du contenu du panier
+	// Affichage du contenu du panier
 	afficherPanierDansCheckout();
 });
 
@@ -185,7 +184,6 @@ function surveillerEtapes() {
   }
 }
 
-
 function copierCoordonnees(e) {
   if (e.target.checked) {
     // Copier les champs facturation vers livraison
@@ -246,7 +244,7 @@ window.addEventListener("panierMisAJour", function () {
     <form id="checkout-form">
       <!-- Étape 1 : Facturation -->
       <fieldset id="step-1" class="etape actif">
-        <legend><span class="etape-numero">1</span> Facturation v10</legend>
+        <legend><span class="etape-numero">1</span> Facturation v11</legend>
         <label>Nom :<br><input type="text" name="nom" id="nom" required /></label>
         <label>Prénom :<br><input type="text" name="prenom" id="prenom" required /></label>
 				<div style="position:relative;">

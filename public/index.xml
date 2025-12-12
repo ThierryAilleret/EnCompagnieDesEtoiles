@@ -58,7 +58,7 @@
 &lt;script&gt;
 document.addEventListener(&#34;DOMContentLoaded&#34;, () =&gt; {
 
-  // 🔁 Surveille les champs nom, prénom, adresse, mail
+  // Surveille les champs nom, prénom, adresse, mail
   [&#34;nom&#34;, &#34;prenom&#34;, &#34;adresse&#34;, &#34;mail&#34;, &#34;nom_exp&#34;, &#34;prenom_exp&#34;, &#34;adresse_exp&#34;, &#34;mail_exp&#34;].forEach(id =&gt; {
     const champ = document.getElementById(id);
     if (champ) {
@@ -71,7 +71,6 @@ document.addEventListener(&#34;DOMContentLoaded&#34;, () =&gt; {
 		checkbox.addEventListener(&#34;change&#34;, copierCoordonnees);
 	}
 
-
 	// Autocomplétion adresse
   const adresseInput = document.getElementById(&#34;adresse&#34;);
 	adresseInput.addEventListener(&#34;input&#34;, async e =&gt; {
@@ -79,7 +78,7 @@ document.addEventListener(&#34;DOMContentLoaded&#34;, () =&gt; {
     if (q.length &lt; 3) return;
 		const res = await fetch(`https://data.geopf.fr/geocodage/completion?text=${encodeURIComponent(q)}&amp;limit=5&amp;terr=METROPOLE`);
     const data = await res.json();
-		//console.log(&#34;🔵 Suggestions reçues :&#34;, data);
+		// console.log(&#34;🔵 Suggestions reçues :&#34;, data);
     const cont = document.getElementById(&#34;autocomplete-container&#34;);
 		cont.innerHTML = &#34;&#34;;
 		cont.style.display = &#34;none&#34;;
@@ -108,7 +107,7 @@ document.addEventListener(&#34;DOMContentLoaded&#34;, () =&gt; {
     if (q.length &lt; 3) return;
 		const res = await fetch(`https://data.geopf.fr/geocodage/completion?text=${encodeURIComponent(q)}&amp;limit=5&amp;terr=METROPOLE`);
     const data = await res.json();
-		//console.log(&#34;🔵 Suggestions reçues :&#34;, data);
+		// console.log(&#34;🔵 Suggestions reçues :&#34;, data);
     const cont = document.getElementById(&#34;autocomplete-container_exp&#34;);
 		cont.innerHTML = &#34;&#34;;
 		cont.style.display = &#34;none&#34;;
@@ -130,7 +129,7 @@ document.addEventListener(&#34;DOMContentLoaded&#34;, () =&gt; {
 		cont.style.display = count ? &#34;block&#34; : &#34;none&#34;
   });
 
-	//Affichage du contenu du panier
+	// Affichage du contenu du panier
 	afficherPanierDansCheckout();
 });
 
@@ -235,7 +234,6 @@ function surveillerEtapes() {
   }
 }
 
-
 function copierCoordonnees(e) {
   if (e.target.checked) {
     // Copier les champs facturation vers livraison
@@ -295,7 +293,7 @@ window.addEventListener(&#34;panierMisAJour&#34;, function () {
     &lt;form id=&#34;checkout-form&#34;&gt;
       &lt;!-- Étape 1 : Facturation --&gt;
       &lt;fieldset id=&#34;step-1&#34; class=&#34;etape actif&#34;&gt;
-        &lt;legend&gt;&lt;span class=&#34;etape-numero&#34;&gt;1&lt;/span&gt; Facturation v10&lt;/legend&gt;
+        &lt;legend&gt;&lt;span class=&#34;etape-numero&#34;&gt;1&lt;/span&gt; Facturation v11&lt;/legend&gt;
         &lt;label&gt;Nom :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;nom&#34; id=&#34;nom&#34; required /&gt;&lt;/label&gt;
         &lt;label&gt;Prénom :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;prenom&#34; id=&#34;prenom&#34; required /&gt;&lt;/label&gt;
 				&lt;div style=&#34;position:relative;&#34;&gt;

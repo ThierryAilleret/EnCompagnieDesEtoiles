@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		const res = await fetch(`https://data.geopf.fr/geocodage/completion?text=${encodeURIComponent(q)}&limit=5&terr=METROPOLE`);
     const data = await res.json();
 		//console.log("🔵 Suggestions reçues :", data);
-    const cont = document.getElementById("autocomplete-container");
+    const cont = document.getElementById("autocomplete-container_exp");
 		cont.innerHTML = "";
 		cont.style.display = "none";
 
@@ -213,7 +213,7 @@ window.addEventListener("panierMisAJour", function () {
     <form id="checkout-form">
       <!-- Étape 1 : Facturation -->
       <fieldset id="step-1" class="etape actif">
-        <legend><span class="etape-numero">1</span> Coordonnées pour la facturation</legend>
+        <legend><span class="etape-numero">1</span> Facturation v2</legend>
         <label>Nom :<br><input type="text" name="nom" id="nom" required /></label>
         <label>Prénom :<br><input type="text" name="prenom" id="prenom" required /></label>
 				<div style="position:relative;">
@@ -236,7 +236,7 @@ window.addEventListener("panierMisAJour", function () {
 						<input type="text" id="adresse_exp" name="adresse_exp" autocomplete="off" required
 									 placeholder="Saisissez une adresse" />
 					</label>
-					<div id="autocomplete-container"></div>
+					<div id="autocomplete-container_exp"></div>
 				</div>
         <label>Complément d'addresse :<br><input type="text" name="complement_adresse_exp" id="complement_adresse_exp"/></label>
         <label>Mail :<br><input type="text" name="mail_exp" id="mail_exp" required /></label>

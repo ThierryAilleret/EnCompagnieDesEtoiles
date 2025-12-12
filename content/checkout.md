@@ -181,6 +181,31 @@ function surveillerEtapes() {
   }
 }
 
+document.getElementById("copier-coordonnees").addEventListener("change", function() {
+  if (this.checked) {
+    // Copier les champs facturation vers livraison
+    document.getElementById("nom_exp").value = document.getElementById("nom").value.trim();
+    document.getElementById("prenom_exp").value = document.getElementById("prenom").value.trim();
+    document.getElementById("adresse_exp").value = document.getElementById("adresse").value.trim();
+    document.getElementById("complement_adresse_exp").value = document.getElementById("complement_adresse").value.trim();
+    document.getElementById("mail_exp").value = document.getElementById("mail").value.trim();
+
+    // Optionnel : verrouiller les champs livraison pour éviter la saisie
+    document.getElementById("nom_exp").readOnly = true;
+    document.getElementById("prenom_exp").readOnly = true;
+    document.getElementById("adresse_exp").readOnly = true;
+    document.getElementById("complement_adresse_exp").readOnly = true;
+    document.getElementById("mail_exp").readOnly = true;
+  } else {
+    // Déverrouiller les champs livraison si la case est décochée
+    document.getElementById("nom_exp").readOnly = false;
+    document.getElementById("prenom_exp").readOnly = false;
+    document.getElementById("adresse_exp").readOnly = false;
+    document.getElementById("complement_adresse_exp").readOnly = false;
+    document.getElementById("mail_exp").readOnly = false;
+  }
+});
+
 function verifierEtatPaiement() {
   const panier = JSON.parse(localStorage.getItem("panier")) || [];
   const boutonStripe = document.getElementById("checkout-button");
@@ -213,7 +238,7 @@ window.addEventListener("panierMisAJour", function () {
     <form id="checkout-form">
       <!-- Étape 1 : Facturation -->
       <fieldset id="step-1" class="etape actif">
-        <legend><span class="etape-numero">1</span> Facturation v5</legend>
+        <legend><span class="etape-numero">1</span> Facturation v6</legend>
         <label>Nom :<br><input type="text" name="nom" id="nom" required /></label>
         <label>Prénom :<br><input type="text" name="prenom" id="prenom" required /></label>
 				<div style="position:relative;">
@@ -229,6 +254,10 @@ window.addEventListener("panierMisAJour", function () {
       <!-- Étape 2 : Livraison -->
       <fieldset id="step-2" class="etape">
         <legend><span class="etape-numero">2</span> Livraison</legend>
+				<label>
+					<input type="checkbox" id="copier-coordonnees" />
+					Utiliser les mêmes coordonnées que la facturation
+				</label>
         <label>Nom :<br><input type="text" name="nom_exp" id="nom_exp" required /></label>
         <label>Prénom :<br><input type="text" name="prenom_exp" id="prenom_exp" required /></label>
 				<div style="position:relative;">

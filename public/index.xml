@@ -59,7 +59,7 @@
     &lt;form id=&#34;checkout-form&#34;&gt;
       &lt;!-- Étape 1 : Facturation --&gt;
       &lt;fieldset id=&#34;step-1&#34; class=&#34;etape actif&#34;&gt;
-        &lt;legend&gt;&lt;span class=&#34;etape-numero&#34;&gt;1&lt;/span&gt; Facturation v10&lt;/legend&gt;
+        &lt;legend&gt;&lt;span class=&#34;etape-numero&#34;&gt;1&lt;/span&gt; Facturation v11&lt;/legend&gt;
         &lt;label&gt;Nom :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;nom&#34; id=&#34;nom&#34; required /&gt;&lt;/label&gt;
         &lt;label&gt;Prénom :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;prenom&#34; id=&#34;prenom&#34; required /&gt;&lt;/label&gt;
 				&lt;div style=&#34;position:relative;&#34;&gt;

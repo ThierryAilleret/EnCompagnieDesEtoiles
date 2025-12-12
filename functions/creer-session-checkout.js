@@ -22,10 +22,7 @@ exports.handler = async (event) => {
     };
   }
 
-	const baseUrl =
-		process.env.CONTEXT === "production"
-			? process.env.URL
-			: process.env.DEPLOY_URL;
+	const baseUrl = process.env.URL_SITE;
 	console.log("Base URL:", baseUrl);
 	
   try {

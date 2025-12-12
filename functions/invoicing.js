@@ -7,7 +7,7 @@ exports.handler = async (event) => {
   let stripeEvent;
 
   try {
-    stripeEvent = stripe.webhooks.constructEvent(event.body, sig, endpointSecret);
+    stripeEvent = stripe.webhooks.constructEvent(Buffer.from(event.body, "utf8"), sig, endpointSecret);
 
     if (stripeEvent.type === "checkout.session.completed") {
       const session = stripeEvent.data.object;

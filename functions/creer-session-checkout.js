@@ -43,9 +43,6 @@ exports.handler = async (event) => {
 			success_url: `${baseUrl}/success`,
 			cancel_url: `${baseUrl}/cancel`,
 
-      // success_url: "https://encompagniedesetoiles.fr/success",
-      // cancel_url: "https://encompagniedesetoiles.fr/cancel",
-
 			// Ajout pour collecter l’adresse 
 			billing_address_collection: "required",
 			shipping_address_collection: {

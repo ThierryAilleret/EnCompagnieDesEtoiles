@@ -39,7 +39,7 @@ layout = "checkout"
 					<div id="autocomplete-container_exp" class="autocomplete-container"></div>
 				</div>
         <label>Complément d'addresse :<br><input type="text" name="complement_adresse_exp" id="complement_adresse_exp"/></label>
-        <label>Mail :<br><input type="email" name="mail_exp" id="mail_exp" required  size="40" /></label>
+        <label>Mail :<br><input type="email" name="mail_exp" id="mail_exp" required /></label>
 			</fieldset>
       <!-- Étape 3 : Paiement -->
       <fieldset id="step-3" class="etape">

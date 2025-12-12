@@ -800,6 +800,18 @@ select {
   box-sizing: border-box;
 }
 
+input[type="email"],
+select {
+  width: 100%;
+  padding: 4px;
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 2px;
+  font-size: 1em;
+	font-weight: 400;
+  box-sizing: border-box;
+}
+
 .bouton-checkout, .bouton-validation-relai {
 	padding: 10px 20px;
   font-size: 1em;

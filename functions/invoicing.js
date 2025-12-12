@@ -4,6 +4,13 @@ exports.handler = async (event) => {
   const sig = event.headers["stripe-signature"];
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
+
+  console.log("Headers:", event.headers);
+  console.log("Stripe signature header:", sig);
+  console.log("Raw event.body type:", typeof event.body);
+  console.log("Raw event.body content:", event.body);
+	
+	
   let stripeEvent;
 
   try {

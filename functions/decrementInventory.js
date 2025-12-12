@@ -24,7 +24,7 @@ exports.handler = async (event) => {
         const currentInventory = parseInt(product.metadata.inventory || "0", 10);
         const quantity = item.quantity || 1;
 				
-				console.log(`✅ Stock actuel pour ${product.id} - ${product} : ${currentInventory}`);
+				console.log(`Stock actuel pour ${product.id} - ${product} : ${currentInventory}`);
 				
         if (currentInventory >= quantity) {
           const newInventory = currentInventory - quantity;
@@ -36,7 +36,7 @@ exports.handler = async (event) => {
             }
           });
 
-          console.log(`✅ Stock mis à jour pour ${product.name} : ${newInventory}`);
+          console.log(`Stock mis à jour pour ${product.name} : ${newInventory}`);
         } else {
           console.warn(`⚠️ Stock insuffisant pour ${product.name} (stock actuel : ${currentInventory})`);
         }

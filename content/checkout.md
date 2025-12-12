@@ -9,7 +9,7 @@ layout = "checkout"
     <form id="checkout-form">
       <!-- Étape 1 : Facturation -->
       <fieldset id="step-1" class="etape actif">
-        <legend><span class="etape-numero">1</span> Facturation v16</legend>
+        <legend><span class="etape-numero">1</span> Facturation v17</legend>
         <label>Nom :<br><input type="text" name="nom" id="nom" required /></label>
         <label>Prénom :<br><input type="text" name="prenom" id="prenom" required /></label>
 				<div style="position:relative;">
@@ -29,17 +29,17 @@ layout = "checkout"
 					<input type="checkbox" id="copier-coordonnees" />
 					Utiliser les mêmes coordonnées que pour la facturation
 				</label>
-        <label>Nom :<br><input type="text" name="nom_exp" id="nom_exp" required /></label>
-        <label>Prénom :<br><input type="text" name="prenom_exp" id="prenom_exp" required /></label>
+        <label>Nom :<br><input type="text" name="nom_liv" id="nom_liv" required /></label>
+        <label>Prénom :<br><input type="text" name="prenom_liv" id="prenom_liv" required /></label>
 				<div style="position:relative;">
 					<label>Adresse :<br>
-						<input type="text" id="adresse_exp" name="adresse_exp" autocomplete="off" required
+						<input type="text" id="adresse_liv" name="adresse_liv" autocomplete="off" required
 									 placeholder="Saisissez une adresse" />
 					</label>
-					<div id="autocomplete-container_exp" class="autocomplete-container"></div>
+					<div id="autocomplete-container_liv" class="autocomplete-container"></div>
 				</div>
-        <label>Complément d'addresse :<br><input type="text" name="complement_adresse_exp" id="complement_adresse_exp"/></label>
-        <label>Mail :<br><input type="email" name="mail_exp" id="mail_exp" required /></label>
+        <label>Complément d'addresse :<br><input type="text" name="complement_adresse_liv" id="complement_adresse_liv"/></label>
+        <label>Mail :<br><input type="email" name="mail_liv" id="mail_liv" required /></label>
 			</fieldset>
       <!-- Étape 3 : Paiement -->
       <fieldset id="step-3" class="etape">
@@ -63,7 +63,7 @@ layout = "checkout"
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   // Surveille les champs nom, prénom, adresse, mail
-  ["nom", "prenom", "adresse", "mail", "nom_exp", "prenom_exp", "adresse_exp", "mail_exp"].forEach(id => {
+  ["nom", "prenom", "adresse", "mail", "nom_liv", "prenom_liv", "adresse_liv", "mail_liv"].forEach(id => {
     const champ = document.getElementById(id);
     if (champ) {
       champ.addEventListener("input", surveillerEtapes);
@@ -103,15 +103,15 @@ document.addEventListener("DOMContentLoaded", () => {
 		cont.style.display = count ? "block" : "none"
   });
 	
-	// Autocomplétion adresse_exp
-  const adresseExpInput = document.getElementById("adresse_exp");
+	// Autocomplétion adresse_liv
+  const adresseExpInput = document.getElementById("adresse_liv");
 	adresseExpInput.addEventListener("input", async e => {
     const q = e.target.value.trim();
     if (q.length < 3) return;
 		const res = await fetch(`https://data.geopf.fr/geocodage/completion?text=${encodeURIComponent(q)}&limit=5&terr=METROPOLE`);
     const data = await res.json();
 		// console.log("🔵 Suggestions reçues :", data);
-    const cont = document.getElementById("autocomplete-container_exp");
+    const cont = document.getElementById("autocomplete-container_liv");
 		cont.innerHTML = "";
 		cont.style.display = "none";
 
@@ -190,10 +190,10 @@ function remplirAdresseExpGeo(item) {
   const pays  = item.country || "";
   const adresse = item.fulltext || `${item.street}, ${cp} ${ville}`;
   // Préremplit le champ Adresse
-  document.getElementById("adresse_exp").value = adresse;
+  document.getElementById("adresse_liv").value = adresse;
 	// Stockage
-	localStorage.setItem('codePostal_exp', cp);
-	localStorage.setItem('ville_exp', ville);
+	localStorage.setItem('codePostal_liv', cp);
+	localStorage.setItem('ville_liv', ville);
 }
 
 function surveillerEtapes() {
@@ -202,10 +202,10 @@ function surveillerEtapes() {
   const adresse = document.getElementById("adresse").value.trim();
   const mail = document.getElementById("mail").value.trim();
 
-  const nom_exp     = document.getElementById("nom_exp").value.trim();
-  const prenom_exp  = document.getElementById("prenom_exp").value.trim();
-  const adresse_exp = document.getElementById("adresse_exp").value.trim();
-  const mail_exp    = document.getElementById("mail_exp").value.trim();
+  const nom_liv     = document.getElementById("nom_liv").value.trim();
+  const prenom_liv  = document.getElementById("prenom_liv").value.trim();
+  const adresse_liv = document.getElementById("adresse_liv").value.trim();
+  const mail_liv    = document.getElementById("mail_liv").value.trim();
 
   const etape1 = document.getElementById("step-1");
   const etape2 = document.getElementById("step-2");
@@ -215,8 +215,8 @@ function surveillerEtapes() {
   const etape_1_complete = nom && prenom && adresse && mail && checkmail;
   if (etape_1_complete) {
     etape2.classList.add("actif");
-		const checkmail_exp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail_exp);
-	  const etape_2_complete = nom_exp && prenom_exp && adresse_exp && mail_exp && checkmail_exp;
+		const checkmail_liv = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail_liv);
+	  const etape_2_complete = nom_liv && prenom_liv && adresse_liv && mail_liv && checkmail_liv;
 		if (etape_2_complete) {
 			etape3.classList.add("actif");
 			const prixTotal = document.getElementById("prix-total");
@@ -240,25 +240,25 @@ function surveillerEtapes() {
 function copierCoordonnees(e) {
   if (e.target.checked) {
     // Copier les champs facturation vers livraison
-    document.getElementById("nom_exp").value = document.getElementById("nom").value.trim();
-    document.getElementById("prenom_exp").value = document.getElementById("prenom").value.trim();
-    document.getElementById("adresse_exp").value = document.getElementById("adresse").value.trim();
-    document.getElementById("complement_adresse_exp").value = document.getElementById("complement_adresse").value.trim();
-    document.getElementById("mail_exp").value = document.getElementById("mail").value.trim();
+    document.getElementById("nom_liv").value = document.getElementById("nom").value.trim();
+    document.getElementById("prenom_liv").value = document.getElementById("prenom").value.trim();
+    document.getElementById("adresse_liv").value = document.getElementById("adresse").value.trim();
+    document.getElementById("complement_adresse_liv").value = document.getElementById("complement_adresse").value.trim();
+    document.getElementById("mail_liv").value = document.getElementById("mail").value.trim();
 
     // Optionnel : verrouiller les champs livraison pour éviter la saisie
-    document.getElementById("nom_exp").readOnly = true;
-    document.getElementById("prenom_exp").readOnly = true;
-    document.getElementById("adresse_exp").readOnly = true;
-    document.getElementById("complement_adresse_exp").readOnly = true;
-    document.getElementById("mail_exp").readOnly = true;
+    document.getElementById("nom_liv").readOnly = true;
+    document.getElementById("prenom_liv").readOnly = true;
+    document.getElementById("adresse_liv").readOnly = true;
+    document.getElementById("complement_adresse_liv").readOnly = true;
+    document.getElementById("mail_liv").readOnly = true;
   } else {
     // Déverrouiller les champs livraison si la case est décochée
-    document.getElementById("nom_exp").readOnly = false;
-    document.getElementById("prenom_exp").readOnly = false;
-    document.getElementById("adresse_exp").readOnly = false;
-    document.getElementById("complement_adresse_exp").readOnly = false;
-    document.getElementById("mail_exp").readOnly = false;
+    document.getElementById("nom_liv").readOnly = false;
+    document.getElementById("prenom_liv").readOnly = false;
+    document.getElementById("adresse_liv").readOnly = false;
+    document.getElementById("complement_adresse_liv").readOnly = false;
+    document.getElementById("mail_liv").readOnly = false;
   }
 	surveillerEtapes();
 }
@@ -309,13 +309,13 @@ document.getElementById("checkout-button").addEventListener("click", function (e
     codePostal: localStorage.getItem("codePostal") || "",
     ville: localStorage.getItem("ville") || "",
 
-    nom_exp: document.getElementById("nom_exp").value.trim(),
-    prenom_exp: document.getElementById("prenom_exp").value.trim(),
-    email_exp: document.getElementById("mail_exp").value.trim(),
-    adresse_exp: document.getElementById("adresse_exp").value.trim(),
-    complement_exp: document.querySelector("[name='complement_adresse_exp']").value.trim(),
-    codePostal_exp: localStorage.getItem("codePostal_exp") || "",
-    ville_exp: localStorage.getItem("ville_exp") || "",
+    nom_liv: document.getElementById("nom_liv").value.trim(),
+    prenom_liv: document.getElementById("prenom_liv").value.trim(),
+    email_liv: document.getElementById("mail_liv").value.trim(),
+    adresse_liv: document.getElementById("adresse_liv").value.trim(),
+    complement_liv: document.querySelector("[name='complement_adresse_liv']").value.trim(),
+    codePostal_liv: localStorage.getItem("codePostal_liv") || "",
+    ville_liv: localStorage.getItem("ville_liv") || "",
   };
 
 	console.log(client);
@@ -326,7 +326,7 @@ document.getElementById("checkout-button").addEventListener("click", function (e
     alert("Veuillez entrer une adresse email valide pour la facturation.");
     return;
   }
-  if (!client.email_exp || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(client.email_exp)) {
+  if (!client.email_liv || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(client.email_liv)) {
     alert("Veuillez entrer une adresse email valide pour la livraison.");
     return;
   }

@@ -41,13 +41,16 @@ exports.handler = async (event) => {
       cancel_url: "https://encompagniedesetoiles.fr/cancel",
 
       metadata: {
-        panier: JSON.stringify(panier),
         nomClient: client.nom,
         prenomClient: client.prenom,
         emailClient: client.email,
         adresseClient: client.adresse,
         complement: client.complement,
-        pointRelais: client.pointRelais,
+        nomClientLiv: client.nom_liv,
+        prenomClientLiv: client.prenom_liv,
+        emailClientLiv: client.email_liv,
+        adresseClientLiv: client.adresse_liv,
+        complementLiv: client.complement_liv,
         environnement: isLive ? "live" : "test"
       }
     });

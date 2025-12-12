@@ -155,10 +155,12 @@ function surveillerEtapes() {
   const etape2 = document.getElementById("step-2");
   const etape3 = document.getElementById("step-3");
 
-  const etape_1_complete = nom && prenom && adresse && mail;
+  const checkmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail);
+  const etape_1_complete = nom && prenom && adresse && mail && checkmail;
   if (etape_1_complete) {
     etape2.classList.add("actif");
-	  const etape_2_complete = nom_exp && prenom_exp && adresse_exp && mail_exp;
+		const checkmail_exp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mai_exp);
+	  const etape_2_complete = nom_exp && prenom_exp && adresse_exp && mail_exp && checkmail_exp;
 		if (etape_2_complete) {
 			etape3.classList.add("actif");
 			const prixTotal = document.getElementById("prix-total");

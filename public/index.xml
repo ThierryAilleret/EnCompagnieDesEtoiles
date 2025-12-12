@@ -536,10 +536,12 @@ function surveillerEtapes() {
   const etape2 = document.getElementById(&#34;step-2&#34;);
   const etape3 = document.getElementById(&#34;step-3&#34;);
 
-  const etape_1_complete = nom &amp;&amp; prenom &amp;&amp; adresse &amp;&amp; mail;
+  const checkmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail);
+  const etape_1_complete = nom &amp;&amp; prenom &amp;&amp; adresse &amp;&amp; mail &amp;&amp; checkmail;
   if (etape_1_complete) {
     etape2.classList.add(&#34;actif&#34;);
-	  const etape_2_complete = nom_exp &amp;&amp; prenom_exp &amp;&amp; adresse_exp &amp;&amp; mail_exp;
+		const checkmail_exp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mai_exp);
+	  const etape_2_complete = nom_exp &amp;&amp; prenom_exp &amp;&amp; adresse_exp &amp;&amp; mail_exp &amp;&amp; checkmail_exp;
 		if (etape_2_complete) {
 			etape3.classList.add(&#34;actif&#34;);
 			const prixTotal = document.getElementById(&#34;prix-total&#34;);

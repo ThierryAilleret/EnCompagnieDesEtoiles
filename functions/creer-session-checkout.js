@@ -37,17 +37,19 @@ exports.handler = async (event) => {
         quantity: item.quantite || 1,
       })),
 			
-	
-			const baseUrl = process.env.CONTEXT === "production"
-				? process.env.URL
-				: process.env.DEPLOY_URL;
-			
-			console.log(baseUrl);
+
+			const baseUrl =
+				process.env.CONTEXT === "production"
+					? process.env.URL
+					: process.env.DEPLOY_URL;
+
+			console.log("Base URL:", baseUrl);
 
 			const session = await stripe.checkout.sessions.create({
-				success_url: '${baseUrl}/success',
-				cancel_url: '${baseUrl}/cancel',
+				success_url: `${baseUrl}/success`,
+				cancel_url: `${baseUrl}/cancel`,
 			});
+
 
 
       // success_url: "https://encompagniedesetoiles.fr/success",

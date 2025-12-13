@@ -9,7 +9,7 @@ layout = "checkout"
     <form id="checkout-form">
       <!-- Étape 1 : Facturation -->
       <fieldset id="step-1" class="etape actif">
-        <legend><span class="etape-numero">1</span> Facturation</legend>
+        <legend><span class="etape-numero">1</span> Facturation v5</legend>
         <label>Nom :<br><input type="text" name="nom" id="nom" required /></label>
         <label>Prénom :<br><input type="text" name="prenom" id="prenom" required /></label>
 				<div style="position:relative;">
@@ -19,7 +19,7 @@ layout = "checkout"
 					</label>
 					<div id="autocomplete-container" class="autocomplete-container"></div>
 				</div>
-        <label>Complément d'addresse :<br><input type="text" name="complement_adresse" id="complement_adresse"/></label>
+        <label>Complément d'adresse :<br><input type="text" name="complement_adresse" id="complement_adresse"/></label>
         <label>Mail :<br><input type="email" name="mail" id="mail" required size="40" /></label>
 			</fieldset>
       <!-- Étape 2 : Livraison -->
@@ -38,7 +38,7 @@ layout = "checkout"
 					</label>
 					<div id="autocomplete-container_liv" class="autocomplete-container"></div>
 				</div>
-        <label>Complément d'addresse :<br><input type="text" name="complement_adresse_liv" id="complement_adresse_liv"/></label>
+        <label>Complément d'adresse :<br><input type="text" name="complement_adresse_liv" id="complement_adresse_liv"/></label>
         <label>Mail :<br><input type="email" name="mail_liv" id="mail_liv" required /></label>
 			</fieldset>
       <!-- Étape 3 : Paiement -->

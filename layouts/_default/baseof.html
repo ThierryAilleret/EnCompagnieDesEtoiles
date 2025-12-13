@@ -1,16 +1,11 @@
 {{- if lt hugo.Version "0.146.0" }}
 {{- errorf "=> hugo v0.146.0 or greater is required for hugo-PaperMod to build " }}
 {{- end -}}
-<!-- DEBUG: STRIPE_ENV={{ getenv "STRIPE_ENV" }} -->
 <!DOCTYPE html>
 <html lang="{{ site.Language }}" dir="{{ .Language.LanguageDirection | default "auto" }}">
 <!-- DEBUG: baseof.html utilisé -->
 <head>
     {{- partial "head.html" . }}
-		<script>
-			window.stripeEnv = "{{ getenv "STRIPE_ENV" }}";
-			window.stripePublicKey = "{{ if eq (getenv "STRIPE_ENV") "live" }}{{ getenv "STRIPE_PUBLIC_KEY_LIVE" }}{{ else }}{{ getenv "STRIPE_PUBLIC_KEY_TEST" }}{{ end }}";
-		</script>
 </head>
 
 <body class="

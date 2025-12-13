@@ -220,7 +220,7 @@
 				}
 
 				localStorage.setItem("panier", JSON.stringify(panier));
-				window.dispatchEvent(new Event("panierMisAJour")); // ✅ déclenche la mise à jour
+				window.dispatchEvent(new Event("panierMisAJour"));
 				
 				afficherMiniPanier();
 				ouvrirPanier();

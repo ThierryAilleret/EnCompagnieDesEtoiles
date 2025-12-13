@@ -4,10 +4,17 @@ exports.handler = async (event) => {
   const sig = event.headers["stripe-signature"];
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
+
+  console.log("Headers:", event.headers);
+  console.log("Stripe signature header:", sig);
+  console.log("Raw event.body type:", typeof event.body);
+  console.log("Raw event.body content:", event.body);
+	
+	
   let stripeEvent;
 
   try {
-    stripeEvent = stripe.webhooks.constructEvent(event.body, sig, endpointSecret);
+    stripeEvent = stripe.webhooks.constructEvent(Buffer.from(event.body, "utf8"), sig, endpointSecret);
 
     if (stripeEvent.type === "checkout.session.completed") {
       const session = stripeEvent.data.object;

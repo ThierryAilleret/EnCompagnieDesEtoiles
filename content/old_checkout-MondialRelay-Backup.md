@@ -364,7 +364,7 @@ document.getElementById("checkout-button").addEventListener("click", function (e
 
   // Vérification minimale
   if (!client.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(client.email)) {
-    alert("Veuillez entrer une adresse email valide.");
+    alert("Veuillez entrer une adresse e-mail valide.");
     return;
   }
 

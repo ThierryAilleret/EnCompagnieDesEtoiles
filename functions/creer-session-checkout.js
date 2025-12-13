@@ -22,35 +22,33 @@ exports.handler = async (event) => {
     };
   }
 
+	const baseUrl = process.env.URL_SITE;
+	console.log("Base URL:", baseUrl);
+	
   try {
-    const { panier, client } = JSON.parse(event.body);
+    const { panier } = JSON.parse(event.body);
     const isLive = process.env.STRIPE_ENV === "live";
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
       customer_creation: "always",
-      customer_email: client.email,
 
       line_items: panier.map(item => ({
         price: item.priceIdStripe,
         quantity: item.quantite || 1,
       })),
 
-      success_url: "https://encompagniedesetoiles.fr/success",
-      cancel_url: "https://encompagniedesetoiles.fr/cancel",
+			success_url: `${baseUrl}/success`,
+			cancel_url: `${baseUrl}/cancel`,
+
+			// Ajout pour collecter l’adresse 
+			billing_address_collection: "required",
+			shipping_address_collection: {
+				allowed_countries: ["FR"]
+			},
 
       metadata: {
-        nomClient: client.nom,
-        prenomClient: client.prenom,
-        emailClient: client.email,
-        adresseClient: client.adresse,
-        complement: client.complement,
-        nomClientLiv: client.nom_liv,
-        prenomClientLiv: client.prenom_liv,
-        emailClientLiv: client.email_liv,
-        adresseClientLiv: client.adresse_liv,
-        complementLiv: client.complement_liv,
         environnement: isLive ? "live" : "test"
       }
     });

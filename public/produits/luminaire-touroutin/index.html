@@ -1,7 +1,13 @@
+<<<<<<< HEAD
 
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
+=======
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+>>>>>>> test-deploy
 <head>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZQ2FL4130K"></script>
 
@@ -79,6 +85,7 @@
 
   <meta name="robots" content="noindex, follow">
 
+<<<<<<< HEAD
 
 		<script>
 			window.stripeEnv = "";
@@ -86,6 +93,11 @@
 		</script>
 </head>
 
+=======
+
+</head>
+
+>>>>>>> test-deploy
 <body class="" id="top">
 <script>
     if (localStorage.getItem("pref-theme") === "dark") {
@@ -218,15 +230,20 @@ window.addEventListener("DOMContentLoaded", () => {
 			</div>
 			<div class="footer-panier">
 				<p id="total-panier">Total : 0 €</p>
-				<button onclick="window.location.href='/checkout.html'" class="btn-commander">
-					Finaliser ma commande
-				</button>
+				
+				<button type="button" id="checkout-button" class="bouton-checkout">
+          Payer avec Stripe
+        </button>
+				<script src="https://js.stripe.com/v3/"></script>
 			</div>
 		</div>
 	</div>
 </header>
 
 <script>
+			window.stripeEnv = "";
+			window.stripePublicKey = "";
+			
 		 
 		function ouvrirOuFermerPanier() {
 			const volet = document.getElementById('mini-panier');
@@ -372,7 +389,53 @@ window.addEventListener("DOMContentLoaded", () => {
 			
 			fermerPanier();
 		});
+		
+		
+		document.getElementById("checkout-button").addEventListener("click", function (event) {
+			event.preventDefault(); 
 
+			
+			let panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+			
+			panier = panier.map(item => ({
+				...item,
+				monnaie: item.monnaie === "€" ? "eur" : item.monnaie
+			}));
+
+			console.log(panier);
+
+			
+			fetch("/.netlify/functions/creer-session-checkout", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ panier })
+			})
+			.then(response => {
+				if (!response.ok) throw new Error("Réponse serveur non valide");
+				return response.json();
+			})
+			.then(data => {
+				if (!data.sessionId) throw new Error("Session Stripe non reçue");
+
+				
+				localStorage.setItem("stripeSessionId", data.sessionId);
+				console.log("Session enregistrée :", data.sessionId);
+
+				if (!window.stripePublicKey || !window.stripePublicKey.startsWith("pk_")) {
+					alert("Clé Stripe invalide ou manquante.");
+					console.error("❌ Clé Stripe non valide :", window.stripePublicKey);
+					return;
+				}
+				
+				const stripe = Stripe(window.stripePublicKey);
+				stripe.redirectToCheckout({ sessionId: data.sessionId });
+			})
+			.catch(error => {
+				console.error("💥 Erreur Stripe :", error);
+				alert("Erreur : " + error.message);
+			});
+		});
 </script>
 <main class="main">
 	<div class="single-container">
@@ -596,7 +659,7 @@ window.addEventListener("DOMContentLoaded", () => {
 				}
 
 				localStorage.setItem("panier", JSON.stringify(panier));
-				window.dispatchEvent(new Event("panierMisAJour")); 
+				window.dispatchEvent(new Event("panierMisAJour"));
 				
 				afficherMiniPanier();
 				ouvrirPanier();

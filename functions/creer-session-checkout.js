@@ -33,7 +33,6 @@ exports.handler = async (event) => {
       payment_method_types: ["card"],
       mode: "payment",
       customer_creation: "always",
-      customer_email: client.email,
 
       line_items: panier.map(item => ({
         price: item.priceIdStripe,

@@ -485,7 +485,7 @@ window.addEventListener("DOMContentLoaded", () => {
 				</ul>
 			</div>
 			<p>Stock disponible : <span id="stock-display">Chargement...</span></p>
-			<p>Prix : 0 €</p>
+			<p>Prix : 200 €</p>
 			<button class="btn-add-to-cart" onclick="ajouterAuPanier()">Ajouter au panier</button>
 		</article>
 	</div>
@@ -618,12 +618,12 @@ window.addEventListener("DOMContentLoaded", () => {
 					: "";
 
 				const priceIdStripe = stripeEnv === "live"
-					? "price_1SE8JaGEPWcc8pKFYkrAM2Jq"
+					? "price_1SdtXmGEPWcc8pKF8AvUkzs1"
 					: "";
 
 				const nom = "Luminaire Iridescent bleu- vert";
 				const description = "Sphère lumineuse en plexiglas iridescent";
-				const prix = parseFloat("0");
+				const prix = parseFloat("200");
 				const monnaie = "€";
 				const image = "\/images\/SERIRITRA_1.jpg".startsWith("http")
 						? "\/images\/SERIRITRA_1.jpg"

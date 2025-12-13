@@ -2,7 +2,7 @@
 stripeProductTest = ""
 stripeProductLive = "prod_TATGnm7xa5q4Hr"
 priceIdStripeTest = ""
-priceIdStripeLive = "price_1SE8JaGEPWcc8pKFYkrAM2Jq"
+priceIdStripeLive = "price_1SdtXmGEPWcc8pKF8AvUkzs1"
 
 product = "SERIRITRA"
 title = "Luminaire Iridescent bleu- vert"
@@ -21,7 +21,7 @@ dimensions = "diamètre 30 cm"
 materiaux = "plexiglas iridescent"
 ampoule = "E27, LED 20 W max (ampoule non fournie)"
 normes = "CE"
-price = 0
+price = 200
 currency = "€"
 new = true
 +++

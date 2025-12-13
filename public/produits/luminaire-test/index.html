@@ -68,8 +68,8 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Produits</title>
-<meta name="description" content="">
+<title>Article de test</title>
+<meta name="description" content="Article de test">
 
 <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
 
@@ -81,7 +81,7 @@
 
 </head>
 
-<body class="list" id="top">
+<body class="" id="top">
 <script>
     if (localStorage.getItem("pref-theme") === "dark") {
         document.body.classList.add('dark');
@@ -421,98 +421,275 @@ window.addEventListener("DOMContentLoaded", () => {
 		});
 </script>
 <main class="main">
-<div class="product-gallery">
-  <h1>Nos Produits</h1>
-  <div class="product-grid">
-    
-      <a href="/produits/luminaire-toubarbla/" class="product-item">
-        
-          <img src="/images/TOUBARBLA_1.jpg" alt="Description de l&#39;image miniature du Luminaire Al Dente" class="product-thumb" />
-        
-        <h2>Al dente</h2>
-        <p>Sphère lumineuse en... boîtes de pâtes !</p>
-      </a>
-    
-      <a href="/produits/luminaire-test/" class="product-item">
-        
-        <h2>Article de test</h2>
-        <p>Article de test</p>
-      </a>
-    
-      <a href="/produits/luminaire-touroutin/" class="product-item">
-        
-          <img src="/images/TOUROUTIN_1.jpg" alt="Description de l&#39;image miniature du Luminaire Tintin" class="product-thumb" />
-        
-        <h2>Luminaire BD</h2>
-        <p>Sphère lumineuse en carton coloré et planches de bande dessinée</p>
-      </a>
-    
-      <a href="/produits/luminaire-toucarjau/" class="product-item">
-        
-          <img src="/images/TOUCARJAU_1.jpg" alt="Description de l&#39;image miniature du Luminaire Carte vintage" class="product-thumb" />
-        
-        <h2>Luminaire Carte vintage</h2>
-        <p>Sphère lumineuse en carton coloré et cartes scolaires vintage</p>
-      </a>
-    
-      <a href="/produits/luminaire-tourosswa/" class="product-item">
-        
-          <img src="/images/TOUROSSWA_1.jpg" alt="Description de l&#39;image miniature du Luminaire Swann" class="product-thumb" />
-        
-        <h2>Luminaire du Côté de chez Swann</h2>
-        <p>Sphère lumineuse en carton coloré et feuilles du Côté de chez Swann</p>
-      </a>
-    
-      <a href="/produits/luminaire-seriritra/" class="product-item">
-        
-          <img src="/images/SERIRITRA_1.jpg" alt="Description de l&#39;image miniature du Luminaire Iridescent bleu vert" class="product-thumb" />
-        
-        <h2>Luminaire Iridescent bleu- vert</h2>
-        <p>Sphère lumineuse en plexiglas iridescent</p>
-      </a>
-    
-      <a href="/produits/luminaire-touroumus/" class="product-item">
-        
-          <img src="/images/TOUROUMUS_1.jpg" alt="Description de l&#39;image miniature du Luminaire Lyra" class="product-thumb" />
-        
-        <h2>Luminaire Lyra</h2>
-        <p>Sphère lumineuse en carton coloré et partitions anciennes</p>
-      </a>
-    
-      <a href="/produits/luminaire-serblemus/" class="product-item">
-        
-          <img src="/images/SERBLEMUS_1.jpg" alt="Description de l&#39;image miniature du Luminaire Maestro" class="product-thumb" />
-        
-        <h2>Luminaire Maestro</h2>
-        <p>Sphère lumineuse en carton coloré et partitions anciennes</p>
-      </a>
-    
-      <a href="/produits/luminaire-carjaudra/" class="product-item">
-        
-          <img src="/images/CARJAUDRA_1.jpg" alt="Description de l&#39;image miniature du Luminaire Manga" class="product-thumb" />
-        
-        <h2>Luminaire Manga</h2>
-        <p>Sphère lumineuse en carton coloré et planches de manga</p>
-      </a>
-    
-      <a href="/produits/luminaire-caroranar/" class="product-item">
-        
-          <img src="/images/CARORANAR_1.jpg" alt="Description de l&#39;image miniature du Luminaire Manga 2" class="product-thumb" />
-        
-        <h2>Luminaire Manga 2</h2>
-        <p>Sphère lumineuse en carton coloré et planches de manga (Naruto)</p>
-      </a>
-    
-      <a href="/produits/luminaire-crunoiorb/" class="product-item">
-        
-          <img src="/images/CRUNOIORB_1.jpg" alt="Description de l&#39;image miniature du Luminaire Nuit Étoilée" class="product-thumb" />
-        
-        <h2>Luminaire Nuit Étoilée</h2>
-        <p>Sphère lumineuse en carton coloré et intérieur doré</p>
-      </a>
-    
+	<div class="single-container">
+		<a href="/produits" class="back-arrow" aria-label="Retour à la galerie">
+			&lt; Retour à la galerie
+		</a>
+		<article>
+			<h1>Article de test</h1>
+			<h3>Article de test</h3>
+
+			
+			<div class="gallery-container">
+				<button id="left-scroll" class="scroll-button arrow"
+								onclick="scrollGallery(-1)" aria-label="Défiler vers la gauche">
+					<svg width="24" height="40" viewBox="0 0 24 40">
+						<polyline points="20,4 4,20 20,36"
+											fill="none" stroke="#888" stroke-width="2"
+											stroke-linecap="round" stroke-linejoin="round"/>
+					</svg>
+				</button>
+
+				<div class="gallery">
+					
+					
+
+				</div>
+
+				<button id="right-scroll" class="scroll-button arrow"
+								onclick="scrollGallery(1)" aria-label="Défiler vers la droite">
+					<svg width="24" height="40" viewBox="0 0 24 40">
+						<polyline points="4,4 20,20 4,36"
+											fill="none" stroke="#888" stroke-width="2"
+											stroke-linecap="round" stroke-linejoin="round"/>
+					</svg>
+				</button>
+			</div>
+
+			<div class="fiche-texte">
+				<p>Article de test</p>
+				<ul>
+					<li><strong>Dimensions :</strong> Article de test</li>
+					<li><strong>Matériaux :</strong> Article de test</li>
+					<li><strong>Ampoule :</strong> Article de test</li>
+					<li><strong>Normes :</strong> <img src="/images/CE.png" alt="Logo CE" class="img-icon"></li>
+					<li><strong>Fabriqué à :</strong> Dunkerque, France</li>
+				</ul>
+			</div>
+			<p>Stock disponible : <span id="stock-display">Chargement...</span></p>
+			<p>Prix : 0.1 €</p>
+			<button class="btn-add-to-cart" onclick="ajouterAuPanier()">Ajouter au panier</button>
+		</article>
+	</div>
+
+  
+  <div id="imageModal" class="modal" onclick="closeModal()">
+    <div class="modal-content-wrapper" onclick="event.stopPropagation()">
+      <span class="close" onclick="closeModal()" aria-label="Fermer">&times;</span>
+
+      <div class="modal-body">
+        <button class="nav-button left-nav"
+                onclick="navigateImage(-1)" aria-label="Image précédente">&#10094;</button>
+        <img id="modalImage" class="modal-content" alt="">
+        <button class="nav-button right-nav"
+                onclick="navigateImage(1)" aria-label="Image suivante">&#10095;</button>
+      </div>
+
+      <div id="modalCaption" class="caption"></div>
+    </div>
   </div>
-</div>
+
+
+
+  
+  <script>
+    let stockDisponible = 0;
+		let currentImageIndex = 0;
+    let images = [];
+
+    function collectGalleryImages() {
+      return Array.from(document.querySelectorAll('.gallery img'))
+        .map(img => ({ src: img.src, alt: img.alt }));
+    }
+
+    function getFilename(url) {
+      return new URL(url, window.location.origin).pathname;
+    }
+
+    function scrollGallery(direction) {
+      const gallery = document.querySelector('.gallery');
+      const moveBy = gallery.clientWidth * 0.8;
+      gallery.scrollBy({ left: direction * moveBy, behavior: 'smooth' });
+    }
+
+    function checkScrollPosition() {
+      const g = document.querySelector('.gallery');
+      document.getElementById('left-scroll').style.visibility =
+        g.scrollLeft <= 5 ? 'hidden' : 'visible';
+      document.getElementById('right-scroll').style.visibility =
+        g.scrollLeft + g.clientWidth >= g.scrollWidth - 5 ? 'hidden' : 'visible';
+    }
+
+		window.addEventListener('load', () => {
+			
+			const gallery = document.querySelector('.gallery');
+			gallery.addEventListener('scroll', checkScrollPosition);
+			setTimeout(checkScrollPosition, 100);
+			images = collectGalleryImages();
+
+			
+			window.dispatchEvent(new Event("panierMisAJour"));
+		});
+
+    function openModal(src, alt) {
+      images = collectGalleryImages();
+      currentImageIndex = images.findIndex(img =>
+        getFilename(img.src) === getFilename(src)
+      );
+      if (currentImageIndex < 0) currentImageIndex = 0;
+
+      const imgEl = document.getElementById('modalImage');
+      const cap   = document.getElementById('modalCaption');
+      imgEl.src = src;
+      imgEl.alt = alt;
+      cap.textContent = alt;
+      imgEl.style.transform = 'translateX(0)';
+
+      const modal = document.getElementById('imageModal');
+      modal.style.display = 'flex';
+      setTimeout(() => modal.classList.add('show'), 10);
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('imageModal');
+      modal.classList.remove('show');
+      setTimeout(() => modal.style.display = 'none', 300);
+    }
+
+		function navigateImage(direction) {
+			if (!images.length || currentImageIndex < 0) return;
+
+			const imgEl = document.getElementById('modalImage');
+			const cap   = document.getElementById('modalCaption');
+
+			
+			const outX = direction > 0 ? '-100%' : '100%';
+			const inX  = direction > 0 ? '100%'  : '-100%';
+
+			
+			imgEl.style.transition = 'transform 0.3s ease';
+			imgEl.style.transform  = `translateX(${outX})`;
+
+			setTimeout(() => {
+				
+				currentImageIndex = (currentImageIndex + direction + images.length) % images.length;
+
+				
+				imgEl.style.transition = 'none';
+				imgEl.style.transform  = `translateX(${inX})`;
+				imgEl.src   = images[currentImageIndex].src;
+				imgEl.alt   = images[currentImageIndex].alt;
+				cap.textContent = images[currentImageIndex].alt;
+
+				
+				void imgEl.offsetWidth;
+
+				
+				imgEl.style.transition = 'transform 0.3s ease';
+				imgEl.style.transform  = 'translateX(0)';
+			}, 300);
+		}
+		
+		async function ajouterAuPanier() {
+				const panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+				const stripeEnv = window.stripeEnv || "test"; 
+
+				const stripeProduct = stripeEnv === "live"
+					? "prod_TATGnm7xa5q4Hr"
+					: "";
+
+				const priceIdStripe = stripeEnv === "live"
+					? "price_1SdtXmGEPWcc8pKF8AvUkzs1"
+					: "";
+
+				const nom = "Article de test";
+				const description = "Article de test";
+				const prix = parseFloat("0.1");
+				const monnaie = "€";
+				const image = "".startsWith("http")
+						? ""
+						: `https://encompagniedesetoiles.fr`;
+
+				
+				if (isNaN(prix) || !monnaie || !nom) {
+						console.error("Article invalide – vérifie les données !");
+						alert("⚠️ Impossible d'ajouter cet article : données manquantes ou invalides.");
+						return;
+				}
+
+				const index = panier.findIndex(p => p.nom === nom);
+				
+				const quantiteDemandee = index >= 0 ? panier[index].quantite + 1 : 1;
+
+				const ok = await verifierQuantiteDisponible(stripeProduct, quantiteDemandee);
+				if (!ok) {
+					afficherMiniPanier();
+					ouvrirPanier();
+					return;
+				}
+				
+				if (index >= 0) {
+						panier[index].quantite += 1;
+				} else {
+						panier.push({ nom, description, prix , stripeProduct, priceIdStripe, monnaie, image, quantite: 1 });
+				}
+
+				localStorage.setItem("panier", JSON.stringify(panier));
+				window.dispatchEvent(new Event("panierMisAJour"));
+				
+				afficherMiniPanier();
+				ouvrirPanier();
+
+		}
+
+		async function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
+				const panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
+				const data = await response.json();
+				quantiteDisponible = parseInt(data.inventory, 10);
+
+				
+				
+				
+
+				
+				if (quantiteDemandee > quantiteDisponible) {
+						alert("⚠️ Stock insuffisant : quantité demandée supérieure au stock disponible.");
+						return false;
+				}
+
+				return true;
+		}
+
+
+		
+		async function fetchInventoryCurrentProduct() {
+				const stripeEnv = window.stripeEnv || "test"; 
+
+				const stripeProduct = stripeEnv === "live"
+					? "prod_TATGnm7xa5q4Hr"
+					: "";
+
+				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
+
+				const data = await response.json();
+				stockDisponible = parseInt(data.inventory, 10);
+				
+				document.getElementById("stock-display").textContent = stockDisponible;
+				
+				if (stockDisponible <= 0) {
+						const bouton = document.querySelector(".btn-add-to-cart");
+						if (bouton) {
+								bouton.disabled = true;
+								bouton.textContent = "Stock épuisé";
+						}
+				}
+		}
+
+		fetchInventoryCurrentProduct();
+</script>
 
     </main>
     

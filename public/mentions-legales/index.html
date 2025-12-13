@@ -221,6 +221,9 @@ window.addEventListener("DOMContentLoaded", () => {
 				<button onclick="window.location.href='/checkout.html'" class="btn-commander">
 					Finaliser ma commande
 				</button>
+				<button type="button" id="checkout-button" class="bouton-checkout  bouton-verrouille" style="display:none">
+          Payer avec Stripe
+        </button>
 			</div>
 		</div>
 	</div>
@@ -372,7 +375,53 @@ window.addEventListener("DOMContentLoaded", () => {
 			
 			fermerPanier();
 		});
+		
+		
+		document.getElementById("checkout-button").addEventListener("click", function (event) {
+			event.preventDefault(); 
 
+			
+			let panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+			
+			panier = panier.map(item => ({
+				...item,
+				monnaie: item.monnaie === "€" ? "eur" : item.monnaie
+			}));
+
+			console.log(panier);
+
+			
+			fetch("/.netlify/functions/creer-session-checkout", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ panier })
+			})
+			.then(response => {
+				if (!response.ok) throw new Error("Réponse serveur non valide");
+				return response.json();
+			})
+			.then(data => {
+				if (!data.sessionId) throw new Error("Session Stripe non reçue");
+
+				
+				localStorage.setItem("stripeSessionId", data.sessionId);
+				console.log("Session enregistrée :", data.sessionId);
+
+				if (!window.stripePublicKey || !window.stripePublicKey.startsWith("pk_")) {
+					alert("Clé Stripe invalide ou manquante.");
+					console.error("❌ Clé Stripe non valide :", window.stripePublicKey);
+					return;
+				}
+				
+				const stripe = Stripe(window.stripePublicKey);
+				stripe.redirectToCheckout({ sessionId: data.sessionId });
+			})
+			.catch(error => {
+				console.error("💥 Erreur Stripe :", error);
+				alert("Erreur : " + error.message);
+			});
+		});
 </script>
 <main class="main">
 

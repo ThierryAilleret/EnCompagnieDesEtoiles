@@ -218,6 +218,9 @@ window.addEventListener("DOMContentLoaded", () => {
 				<button onclick="window.location.href='/checkout.html'" class="btn-commander">
 					Finaliser ma commande
 				</button>
+				<button type="button" id="checkout-button" class="bouton-checkout  bouton-verrouille" style="display:none">
+          Payer avec Stripe
+        </button>
 			</div>
 		</div>
 	</div>
@@ -369,5 +372,51 @@ window.addEventListener("DOMContentLoaded", () => {
 			// Sinon → fermeture du volet
 			fermerPanier();
 		});
+		
+		// Lors du click sur le bouton Stripe
+		document.getElementById("checkout-button").addEventListener("click", function (event) {
+			event.preventDefault(); // Empêche la soumission du formulaire
 
+			// Récupération du panier
+			let panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+			// Normaliser la monnaie pour Stripe
+			panier = panier.map(item => ({
+				...item,
+				monnaie: item.monnaie === "€" ? "eur" : item.monnaie
+			}));
+
+			console.log(panier);
+
+			// Envoi au backend
+			fetch("/.netlify/functions/creer-session-checkout", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ panier })
+			})
+			.then(response => {
+				if (!response.ok) throw new Error("Réponse serveur non valide");
+				return response.json();
+			})
+			.then(data => {
+				if (!data.sessionId) throw new Error("Session Stripe non reçue");
+
+				// Stocker l'ID de session pour la page success
+				localStorage.setItem("stripeSessionId", data.sessionId);
+				console.log("Session enregistrée :", data.sessionId);
+
+				if (!window.stripePublicKey || !window.stripePublicKey.startsWith("pk_")) {
+					alert("Clé Stripe invalide ou manquante.");
+					console.error("❌ Clé Stripe non valide :", window.stripePublicKey);
+					return;
+				}
+				// Redirection vers Stripe Checkout
+				const stripe = Stripe(window.stripePublicKey);
+				stripe.redirectToCheckout({ sessionId: data.sessionId });
+			})
+			.catch(error => {
+				console.error("💥 Erreur Stripe :", error);
+				alert("Erreur : " + error.message);
+			});
+		});
 </script>

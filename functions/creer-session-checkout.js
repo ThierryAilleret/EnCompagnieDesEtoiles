@@ -26,7 +26,7 @@ exports.handler = async (event) => {
 	console.log("Base URL:", baseUrl);
 	
   try {
-    const { panier, client } = JSON.parse(event.body);
+    const { panier } = JSON.parse(event.body);
     const isLive = process.env.STRIPE_ENV === "live";
 
     const session = await stripe.checkout.sessions.create({
@@ -50,16 +50,6 @@ exports.handler = async (event) => {
 			},
 
       metadata: {
-        nomClient: client.nom,
-        prenomClient: client.prenom,
-        emailClient: client.email,
-        adresseClient: client.adresse,
-        complement: client.complement,
-        nomClientLiv: client.nom_liv,
-        prenomClientLiv: client.prenom_liv,
-        emailClientLiv: client.email_liv,
-        adresseClientLiv: client.adresse_liv,
-        complementLiv: client.complement_liv,
         environnement: isLive ? "live" : "test"
       }
     });

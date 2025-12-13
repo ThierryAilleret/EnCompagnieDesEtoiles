@@ -1,8 +1,8 @@
 +++
 stripeProductTest = ""
-stripeProductLive = "prod_TATGnm7xa5q4Hr"
+stripeProductLive = "prod_Tb5pGLFNisZHgU"
 priceIdStripeTest = ""
-priceIdStripeLive = "price_1SdtXmGEPWcc8pKF8AvUkzs1"
+priceIdStripeLive = "price_1SdteEGEPWcc8pKF5G6Ji3K7"
 
 product = "Test"
 title = "Article de test"
@@ -16,7 +16,7 @@ dimensions = "Article de test"
 materiaux = "Article de test"
 ampoule = "Article de test"
 normes = "CE"
-price = 0.1
+price = 1
 currency = "€"
 new = true
 +++

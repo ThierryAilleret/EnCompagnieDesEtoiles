@@ -467,7 +467,7 @@ window.addEventListener("DOMContentLoaded", () => {
 				</ul>
 			</div>
 			<p>Stock disponible : <span id="stock-display">Chargement...</span></p>
-			<p>Prix : 0.1 €</p>
+			<p>Prix : 1 €</p>
 			<button class="btn-add-to-cart" onclick="ajouterAuPanier()">Ajouter au panier</button>
 		</article>
 	</div>
@@ -596,16 +596,16 @@ window.addEventListener("DOMContentLoaded", () => {
 				const stripeEnv = window.stripeEnv || "test"; 
 
 				const stripeProduct = stripeEnv === "live"
-					? "prod_TATGnm7xa5q4Hr"
+					? "prod_Tb5pGLFNisZHgU"
 					: "";
 
 				const priceIdStripe = stripeEnv === "live"
-					? "price_1SdtXmGEPWcc8pKF8AvUkzs1"
+					? "price_1SdteEGEPWcc8pKF5G6Ji3K7"
 					: "";
 
 				const nom = "Article de test";
 				const description = "Article de test";
-				const prix = parseFloat("0.1");
+				const prix = parseFloat("1");
 				const monnaie = "€";
 				const image = "".startsWith("http")
 						? ""
@@ -669,7 +669,7 @@ window.addEventListener("DOMContentLoaded", () => {
 				const stripeEnv = window.stripeEnv || "test"; 
 
 				const stripeProduct = stripeEnv === "live"
-					? "prod_TATGnm7xa5q4Hr"
+					? "prod_Tb5pGLFNisZHgU"
 					: "";
 
 				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);

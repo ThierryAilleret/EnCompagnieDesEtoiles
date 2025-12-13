@@ -6,10 +6,6 @@
 <!-- DEBUG: baseof.html utilisé -->
 <head>
     {{- partial "head.html" . }}
-		<script>
-			window.stripeEnv = "{{ getenv "STRIPE_ENV" }}";
-			window.stripePublicKey = "{{ if eq (getenv "STRIPE_ENV") "live" }}{{ getenv "STRIPE_PUBLIC_KEY_LIVE" }}{{ else }}{{ getenv "STRIPE_PUBLIC_KEY_TEST" }}{{ end }}";
-		</script>
 </head>
 
 <body class="

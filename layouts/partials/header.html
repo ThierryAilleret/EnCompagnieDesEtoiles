@@ -228,6 +228,9 @@ window.addEventListener("DOMContentLoaded", () => {
 </header>
 
 <script>
+			window.stripeEnv = "{{ getenv "STRIPE_ENV" }}";
+			window.stripePublicKey = "{{ if eq (getenv "STRIPE_ENV") "live" }}{{ getenv "STRIPE_PUBLIC_KEY_LIVE" }}{{ else }}{{ getenv "STRIPE_PUBLIC_KEY_TEST" }}{{ end }}";
+			
 		/* Pour le panier */
 		function ouvrirOuFermerPanier() {
 			const volet = document.getElementById('mini-panier');

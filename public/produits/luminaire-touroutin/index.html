@@ -291,7 +291,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 			document.getElementById("total-panier").textContent = `Total : ${total.toFixed(2)} € frais de port inclus`;
 
-			const btnCommander = document.querySelector(".btn-commander");
+			const btnCommander = document.querySelector(".bouton-checkout");
 			if (btnCommander) {
 				if (panier.length === 0) {
 					btnCommander.disabled = true;

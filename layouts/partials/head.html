@@ -63,6 +63,33 @@
     }
   });
 </script>
+<script>
+	//Compteur de pages
+  (function () {
+    // Ne pas compter dans l'éditeur local de Hugo si tu veux
+    if (window.location.hostname === 'localhost') {
+      return;
+    }
+
+    const path = window.location.pathname;
+    const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+
+    fetch('/.netlify/functions/page-counter', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        path: path,
+        date: today
+      })
+    }).catch(function (err) {
+      // On ignore les erreurs, on ne casse pas le rendu
+      console.warn('Page counter error', err);
+    });
+  })();
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{ .Title }}</title>

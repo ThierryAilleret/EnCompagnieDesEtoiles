@@ -60,10 +60,8 @@
 
 <div class="stats-container">
   <h1>{{ .Title }}</h1>
-  <h1>{{ .Title }}</h1>
 
-  {{ $data := .Site.Data.page-views }}
-  <h1>a</h1>
+  {{ $data := .Site.Data.pageviews }}
 	
   {{/* Trier les dates de la plus récente à la plus ancienne */}}
   {{ $dates := sort (keys $data) "value" "desc" }}
@@ -89,7 +87,6 @@
     <div class="month-title">
       {{ (time (printf "%s-01" $monthKey)) | time.Format "January 2006" }}
     </div>
-  <h1>a</h1>
 	
       <table>
         <tr>

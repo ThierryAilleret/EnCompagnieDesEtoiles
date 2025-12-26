@@ -84,10 +84,9 @@
   {{/* Affichage des données par mois */}}
   {{ range $monthKey, $monthDates := $months }}
     <div class="month-block">
-      <div class="month-title">
-				{{ (time (printf "%s-01" $monthKey) ) | time.Format "January 2006" }}
-
-      </div>
+    <div class="month-title">
+      {{ (time (printf "%s-01" $monthKey)) | time.Format "January 2006" }}
+    </div>
 
       <table>
         <tr>
@@ -116,7 +115,7 @@
                 {{ $paths := sort (keys $pages) "value" "desc" }}
                 {{ range $paths }}
                   <div class="page-item">
-                    • <strong>{{ . }}</strong> : {{ index $pages . }} vues
+                    - <strong>{{ . }}</strong> : {{ index $pages . }} vues
                   </div>
                 {{ end }}
               </div>

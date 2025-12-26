@@ -63,7 +63,7 @@
 
   {{ $data := .Site.Data.page-views }}
 
-  {{/* Trier les dates du plus récent au plus ancien */}}
+  {{/* Trier les dates de la plus récente à la plus ancienne */}}
   {{ $dates := sort (keys $data) "value" "desc" }}
 
   {{/* Grouper par mois */}}

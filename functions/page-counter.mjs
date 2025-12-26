@@ -1,61 +1,45 @@
-import { getStore } from '@netlify/blobs';
+import { getStore } from "@netlify/blobs";
 
 export async function handler(event) {
-  // On n'accepte que POST
-  if (event.httpMethod !== 'POST') {
+  if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
-      body: 'Method Not Allowed',
+      body: "Method Not Allowed",
     };
   }
 
   try {
-    const { path, date } = JSON.parse(event.body || '{}');
+    const { path, date } = JSON.parse(event.body || "{}");
 
     if (!path || !date) {
       return {
         statusCode: 400,
-        body: 'Missing "path" or "date"',
+        body: "Missing path or date",
       };
     }
 
-    // 1. Récupérer le store "page-views"
-    const store = getStore({
-      name: 'page-views',
-      access: 'read_write', // lecture + écriture
-    });
+    // ⚠️ NOUVELLE API : juste un nom de store, pas un objet
+    const store = getStore("page-views");
 
     const key = `${date}.json`;
 
-    // 2. Lire le JSON existant pour ce jour
-    let data = await store.get(key, { type: 'json' });
-    if (!data) {
-      data = {};
-    }
+    let data = await store.get(key, { type: "json" });
+    if (!data) data = {};
 
-    // 3. Incrémenter le compteur pour cette page
     const current = data[path] || 0;
-    const updated = current + 1;
-    data[path] = updated;
+    data[path] = current + 1;
 
-    // 4. Réécrire le JSON dans le blob
-    await store.setJSON(key, data);
+    await store.set(key, JSON.stringify(data));
 
-    // 5. Retourner l’info
     return {
       statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        // petite protection CORS minimale si tu veux aussi interroger depuis d'autres origines
-        'Access-Control-Allow-Origin': '*',
-      },
-      body: JSON.stringify({ path, date, count: updated }),
+      body: JSON.stringify({ path, date, count: data[path] }),
     };
-  } catch (error) {
-    console.error('Error in page-counter:', error);
+  } catch (err) {
+    console.error("Error in page-counter:", err);
     return {
       statusCode: 500,
-      body: 'Internal Server Error',
+      body: "Internal Server Error",
     };
   }
 }

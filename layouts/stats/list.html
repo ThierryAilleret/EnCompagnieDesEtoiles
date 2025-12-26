@@ -85,7 +85,8 @@
   {{ range $monthKey, $monthDates := $months }}
     <div class="month-block">
       <div class="month-title">
-        {{ (time (printf "%s-01" $monthKey)).Format "January 2006" }}
+				{{ (time (printf "%s-01" $monthKey) ) | time.Format "January 2006" }}
+
       </div>
 
       <table>

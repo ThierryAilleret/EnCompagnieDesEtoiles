@@ -1,0 +1,128 @@
+<style>
+  .stats-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    font-family: system-ui, sans-serif;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .month-block {
+    margin-top: 3rem;
+  }
+
+  .month-title {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: #444;
+    border-bottom: 3px solid #ddd;
+    padding-bottom: .3rem;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    background: #fafafa;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  th {
+    background: #333;
+    color: white;
+    padding: .6rem;
+    text-align: left;
+  }
+
+  td {
+    padding: .6rem;
+    border-bottom: 1px solid #ddd;
+  }
+
+  tr:nth-child(even) {
+    background: #f0f0f0;
+  }
+
+  .page-list {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .page-item {
+    color: #555;
+    font-size: .95rem;
+  }
+</style>
+
+<div class="stats-container">
+  <h1>{{ .Title }}</h1>
+
+  {{ $data := .Site.Data.page-views }}
+
+  {{/* Trier les dates du plus récent au plus ancien */}}
+  {{ $dates := sort (keys $data) "value" "desc" }}
+
+  {{/* Grouper par mois */}}
+  {{ $months := dict }}
+
+  {{ range $dates }}
+    {{ $year := substr . 0 4 }}
+    {{ $month := substr . 5 2 }}
+    {{ $key := printf "%s-%s" $year $month }}
+
+    {{ if not (isset $months $key) }}
+      {{ $months = merge $months (dict $key (slice .)) }}
+    {{ else }}
+      {{ $months = merge $months (dict $key (append (index $months $key) .)) }}
+    {{ end }}
+  {{ end }}
+
+  {{/* Affichage par mois */}}
+  {{ range $monthKey, $monthDates := $months }}
+    <div class="month-block">
+      <div class="month-title">
+        {{ (time (printf "%s-01" $monthKey)).Format "January 2006" }}
+      </div>
+
+      <table>
+        <tr>
+          <th>Date</th>
+          <th>Total vues</th>
+        </tr>
+
+        {{ range $monthDates }}
+          {{ $pages := index $data . }}
+
+          {{/* Somme des vues pour cette date */}}
+          {{ $total := 0 }}
+          {{ range $pages }}
+            {{ $total = add $total . }}
+          {{ end }}
+
+          <tr>
+            <td>{{ . }}</td>
+            <td>{{ $total }}</td>
+          </tr>
+
+          <tr>
+            <td colspan="2">
+              <div class="page-list">
+                {{/* Trier les pages par nombre de vues (desc) */}}
+                {{ $paths := sort (keys $pages) "value" "desc" }}
+                {{ range $paths }}
+                  <div class="page-item">
+                    • <strong>{{ . }}</strong> : {{ index $pages . }} vues
+                  </div>
+                {{ end }}
+              </div>
+            </td>
+          </tr>
+        {{ end }}
+      </table>
+    </div>
+  {{ end }}
+</div>

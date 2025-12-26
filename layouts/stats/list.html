@@ -1,11 +1,5 @@
 <h1>{{ .Title }}</h1>
 
-<h2>DEBUG — Contenu brut de .Site.Data</h2>
-<pre>{{ printf "%#v" .Site.Data }}</pre>
-
-<h2>DEBUG — Contenu brut de pageviews.json</h2>
-<pre>{{ printf "%#v" .Site.Data.pageviews }}</pre>
-
 <h2>Affichage simple du JSON</h2>
 
 {{ $data := .Site.Data.pageviews }}

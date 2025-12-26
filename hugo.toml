@@ -10,10 +10,3 @@ theme = "PaperMod"
 
 [security.funcs]
 getenv = ['^STRIPE_', '^HUGO_', '^CI$']
-
-[functions]
-directory = "functions"
-node_bundler = "esbuild"
-
-[blobs]
-enabled = true

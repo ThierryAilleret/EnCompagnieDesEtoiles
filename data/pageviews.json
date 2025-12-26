@@ -2,6 +2,7 @@
   "2025-12-26": {
     "/": 26,
     "/test": 3,
-    "/stats": 6
+    "/stats": 6,
+    "/data/pageviews.json": 1
   }
 }

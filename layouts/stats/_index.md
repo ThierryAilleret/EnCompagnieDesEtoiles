@@ -1,3 +1,0 @@
----
-title: "Statistiques de visites"
----

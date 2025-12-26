@@ -61,8 +61,9 @@
 <div class="stats-container">
   <h1>{{ .Title }}</h1>
 
+	{{ printf "%#v" .Site.Data }}
   {{ $data := .Site.Data.pageviews }}
-	
+
   {{/* Trier les dates de la plus récente à la plus ancienne */}}
   {{ $dates := sort (keys $data) "value" "desc" }}
 

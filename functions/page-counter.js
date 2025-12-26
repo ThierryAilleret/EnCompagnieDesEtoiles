@@ -17,7 +17,7 @@ export async function handler(event) {
 
   const token = process.env.GITHUB_TOKEN;
   const repo = process.env.GITHUB_REPO;
-  const filePath = "data/page-views.json";
+  const filePath = "data/pageviews.json";
 
   const apiBase = `https://api.github.com/repos/${repo}/contents/${filePath}`;
 

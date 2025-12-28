@@ -16,7 +16,10 @@ title: "Statistiques"
 <div id="stats" style="margin-top:20px;">Chargement…</div>
 
 <h2>Graphique des vues par jour</h2>
-<canvas id="chart" width="800" height="300"></canvas>
+<canvas id="chart" width="800" height="300" style="border:1px solid #ccc;"></canvas>
+
+<h2>Total par jour</h2>
+<div id="totals-by-day">Chargement…</div>
 
 <script>
 fetch("/.netlify/functions/get-stats")
@@ -25,6 +28,7 @@ fetch("/.netlify/functions/get-stats")
     const statsDiv = document.getElementById("stats");
     const filter = document.getElementById("filter");
     const summary = document.getElementById("summary");
+    const totalsDiv = document.getElementById("totals-by-day");
 
     if (!rows.length) {
       statsDiv.innerHTML = "<p>Aucune donnée.</p>";
@@ -40,7 +44,7 @@ fetch("/.netlify/functions/get-stats")
     filter.innerHTML = `<option value="">Toutes</option>` +
       pages.map(p => `<option value="${p}">${p}</option>`).join("");
 
-    // --- Fonction d'affichage du tableau ---
+    // --- Fonction d'affichage du tableau principal ---
     function renderTable() {
       const selected = filter.value;
       const filtered = selected ? rows.filter(r => r.path === selected) : rows;
@@ -74,7 +78,7 @@ fetch("/.netlify/functions/get-stats")
     filter.addEventListener("change", renderTable);
     renderTable();
 
-    // --- Graphique des vues par jour ---
+    // --- Calcul des vues par jour ---
     const byDate = {};
     rows.forEach(r => {
       byDate[r.date] = (byDate[r.date] || 0) + r.count;
@@ -83,9 +87,33 @@ fetch("/.netlify/functions/get-stats")
     const labels = Object.keys(byDate);
     const values = Object.values(byDate);
 
+    // --- Tableau total par jour ---
+    let totalsHtml = `
+      <table style="border-collapse: collapse; width: 100%; margin-top: 10px;">
+        <thead>
+          <tr>
+            <th style="border-bottom: 1px solid #ccc; text-align:left;">Date</th>
+            <th style="border-bottom: 1px solid #ccc; text-align:right;">Total vues</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    labels.forEach((date, i) => {
+      totalsHtml += `
+        <tr>
+          <td>${date}</td>
+          <td style="text-align:right;">${values[i]}</td>
+        </tr>
+      `;
+    });
+
+    totalsHtml += "</tbody></table>";
+    totalsDiv.innerHTML = totalsHtml;
+
+    // --- Graphique artisanal ---
     const ctx = document.getElementById("chart").getContext("2d");
 
-    // Graphique artisanal sans dépendances
     function drawChart() {
       const max = Math.max(...values);
       const w = ctx.canvas.width;

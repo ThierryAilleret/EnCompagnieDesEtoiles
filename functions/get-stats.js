@@ -10,7 +10,7 @@ exports.handler = async () => {
     const { data, error } = await supabase
       .from('pageviews')
       .select('*')
-      .order('date', { ascending: false })
+      .order('date', { ascending: true })
       .order('path', { ascending: true });
 
     if (error) {

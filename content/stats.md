@@ -8,6 +8,9 @@ title: "Statistiques"
   Chargement…
 </div>
 
+<h2>Total par jour</h2>
+<div id="totals-by-day">Chargement…</div>
+
 <label>
   Filtrer par page :
   <select id="filter"></select>
@@ -17,9 +20,6 @@ title: "Statistiques"
 
 <h2>Graphique des vues par jour</h2>
 <canvas id="chart" width="800" height="300" style="border:1px solid #ccc;"></canvas>
-
-<h2>Total par jour</h2>
-<div id="totals-by-day">Chargement…</div>
 
 <script>
 fetch("/.netlify/functions/get-stats")

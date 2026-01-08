@@ -62,77 +62,79 @@ fetch("/.netlify/functions/get-stats")
 
     // TABLEAU CROISÉ
     function renderPivotTable(rows) {
+			var statsDiv = document.getElementById("stats");
 
-      // Dates triées (récentes → anciennes)
-      var dates = Array.from(new Set(rows.map(function(r){ return r.date; })))
-        .sort(function(a,b){ return new Date(b) - new Date(a); });
+			// Dates triées (récentes → anciennes)
+			var dates = Array.from(new Set(rows.map(function(r){ return r.date; })))
+				.sort(function(a,b){ return new Date(b) - new Date(a); });
 
-      // Pages triées
-      var pages = Array.from(new Set(rows.map(function(r){ return r.path; })))
-        .sort();
+			// Pages triées
+			var pages = Array.from(new Set(rows.map(function(r){ return r.path; })))
+				.sort();
 
-      // Index {page → {date → count}}
-      var matrix = {};
-      pages.forEach(function(p){ matrix[p] = {}; });
-      rows.forEach(function(r){ matrix[r.path][r.date] = r.count; });
+			// Index {page → {date → count}}
+			var matrix = {};
+			pages.forEach(function(p){ matrix[p] = {}; });
+			rows.forEach(function(r){ matrix[r.path][r.date] = r.count; });
 
-      // Totaux
-      var totalByPage = {};
-      pages.forEach(function(p){
-        totalByPage[p] = dates.reduce(function(sum,d){
-          return sum + (matrix[p][d] || 0);
-        }, 0);
-      });
+			// Totaux
+			var totalByPage = {};
+			pages.forEach(function(p){
+				totalByPage[p] = dates.reduce(function(sum,d){
+					return sum + (matrix[p][d] || 0);
+				}, 0);
+			});
 
-      var totalByDate = {};
-      dates.forEach(function(d){
-        totalByDate[d] = rows
-          .filter(function(r){ return r.date === d; })
-          .reduce(function(sum,r){ return sum + r.count; }, 0);
-      });
+			var totalByDate = {};
+			dates.forEach(function(d){
+				totalByDate[d] = rows
+					.filter(function(r){ return r.date === d; })
+					.reduce(function(sum,r){ return sum + r.count; }, 0);
+			});
 
-      var grandTotal = Object.values(totalByPage).reduce(function(a,b){ return a+b; }, 0);
+			var grandTotal = Object.values(totalByPage).reduce(function(a,b){ return a+b; }, 0);
 
-      // Construction HTML
-      var html = "";
-      html += '<table class="pivot-table">';
-      html += "<thead><tr>";
-      html += '<th class="label">Page</th>';
+			// Construction HTML
+			var html = "";
+			html += '<table class="pivot-table">';
+			html += "<thead><tr>";
+			html += '<th class="label">Page</th>';
+			html += '<th class="label">Total</th>';   // <-- déplacé ici
 
-      dates.forEach(function(d){
-        var parts = d.split("-");
-        var y = parts[0], m = parts[1], day = parts[2];
-        html += '<th class="date">' + day + "/" + m + "/" + y + "</th>";
-      });
+			dates.forEach(function(d){
+				var parts = d.split("-");
+				var y = parts[0], m = parts[1], day = parts[2];
+				html += '<th class="date">' + day + "/" + m + "/" + y + "</th>";
+			});
 
-      html += '<th class="label">Total</th>';
-      html += "</tr></thead><tbody>";
+			html += "</tr></thead><tbody>";
 
-      pages.forEach(function(p){
-        html += "<tr>";
-        html += '<th class="label">' + p + "</th>";
+			pages.forEach(function(p){
+				html += "<tr>";
+				html += '<th class="label">' + p + "</th>";
+				html += "<td><strong>" + totalByPage[p] + "</strong></td>";  // <-- déplacé ici
 
-        dates.forEach(function(d){
-          var v = matrix[p][d] || "";
-          html += "<td>" + v + "</td>";
-        });
+				dates.forEach(function(d){
+					var v = matrix[p][d] || "";
+					html += "<td>" + v + "</td>";
+				});
 
-        html += "<td><strong>" + totalByPage[p] + "</strong></td>";
-        html += "</tr>";
-      });
+				html += "</tr>";
+			});
 
-      html += "</tbody><tfoot><tr>";
-      html += "<td><strong>Total</strong></td>";
+			html += "</tbody><tfoot><tr>";
+			html += "<td><strong>Total</strong></td>";
+			html += "<td><strong>" + grandTotal + "</strong></td>";  // <-- déplacé ici
 
-      dates.forEach(function(d){
-        html += "<td><strong>" + totalByDate[d] + "</strong></td>";
-      });
+			dates.forEach(function(d){
+				html += "<td><strong>" + totalByDate[d] + "</strong></td>";
+			});
 
-      html += "<td><strong>" + grandTotal + "</strong></td>";
-      html += "</tr></tfoot></table>";
+			html += "</tr></tfoot></table>";
 
-      statsDiv.innerHTML = html;
-    }
+			statsDiv.innerHTML = html;
+		}
+
 
     renderPivotTable(rows);
 

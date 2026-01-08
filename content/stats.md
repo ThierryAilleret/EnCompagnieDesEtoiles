@@ -14,127 +14,153 @@ title: "Statistiques"
 <h2>Graphique des vues par jour</h2>
 <canvas id="chart" width="800" height="300" style="border:1px solid #ccc;"></canvas>
 
+<style>
+.pivot-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 20px;
+}
+.pivot-table th, .pivot-table td {
+  border: 1px solid #ccc;
+  padding: 4px;
+  text-align: right;
+  font-size: 0.9em;
+}
+.pivot-table th.label {
+  background: #eee;
+  text-align: left;
+}
+.pivot-table th.date {
+  background: #eee;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  text-align: left;
+  height: 120px;
+  vertical-align: bottom;
+  padding: 2px;
+}
+.pivot-table tfoot td {
+  font-weight: bold;
+  background: #f7f7f7;
+}
+</style>
+
 <script>
 fetch("/.netlify/functions/get-stats")
-  .then(r => r.json())
-  .then(rows => {
-    const statsDiv = document.getElementById("stats");
-    const summary = document.getElementById("summary");
+  .then(function(r) { return r.json(); })
+  .then(function(rows) {
+
+    var statsDiv = document.getElementById("stats");
+    var summary = document.getElementById("summary");
 
     if (!rows.length) {
       statsDiv.innerHTML = "<p>Aucune donnée.</p>";
       return;
     }
 
-    // --- Résumé global ---
-    const totalViews = rows.reduce((sum, r) => sum + r.count, 0);
+    // Résumé global
+    var totalViews = rows.reduce(function(sum, r) { return sum + r.count; }, 0);
     summary.innerHTML = "<strong>Total de vues :</strong> " + totalViews;
 
-    // --- TABLEAU CROISÉ UNIQUE ---
+    // TABLEAU CROISÉ
     function renderPivotTable(rows) {
-			const statsDiv = document.getElementById("stats");
 
-			// Dates triées (récentes → anciennes)
-			const dates = Array.from(new Set(rows.map(r => r.date)))
-				.sort((a, b) => new Date(b) - new Date(a));
+      // Dates triées (récentes → anciennes)
+      var dates = Array.from(new Set(rows.map(function(r){ return r.date; })))
+        .sort(function(a,b){ return new Date(b) - new Date(a); });
 
-			// Pages triées alphabétiquement
-			const pages = Array.from(new Set(rows.map(r => r.path))).sort();
+      // Pages triées
+      var pages = Array.from(new Set(rows.map(function(r){ return r.path; })))
+        .sort();
 
-			// Index {page → {date → count}}
-			const matrix = {};
-			pages.forEach(p => { matrix[p] = {}; });
-			rows.forEach(r => { matrix[r.path][r.date] = r.count; });
+      // Index {page → {date → count}}
+      var matrix = {};
+      pages.forEach(function(p){ matrix[p] = {}; });
+      rows.forEach(function(r){ matrix[r.path][r.date] = r.count; });
 
-			// Totaux
-			const totalByPage = {};
-			pages.forEach(p => {
-				totalByPage[p] = dates.reduce((sum, d) => sum + (matrix[p][d] || 0), 0);
-			});
+      // Totaux
+      var totalByPage = {};
+      pages.forEach(function(p){
+        totalByPage[p] = dates.reduce(function(sum,d){
+          return sum + (matrix[p][d] || 0);
+        }, 0);
+      });
 
-			const totalByDate = {};
-			dates.forEach(d => {
-				totalByDate[d] = rows
-					.filter(r => r.date === d)
-					.reduce((sum, r) => sum + r.count, 0);
-			});
+      var totalByDate = {};
+      dates.forEach(function(d){
+        totalByDate[d] = rows
+          .filter(function(r){ return r.date === d; })
+          .reduce(function(sum,r){ return sum + r.count; }, 0);
+      });
 
-			const grandTotal = Object.values(totalByPage).reduce((a, b) => a + b, 0);
+      var grandTotal = Object.values(totalByPage).reduce(function(a,b){ return a+b; }, 0);
 
-			// Construction HTML
-			let html = "";
-			html += "<style>";
-			html += ".pivot-table { border-collapse: collapse; width: 100%; margin-top: 20px; }";
-			html += ".pivot-table th, .pivot-table td { border: 1px solid #ccc; padding: 4px; text-align: right; font-size: 0.9em; }";
-			html += ".pivot-table th.label { background: #eee; text-align: left; }";
-			html += ".pivot-table th.date { background: #eee; writing-mode: vertical-rl; transform: rotate(180deg); text-align: left; height: 120px; vertical-align: bottom; padding: 2px; }";
-			html += ".pivot-table tfoot td { font-weight: bold; background: #f7f7f7; }";
-			html += "</style>";
+      // Construction HTML
+      var html = "";
+      html += '<table class="pivot-table">';
+      html += "<thead><tr>";
+      html += '<th class="label">Page</th>';
 
-			html += '<table class="pivot-table">';
-			html += "<thead><tr>";
-			html += '<th class="label">Page</th>';
+      dates.forEach(function(d){
+        var parts = d.split("-");
+        var y = parts[0], m = parts[1], day = parts[2];
+        html += '<th class="date">' + day + "/" + m + "/" + y + "</th>";
+      });
 
-			dates.forEach(function(d) {
-				const parts = d.split("-");
-				const y = parts[0], m = parts[1], day = parts[2];
-				html += '<th class="date">' + day + "/" + m + "/" + y + "</th>";
-			});
+      html += '<th class="label">Total</th>';
+      html += "</tr></thead><tbody>";
 
-			html += '<th class="label">Total</th>';
-			html += "</tr></thead><tbody>";
+      pages.forEach(function(p){
+        html += "<tr>";
+        html += '<th class="label">' + p + "</th>";
 
-			pages.forEach(function(p) {
-				html += "<tr>";
-				html += '<th class="label">' + p + "</th>";
+        dates.forEach(function(d){
+          var v = matrix[p][d] || "";
+          html += "<td>" + v + "</td>";
+        });
 
-				dates.forEach(function(d) {
-					const v = matrix[p][d] || "";
-					html += "<td>" + v + "</td>";
-				});
+        html += "<td><strong>" + totalByPage[p] + "</strong></td>";
+        html += "</tr>";
+      });
 
-				html += "<td><strong>" + totalByPage[p] + "</strong></td>";
-				html += "</tr>";
-			});
+      html += "</tbody><tfoot><tr>";
+      html += "<td><strong>Total</strong></td>";
 
-			html += "</tbody><tfoot><tr>";
-			html += "<td><strong>Total</strong></td>";
+      dates.forEach(function(d){
+        html += "<td><strong>" + totalByDate[d] + "</strong></td>";
+      });
 
-			dates.forEach(function(d) {
-				html += "<td><strong>" + totalByDate[d] + "</strong></td>";
-			});
+      html += "<td><strong>" + grandTotal + "</strong></td>";
+      html += "</tr></tfoot></table>";
 
-			html += "<td><strong>" + grandTotal + "</strong></td>";
-			html += "</tr></tfoot></table>";
+      statsDiv.innerHTML = html;
+    }
 
-			statsDiv.innerHTML = html;
-		}
+    renderPivotTable(rows);
 
-		renderPivotTable(rows);
-
-
-    // --- Graphique artisanal ---
-    const byDate = {};
-    rows.forEach(r => {
+    // GRAPHIQUE
+    var byDate = {};
+    rows.forEach(function(r){
       byDate[r.date] = (byDate[r.date] || 0) + r.count;
     });
 
-    const labels = Object.keys(byDate);
-    const values = Object.values(byDate);
+    var labels = Object.keys(byDate);
+    var values = Object.values(byDate);
 
-    const ctx = document.getElementById("chart").getContext("2d");
+    var ctx = document.getElementById("chart").getContext("2d");
 
     function drawChart() {
       if (!values.length) return;
-      const max = Math.max.apply(null, values);
-      const w = ctx.canvas.width;
-      const h = ctx.canvas.height;
-      const barWidth = w / labels.length;
+
+      var max = Math.max.apply(null, values);
+      var w = ctx.canvas.width;
+      var h = ctx.canvas.height;
+      var barWidth = w / labels.length;
 
       ctx.clearRect(0, 0, w, h);
 
-      values.forEach((v, i) => {
-        const barHeight = (v / max) * (h - 20);
+      values.forEach(function(v, i){
+        var barHeight = (v / max) * (h - 20);
         ctx.fillStyle = "#4a90e2";
         ctx.fillRect(i * barWidth, h - barHeight, barWidth - 4, barHeight);
 
@@ -145,8 +171,9 @@ fetch("/.netlify/functions/get-stats")
     }
 
     drawChart();
+
   })
-  .catch(err => {
+  .catch(function(err){
     document.getElementById("stats").innerHTML =
       "<p>Erreur lors du chargement des statistiques.</p>";
     console.error(err);

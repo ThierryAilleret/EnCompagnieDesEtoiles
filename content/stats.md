@@ -31,114 +31,87 @@ fetch("/.netlify/functions/get-stats")
     summary.innerHTML = "<strong>Total de vues :</strong> " + totalViews;
 
     // --- TABLEAU CROISÉ UNIQUE ---
-    function renderPivotTable() {
-      // 1. Dates triées (récentes → anciennes)
-      const dates = [...new Set(rows.map(r => r.date))]
-        .sort((a, b) => new Date(b) - new Date(a));
+    function renderPivotTable(rows) {
+			const statsDiv = document.getElementById("stats");
 
-      // 2. Pages triées alphabétiquement
-      const pages = [...new Set(rows.map(r => r.path))].sort();
+			// Dates triées (récentes → anciennes)
+			const dates = Array.from(new Set(rows.map(r => r.date)))
+				.sort((a, b) => new Date(b) - new Date(a));
 
-      // 3. Construction d’un index {page → {date → count}}
-      const matrix = {};
-      pages.forEach(p => { matrix[p] = {}; });
-      rows.forEach(r => {
-        matrix[r.path][r.date] = r.count;
-      });
+			// Pages triées alphabétiquement
+			const pages = Array.from(new Set(rows.map(r => r.path))).sort();
 
-      // 4. Totaux par page et par date
-      const totalByPage = {};
-      pages.forEach(p => {
-        totalByPage[p] = dates.reduce((sum, d) => sum + (matrix[p][d] || 0), 0);
-      });
+			// Index {page → {date → count}}
+			const matrix = {};
+			pages.forEach(p => { matrix[p] = {}; });
+			rows.forEach(r => { matrix[r.path][r.date] = r.count; });
 
-      const totalByDate = {};
-      dates.forEach(d => {
-        totalByDate[d] = rows
-          .filter(r => r.date === d)
-          .reduce((sum, r) => sum + r.count, 0);
-      });
+			// Totaux
+			const totalByPage = {};
+			pages.forEach(p => {
+				totalByPage[p] = dates.reduce((sum, d) => sum + (matrix[p][d] || 0), 0);
+			});
 
-      const grandTotal = Object.values(totalByPage).reduce((a, b) => a + b, 0);
+			const totalByDate = {};
+			dates.forEach(d => {
+				totalByDate[d] = rows
+					.filter(r => r.date === d)
+					.reduce((sum, r) => sum + r.count, 0);
+			});
 
-      // 5. Construction HTML
-      let html = ""
-        + "<style>"
-        + "  .pivot-table {"
-        + "    border-collapse: collapse;"
-        + "    width: 100%;"
-        + "    margin-top: 20px;"
-        + "  }"
-        + "  .pivot-table th, .pivot-table td {"
-        + "    border: 1px solid #ccc;"
-        + "    padding: 4px;"
-        + "    text-align: right;"
-        + "    font-size: 0.9em;"
-        + "  }"
-        + "  .pivot-table th.label {"
-        + "    background: #eee;"
-        + "    text-align: left;"
-        + "  }"
-        + "  .pivot-table th.date {"
-        + "    background: #eee;"
-        + "    writing-mode: vertical-rl;"
-        + "    transform: rotate(180deg);"
-        + "    text-align: left;"
-        + "    height: 120px;"
-        + "    vertical-align: bottom;"
-        + "    padding: 2px;"
-        + "  }"
-        + "  .pivot-table tfoot td {"
-        + "    font-weight: bold;"
-        + "    background: #f7f7f7;"
-        + "  }"
-        + "</style>";
+			const grandTotal = Object.values(totalByPage).reduce((a, b) => a + b, 0);
 
-      html += '<table class="pivot-table">';
-      html +=   "<thead>";
-      html +=     "<tr>";
-      html +=       '<th class="label">Page</th>';
+			// Construction HTML
+			let html = "";
+			html += "<style>";
+			html += ".pivot-table { border-collapse: collapse; width: 100%; margin-top: 20px; }";
+			html += ".pivot-table th, .pivot-table td { border: 1px solid #ccc; padding: 4px; text-align: right; font-size: 0.9em; }";
+			html += ".pivot-table th.label { background: #eee; text-align: left; }";
+			html += ".pivot-table th.date { background: #eee; writing-mode: vertical-rl; transform: rotate(180deg); text-align: left; height: 120px; vertical-align: bottom; padding: 2px; }";
+			html += ".pivot-table tfoot td { font-weight: bold; background: #f7f7f7; }";
+			html += "</style>";
 
-      // En-têtes de dates, format dd/mm/yyyy, pivotées
-      html += dates.map(function(d) {
-        var parts = d.split("-");
-        var y = parts[0], m = parts[1], day = parts[2];
-        return '<th class="date">' + day + "/" + m + "/" + y + "</th>";
-      }).join("");
+			html += '<table class="pivot-table">';
+			html += "<thead><tr>";
+			html += '<th class="label">Page</th>';
 
-      html +=       '<th class="label">Total</th>';
-      html +=     "</tr>";
-      html +=   "</thead>";
-      html +=   "<tbody>";
+			dates.forEach(function(d) {
+				const parts = d.split("-");
+				const y = parts[0], m = parts[1], day = parts[2];
+				html += '<th class="date">' + day + "/" + m + "/" + y + "</th>";
+			});
 
-      // Lignes par page
-      pages.forEach(function(p) {
-        html += "<tr>";
-        html +=   '<th class="label">' + p + "</th>";
-        html +=   dates.map(function(d) {
-          var v = matrix[p][d] || "";
-          return "<td>" + v + "</td>";
-        }).join("");
-        html +=   "<td><strong>" + totalByPage[p] + "</strong></td>";
-        html += "</tr>";
-      });
+			html += '<th class="label">Total</th>';
+			html += "</tr></thead><tbody>";
 
-      html +=   "</tbody>";
-      html +=   "<tfoot>";
-      html +=     "<tr>";
-      html +=       "<td><strong>Total</strong></td>";
-      html +=       dates.map(function(d) {
-        return "<td><strong>" + totalByDate[d] + "</strong></td>";
-      }).join("");
-      html +=       "<td><strong>" + grandTotal + "</strong></td>";
-      html +=     "</tr>";
-      html +=   "</tfoot>";
-      html += "</table>";
+			pages.forEach(function(p) {
+				html += "<tr>";
+				html += '<th class="label">' + p + "</th>";
 
-      statsDiv.innerHTML = html;
-    }
+				dates.forEach(function(d) {
+					const v = matrix[p][d] || "";
+					html += "<td>" + v + "</td>";
+				});
 
-    renderPivotTable();
+				html += "<td><strong>" + totalByPage[p] + "</strong></td>";
+				html += "</tr>";
+			});
+
+			html += "</tbody><tfoot><tr>";
+			html += "<td><strong>Total</strong></td>";
+
+			dates.forEach(function(d) {
+				html += "<td><strong>" + totalByDate[d] + "</strong></td>";
+			});
+
+			html += "<td><strong>" + grandTotal + "</strong></td>";
+			html += "</tr></tfoot></table>";
+
+			statsDiv.innerHTML = html;
+		}
+
+		renderPivotTable(rows);
+
 
     // --- Graphique artisanal ---
     const byDate = {};

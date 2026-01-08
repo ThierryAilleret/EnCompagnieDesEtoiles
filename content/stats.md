@@ -8,14 +8,7 @@ title: "Statistiques"
   Chargement…
 </div>
 
-<h2>Total par jour</h2>
-<div id="totals-by-day">Chargement…</div>
-
-<label>
-  Filtrer par page :
-  <select id="filter"></select>
-</label>
-
+<h2>Tableau croisé</h2>
 <div id="stats" style="margin-top:20px;">Chargement…</div>
 
 <h2>Graphique des vues par jour</h2>
@@ -26,9 +19,7 @@ fetch("/.netlify/functions/get-stats")
   .then(r => r.json())
   .then(rows => {
     const statsDiv = document.getElementById("stats");
-    const filter = document.getElementById("filter");
     const summary = document.getElementById("summary");
-    const totalsDiv = document.getElementById("totals-by-day");
 
     if (!rows.length) {
       statsDiv.innerHTML = "<p>Aucune donnée.</p>";
@@ -39,46 +30,112 @@ fetch("/.netlify/functions/get-stats")
     const totalViews = rows.reduce((sum, r) => sum + r.count, 0);
     summary.innerHTML = `<strong>Total de vues :</strong> ${totalViews}`;
 
-    // --- Liste des pages pour le filtre ---
-    const pages = [...new Set(rows.map(r => r.path))];
-    filter.innerHTML = `<option value="">Toutes</option>` +
-      pages.map(p => `<option value="${p}">${p}</option>`).join("");
+    // --- TABLEAU CROISÉ UNIQUE ---
+    function renderPivotTable() {
+      // 1. Dates triées (récentes → anciennes)
+      const dates = [...new Set(rows.map(r => r.date))]
+        .sort((a, b) => new Date(b) - new Date(a));
 
-    // --- Fonction d'affichage du tableau principal ---
-    function renderTable() {
-      const selected = filter.value;
-      const filtered = selected ? rows.filter(r => r.path === selected) : rows;
+      // 2. Pages triées alphabétiquement
+      const pages = [...new Set(rows.map(r => r.path))].sort();
 
+      // 3. Construction d’un index {page → {date → count}}
+      const matrix = {};
+      pages.forEach(p => matrix[p] = {});
+      rows.forEach(r => {
+        matrix[r.path][r.date] = r.count;
+      });
+
+      // 4. Totaux par page et par date
+      const totalByPage = {};
+      pages.forEach(p => {
+        totalByPage[p] = dates.reduce((sum, d) => sum + (matrix[p][d] || 0), 0);
+      });
+
+      const totalByDate = {};
+      dates.forEach(d => {
+        totalByDate[d] = rows
+          .filter(r => r.date === d)
+          .reduce((sum, r) => sum + r.count, 0);
+      });
+
+      const grandTotal = Object.values(totalByPage).reduce((a, b) => a + b, 0);
+
+      // 5. Construction HTML
       let html = `
-        <table style="border-collapse: collapse; width: 100%;">
+        <style>
+          .pivot-table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+          }
+          .pivot-table th, .pivot-table td {
+            border: 1px solid #ccc;
+            padding: 4px;
+            text-align: right;
+            font-size: 0.9em;
+          }
+          .pivot-table th.label {
+            background: #eee;
+            text-align: left;
+          }
+          .pivot-table th.date {
+            background: #eee;
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            text-align: left;
+            height: 120px;
+            vertical-align: bottom;
+            padding: 2px;
+          }
+          .pivot-table tfoot td {
+            font-weight: bold;
+            background: #f7f7f7;
+          }
+        </style>
+
+        <table class="pivot-table">
           <thead>
             <tr>
-              <th style="border-bottom: 1px solid #ccc; text-align:left;">Date</th>
-              <th style="border-bottom: 1px solid #ccc; text-align:left;">Page</th>
-              <th style="border-bottom: 1px solid #ccc; text-align:right;">Vues</th>
+              <th class="label">Page</th>
+              ${dates.map(d => {
+                const [y, m, day] = d.split("-");
+                return `<th class="date">${day}/${m}/${y}</th>`;
+              }).join("")}
+              <th class="label">Total</th>
             </tr>
           </thead>
           <tbody>
       `;
 
-      filtered.forEach(row => {
+      pages.forEach(p => {
         html += `
           <tr>
-            <td>${row.date}</td>
-            <td>${row.path}</td>
-            <td style="text-align:right;">${row.count}</td>
+            <th class="label">${p}</th>
+            ${dates.map(d => `<td>${matrix[p][d] || ""}</td>`).join("")}
+            <td><strong>${totalByPage[p]}</strong></td>
           </tr>
         `;
       });
 
-      html += "</tbody></table>";
+      html += `
+          </tbody>
+          <tfoot>
+            <tr>
+              <td><strong>Total</strong></td>
+              ${dates.map(d => `<td><strong>${totalByDate[d]}</strong></td>`).join("")}
+              <td><strong>${grandTotal}</strong></td>
+            </tr>
+          </tfoot>
+        </table>
+      `;
+
       statsDiv.innerHTML = html;
     }
 
-    filter.addEventListener("change", renderTable);
-    renderTable();
+    renderPivotTable();
 
-    // --- Calcul des vues par jour ---
+    // --- Graphique artisanal ---
     const byDate = {};
     rows.forEach(r => {
       byDate[r.date] = (byDate[r.date] || 0) + r.count;
@@ -87,31 +144,6 @@ fetch("/.netlify/functions/get-stats")
     const labels = Object.keys(byDate);
     const values = Object.values(byDate);
 
-    // --- Tableau total par jour ---
-    let totalsHtml = `
-      <table style="border-collapse: collapse; width: 100%; margin-top: 10px;">
-        <thead>
-          <tr>
-            <th style="border-bottom: 1px solid #ccc; text-align:left;">Date</th>
-            <th style="border-bottom: 1px solid #ccc; text-align:right;">Total vues</th>
-          </tr>
-        </thead>
-        <tbody>
-    `;
-
-    labels.forEach((date, i) => {
-      totalsHtml += `
-        <tr>
-          <td>${date}</td>
-          <td style="text-align:right;">${values[i]}</td>
-        </tr>
-      `;
-    });
-
-    totalsHtml += "</tbody></table>";
-    totalsDiv.innerHTML = totalsHtml;
-
-    // --- Graphique artisanal ---
     const ctx = document.getElementById("chart").getContext("2d");
 
     function drawChart() {

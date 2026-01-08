@@ -28,7 +28,7 @@ fetch("/.netlify/functions/get-stats")
 
     // --- Résumé global ---
     const totalViews = rows.reduce((sum, r) => sum + r.count, 0);
-    summary.innerHTML = `<strong>Total de vues :</strong> ${totalViews}`;
+    summary.innerHTML = "<strong>Total de vues :</strong> " + totalViews;
 
     // --- TABLEAU CROISÉ UNIQUE ---
     function renderPivotTable() {
@@ -41,7 +41,7 @@ fetch("/.netlify/functions/get-stats")
 
       // 3. Construction d’un index {page → {date → count}}
       const matrix = {};
-      pages.forEach(p => matrix[p] = {});
+      pages.forEach(p => { matrix[p] = {}; });
       rows.forEach(r => {
         matrix[r.path][r.date] = r.count;
       });
@@ -62,73 +62,78 @@ fetch("/.netlify/functions/get-stats")
       const grandTotal = Object.values(totalByPage).reduce((a, b) => a + b, 0);
 
       // 5. Construction HTML
-      let html = `
-        <style>
-          .pivot-table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-top: 20px;
-          }
-          .pivot-table th, .pivot-table td {
-            border: 1px solid #ccc;
-            padding: 4px;
-            text-align: right;
-            font-size: 0.9em;
-          }
-          .pivot-table th.label {
-            background: #eee;
-            text-align: left;
-          }
-          .pivot-table th.date {
-            background: #eee;
-            writing-mode: vertical-rl;
-            transform: rotate(180deg);
-            text-align: left;
-            height: 120px;
-            vertical-align: bottom;
-            padding: 2px;
-          }
-          .pivot-table tfoot td {
-            font-weight: bold;
-            background: #f7f7f7;
-          }
-        </style>
+      let html = ""
+        + "<style>"
+        + "  .pivot-table {"
+        + "    border-collapse: collapse;"
+        + "    width: 100%;"
+        + "    margin-top: 20px;"
+        + "  }"
+        + "  .pivot-table th, .pivot-table td {"
+        + "    border: 1px solid #ccc;"
+        + "    padding: 4px;"
+        + "    text-align: right;"
+        + "    font-size: 0.9em;"
+        + "  }"
+        + "  .pivot-table th.label {"
+        + "    background: #eee;"
+        + "    text-align: left;"
+        + "  }"
+        + "  .pivot-table th.date {"
+        + "    background: #eee;"
+        + "    writing-mode: vertical-rl;"
+        + "    transform: rotate(180deg);"
+        + "    text-align: left;"
+        + "    height: 120px;"
+        + "    vertical-align: bottom;"
+        + "    padding: 2px;"
+        + "  }"
+        + "  .pivot-table tfoot td {"
+        + "    font-weight: bold;"
+        + "    background: #f7f7f7;"
+        + "  }"
+        + "</style>";
 
-        <table class="pivot-table">
-          <thead>
-            <tr>
-              <th class="label">Page</th>
-              ${dates.map(d => {
-                const [y, m, day] = d.split("-");
-                return `<th class="date">${day}/${m}/${y}</th>`;
-              }).join("")}
-              <th class="label">Total</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
+      html += '<table class="pivot-table">';
+      html +=   "<thead>";
+      html +=     "<tr>";
+      html +=       '<th class="label">Page</th>';
 
-      pages.forEach(p => {
-        html += `
-          <tr>
-            <th class="label">${p}</th>
-            ${dates.map(d => `<td>${matrix[p][d] || ""}</td>`).join("")}
-            <td><strong>${totalByPage[p]}</strong></td>
-          </tr>
-        `;
+      // En-têtes de dates, format dd/mm/yyyy, pivotées
+      html += dates.map(function(d) {
+        var parts = d.split("-");
+        var y = parts[0], m = parts[1], day = parts[2];
+        return '<th class="date">' + day + "/" + m + "/" + y + "</th>";
+      }).join("");
+
+      html +=       '<th class="label">Total</th>';
+      html +=     "</tr>";
+      html +=   "</thead>";
+      html +=   "<tbody>";
+
+      // Lignes par page
+      pages.forEach(function(p) {
+        html += "<tr>";
+        html +=   '<th class="label">' + p + "</th>";
+        html +=   dates.map(function(d) {
+          var v = matrix[p][d] || "";
+          return "<td>" + v + "</td>";
+        }).join("");
+        html +=   "<td><strong>" + totalByPage[p] + "</strong></td>";
+        html += "</tr>";
       });
 
-      html += `
-          </tbody>
-          <tfoot>
-            <tr>
-              <td><strong>Total</strong></td>
-              ${dates.map(d => `<td><strong>${totalByDate[d]}</strong></td>`).join("")}
-              <td><strong>${grandTotal}</strong></td>
-            </tr>
-          </tfoot>
-        </table>
-      `;
+      html +=   "</tbody>";
+      html +=   "<tfoot>";
+      html +=     "<tr>";
+      html +=       "<td><strong>Total</strong></td>";
+      html +=       dates.map(function(d) {
+        return "<td><strong>" + totalByDate[d] + "</strong></td>";
+      }).join("");
+      html +=       "<td><strong>" + grandTotal + "</strong></td>";
+      html +=     "</tr>";
+      html +=   "</tfoot>";
+      html += "</table>";
 
       statsDiv.innerHTML = html;
     }
@@ -147,7 +152,8 @@ fetch("/.netlify/functions/get-stats")
     const ctx = document.getElementById("chart").getContext("2d");
 
     function drawChart() {
-      const max = Math.max(...values);
+      if (!values.length) return;
+      const max = Math.max.apply(null, values);
       const w = ctx.canvas.width;
       const h = ctx.canvas.height;
       const barWidth = w / labels.length;

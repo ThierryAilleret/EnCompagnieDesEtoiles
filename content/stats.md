@@ -1,8 +1,6 @@
 ---
-title: "Statistiques"
+title: "Statistiques des pages vues"
 ---
-
-<h1>Statistiques des pages vues</h1>
 
 <div id="summary" style="margin-bottom:20px; font-size:1.2em;">
   Chargement…
@@ -149,26 +147,38 @@ fetch("/.netlify/functions/get-stats")
 
     var ctx = document.getElementById("chart").getContext("2d");
 
-    function drawChart() {
-      if (!values.length) return;
+		function drawChart() {
+			if (!values.length) return;
 
-      var max = Math.max.apply(null, values);
-      var w = ctx.canvas.width;
-      var h = ctx.canvas.height;
-      var barWidth = w / labels.length;
+			var max = Math.max.apply(null, values);
+			var w = ctx.canvas.width;
+			var h = ctx.canvas.height;
+			var barWidth = w / labels.length;
 
-      ctx.clearRect(0, 0, w, h);
+			ctx.clearRect(0, 0, w, h);
 
-      values.forEach(function(v, i){
-        var barHeight = (v / max) * (h - 20);
-        ctx.fillStyle = "#4a90e2";
-        ctx.fillRect(i * barWidth, h - barHeight, barWidth - 4, barHeight);
+			values.forEach(function(v, i){
+				var barHeight = (v / max) * (h - 20);
+				var x = i * barWidth;
+				var y = h - barHeight;
 
-        ctx.fillStyle = "#000";
-        ctx.font = "10px sans-serif";
-        ctx.fillText(labels[i], i * barWidth + 2, h - 5);
-      });
-    }
+				// Barre
+				ctx.fillStyle = "#4a90e2";
+				ctx.fillRect(x, y, barWidth - 4, barHeight);
+
+				// Label date
+				ctx.fillStyle = "#000";
+				ctx.font = "10px sans-serif";
+				ctx.fillText(labels[i], x + 2, h - 5);
+
+				// Valeur au-dessus de la barre
+				ctx.fillStyle = "#000";
+				ctx.font = "12px sans-serif";
+				ctx.textAlign = "center";
+				ctx.fillText(v, x + (barWidth - 4) / 2, y - 4);
+			});
+		}
+
 
     drawChart();
 

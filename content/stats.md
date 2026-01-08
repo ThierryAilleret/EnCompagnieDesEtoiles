@@ -158,24 +158,25 @@ fetch("/.netlify/functions/get-stats")
 			ctx.clearRect(0, 0, w, h);
 
 			values.forEach(function(v, i){
-				var barHeight = (v / max) * (h - 20);
+				var barHeight = (v / max) * (h - 40); // on laisse plus de place en bas
 				var x = i * barWidth;
-				var y = h - barHeight;
+				var y = h - barHeight - 20; // on remonte la barre pour laisser la place aux dates
 
 				// Barre
 				ctx.fillStyle = "#4a90e2";
 				ctx.fillRect(x, y, barWidth - 4, barHeight);
-
-				// Label date
-				ctx.fillStyle = "#000";
-				ctx.font = "10px sans-serif";
-				ctx.fillText(labels[i], x + 2, h - 5);
 
 				// Valeur au-dessus de la barre
 				ctx.fillStyle = "#000";
 				ctx.font = "12px sans-serif";
 				ctx.textAlign = "center";
 				ctx.fillText(v, x + (barWidth - 4) / 2, y - 4);
+
+				// Date sous la barre
+				ctx.fillStyle = "#000";
+				ctx.font = "10px sans-serif";
+				ctx.textAlign = "center";
+				ctx.fillText(labels[i], x + (barWidth - 4) / 2, h - 5);
 			});
 		}
 

@@ -45,6 +45,13 @@ type = "homepage"
       </div>
     </article>
     <article class="item">
+      <a href="/produits/"><img src="/images/CARORANAR_1.jpg"></a>
+      <div class="text">
+        <h3>Uniques ou en très petite série</h3>
+        <p>Et aucun ne porte le nom d'une bourgade suédoise ;-)</p>
+      </div>
+    </article>
+    <article class="item">
       <a href="/produits/"><img src="/images/TOUBARBLA_1.jpg"></a>
       <div class="text">
         <h3>Responsables</h3>

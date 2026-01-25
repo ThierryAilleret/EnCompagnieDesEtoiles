@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Produits - Copies on En Compagnie des Étoiles</title>
+    <link>http://localhost:1313/produits---copie/</link>
+    <description>Recent content in Produits - Copies on En Compagnie des Étoiles</description>
+    <generator>Hugo -- 0.147.9</generator>
+    <language>FR-fr</language>
+    <atom:link href="http://localhost:1313/produits---copie/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Carte Alhambra</title>
+      <link>http://localhost:1313/produits---copie/carterie/carte_alhambra_1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/produits---copie/carterie/carte_alhambra_1/</guid>
+      <description>Carte étoilée</description>
+    </item>
+    <item>
+      <title>Luminaire Manga</title>
+      <link>http://localhost:1313/produits---copie/luminaire-carjaudra/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/produits---copie/luminaire-carjaudra/</guid>
+      <description>Sphère lumineuse en carton coloré et planches de manga</description>
+    </item>
+  </channel>
+</rss>

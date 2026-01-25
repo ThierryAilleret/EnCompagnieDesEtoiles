@@ -1,15 +1,38 @@
 {{ define "main" }}
 <div class="product-gallery">
-  <h1>Nos Produits</h1>
+  <h1>Nos luminaires</h1>
+
+  {{/* Vignettes textuelles */}}
+  {{ $vignettes := slice
+    (dict "title" "Fabriqués en France" "text" "Imaginés et fabriqués dans notre atelier à Dunkerque.")
+    (dict "title" "Poétiques" "text" "De jour, objets singuliers. La nuit, un ciel étoilé se dessine en projection.")
+    (dict "title" "Ingénieux" "text" "60 pièces identiques, un assemblage précis, et une lumière qui révèle la structure.")
+    (dict "title" "Uniques ou en très petite série" "text" "Et aucun ne porte le nom d'une bourgade suédoise ;-)")
+    (dict "title" "Responsables" "text" "Cartons colorés, décors chinés... rien ne se perd, tout s’illumine.")
+    (dict "title" "Conformes CE" "text" "Composants certifiés et montage soigné pour une lumière sûre et durable.")
+    (dict "title" "Lumineux !" "text" "Quand un rayon de soleil s'invite sur nos modèles iridescents, votre intérieur flamboie.")
+  }}
+
   <div class="product-grid">
-    {{ range .Pages }}
-      <a href="{{ .RelPermalink }}" class="product-item">
-        {{ if .Params.thumbnail }}
-          <img src="{{ .Params.thumbnail }}" alt="{{ .Params.thumbnail_alt }}" class="product-thumb" />
+    {{ range $i, $p := .Pages }}
+
+      {{/* Produit */}}
+      <a href="{{ $p.RelPermalink }}" class="product-item">
+        {{ if $p.Params.thumbnail }}
+          <img src="{{ $p.Params.thumbnail }}" alt="{{ $p.Params.thumbnail_alt }}" class="product-thumb" />
         {{ end }}
-        <h2>{{ .Title }}</h2>
-        <p>{{ .Params.description }}</p>
+        <h2>{{ $p.Title }}</h2>
+        <p>{{ $p.Params.description }}</p>
       </a>
+
+      {{/* Vignette */}}
+			{{ $v := index $vignettes (mod $i (len $vignettes)) }}
+			<article class="product-item item alt vignette">
+				<div class="text">
+					<h3>{{ $v.title }}</h3>
+					<p>{{ $v.text }}</p>
+				</div>
+			</article>
     {{ end }}
   </div>
 </div>

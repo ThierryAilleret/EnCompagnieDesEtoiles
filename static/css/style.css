@@ -1,4 +1,5 @@
 /* pour index.html */
+
 body {
 	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	color: #222;
@@ -72,6 +73,58 @@ ul {
 ul li {
 	margin-bottom: 10px;
 }
+
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+@media (max-width: 768px) {
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.home-tile {
+  display: block;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+.home-tile:hover {
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.tile-img {
+  width: 100%;
+  height: auto;
+  margin: 10px 0;
+  height: 180px;        /* hauteur fixe élégante */
+  object-fit: cover;    /* recadre proprement sans déformer */
+  border-radius: 4px;   /* optionnel, pour un rendu plus doux */
+  display: block;
+}
+
+
+.tile-subtitle {
+  font-size: 1.45em;
+  color: #555;
+  margin-top: 20px;
+  margin-bottom: 0px;
+  line-height: 1.2; /* réduit l’interligne */
+}
+
+
 
 .intro-section {
 	animation: fadeIn 0.8s ease-in-out;
@@ -589,6 +642,12 @@ animation: pulse 0.3s ease;
 
 
 /* pour list.html */
+
+article.product-item {
+  margin: 0;
+}
+
+
 .product-gallery {
 	max-width: 900px;
 	margin: 0 auto;
@@ -602,7 +661,9 @@ animation: pulse 0.3s ease;
 }
 
 .product-item {
-	display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 	text-decoration: none;
 	color: inherit;
 	border: 1px solid #eee;
@@ -619,6 +680,21 @@ body.dark .product-item {
 }
 .product-item:hover {
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-item.vignette {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+	padding: 0px;
+}
+
+.product-item.vignette .text {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+  margin: 0 0;
 }
 
 .product-gallery h1 {
@@ -1045,5 +1121,4 @@ body.dark .carte-relai  {
 .link-modern:hover {
   color: #ffd700;
 }
-
 

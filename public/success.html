@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZQ2FL4130K"></script>
 
 
@@ -29,6 +29,10 @@
   tarteaucitron.user.gtagUa = 'G-ZQ2FL4130K';
   tarteaucitron.job = tarteaucitron.job || [];
   tarteaucitron.job.push('gtag');
+	
+	
+  tarteaucitron.user.facebookpixelId = '853229717470549';
+  tarteaucitron.job.push('facebookpixel');
 
   tarteaucitron.init({
     privacyUrl: "/politique-confidentialite/",
@@ -67,32 +71,13 @@
   });
 </script>
 <script>
-	
-  (function () {
-    
-    if (window.location.hostname === 'localhost') {
-      return;
-    }
 
-    const path = window.location.pathname;
-    const today = new Date().toISOString().slice(0, 10); 
-
-    fetch('/.netlify/functions/page-counter', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        path: path,
-        date: today
-      })
-    }).catch(function (err) {
-      
-      console.warn('Page counter error', err);
-    });
-  })();
+fetch("/.netlify/functions/increment-views", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ path: window.location.pathname })
+});
 </script>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Commande validée</title>
@@ -471,7 +456,7 @@ window.addEventListener("DOMContentLoaded", () => {
     
 <footer class="footer">
 	<div id="footer" class="footer-container">
-		<span>&copy; 2025 <a href="https://encompagniedesetoiles.fr/">En Compagnie des Étoiles</a></span> · 
+		<span>&copy; 2026 <a href="http://localhost:1313/">En Compagnie des Étoiles</a></span> · 
 		<a href="/mentions-legales/">Mentions légales</a> ·  
 		<a href="/conditions-generales-vente/">CGV</a> · 
 		<a href="/politique-confidentialite/">Confidentialité</a>

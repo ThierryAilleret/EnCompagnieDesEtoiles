@@ -1,0 +1,16 @@
+{{ define "main" }}
+<div class="product-gallery">
+  <h1>Nos cartes</h1>
+  <div class="product-grid">
+    {{ range .Pages }}
+      <a href="{{ .RelPermalink }}" class="product-item">
+        {{ if .Params.thumbnail }}
+          <img src="{{ .Params.thumbnail }}" alt="{{ .Params.thumbnail_alt }}" class="product-thumb" />
+        {{ end }}
+        <h2>{{ .Title }}</h2>
+        <p>{{ .Params.description }}</p>
+      </a>
+    {{ end }}
+  </div>
+</div>
+{{ end }}

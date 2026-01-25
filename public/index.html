@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
   <head>
-	<meta name="generator" content="Hugo 0.147.9">
+	<meta name="generator" content="Hugo 0.147.9"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
     
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZQ2FL4130K"></script>
 
@@ -30,6 +30,10 @@
   tarteaucitron.user.gtagUa = 'G-ZQ2FL4130K';
   tarteaucitron.job = tarteaucitron.job || [];
   tarteaucitron.job.push('gtag');
+	
+	
+  tarteaucitron.user.facebookpixelId = '853229717470549';
+  tarteaucitron.job.push('facebookpixel');
 
   tarteaucitron.init({
     privacyUrl: "/politique-confidentialite/",
@@ -68,32 +72,13 @@
   });
 </script>
 <script>
-	
-  (function () {
-    
-    if (window.location.hostname === 'localhost') {
-      return;
-    }
 
-    const path = window.location.pathname;
-    const today = new Date().toISOString().slice(0, 10); 
-
-    fetch('/.netlify/functions/page-counter', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        path: path,
-        date: today
-      })
-    }).catch(function (err) {
-      
-      console.warn('Page counter error', err);
-    });
-  })();
+fetch("/.netlify/functions/increment-views", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ path: window.location.pathname })
+});
 </script>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bienvenue En Compagnie des Étoiles</title>
@@ -452,63 +437,18 @@ window.addEventListener("DOMContentLoaded", () => {
 
     <main class="main-content">
       <section class="intro-section">
-        <section class="hero">
-  <img src="/images/Bandeau.jpg" alt="Luminaire étoilé — sphère lumineuse" class="hero-img">
-  <div class="hero-text">
-    <h1>Bienvenue En Compagnie des Étoiles</h1>
-		<h3>
-			Découvrez nos créations pour illuminer votre univers, 
-			<a href="/produits/" class="link-modern">explorez la galerie</a>.
-		</h3>
-  </div>
-</section>
-<section class="values">
-  <h2>Nos luminaires sont…</h2>
-  <div class="grid-luminaires">
-    <article class="item alt">
-      <a href="/produits/"><img src="/images/SERBLEMUS_1.jpg"></a>
-      <div class="text">
-        <h3>Fabriqués en France</h3>
-        <p>Imaginés et fabriqués dans notre atelier à Dunkerque.</p>
-      </div>
-    </article>
-    <article class="item alt">
-      <a href="/produits/"><img src="/images/TOUCARJAU_3.jpg" alt="Poétiques — jeux de lumière"></a>
-      <div class="text">
-        <h3>Poétiques</h3>
-        <p>De jour, objets singuliers. La nuit, un ciel étoilé se dessine en projection.</p>
-      </div>
-    </article>
-    <article class="item">
-      <a href="/produits/"><img src="/images/TOUROUMUS_1.jpg"></a>
-      <div class="text">
-        <h3>Ingénieux</h3>
-        <p>60 pièces identiques, un assemblage précis, et une lumière qui révèle la structure.</p>
-      </div>
-    </article>
-    <article class="item">
-      <a href="/produits/"><img src="/images/TOUBARBLA_1.jpg"></a>
-      <div class="text">
-        <h3>Responsables</h3>
-        <p>Cartons colorés, décors chinés... rien ne se perd, tout s’illumine.</p>
-      </div>
-    </article>
-    <article class="item alt">
-      <a href="/produits/"><img src="/images/CRUNOIORB_1.jpg" alt="Conformes CE — sécurité et fiabilité"></a>
-      <div class="text">
-        <h3>Conformes CE</h3>
-        <p>Composants certifiés et montage soigné pour une lumière sûre et durable.</p>
-      </div>
-    </article>
-    <article class="item alt">
-      <a href="/produits/"><img src="/images/SERIRITRA_5.jpg" alt="Poétiques — jeux de lumière"></a>
-      <div class="text">
-        <h3>Lumineux !</h3>
-        <p>Quand un rayon de soleil s'invite sur nos modèles iridescents, votre intérieur flamboie.</p>
-      </div>
-    </article>
-  </div>
-</section>
+        <div class="home-grid">
+  <a href="/cartes/" class="home-tile">
+    <h2>Carterie</h2>
+    <img src="/images/ALHAMBRA_1.jpg" alt="Carterie artisanale" class="tile-img">
+    <p class="tile-subtitle">Des cartes qui subliment vos messages.</p>
+  </a>
+  <a href="/produits/" class="home-tile">
+    <h2>Luminaires</h2>
+    <img src="/images/SERBLEMUS_1.jpg" alt="Luminaires artisanaux" class="tile-img">
+    <p class="tile-subtitle">Des créations lumineuses au design unique.</p>
+  </a>
+</div>
 
       </section>
 
@@ -517,7 +457,7 @@ window.addEventListener("DOMContentLoaded", () => {
     
 <footer class="footer">
 	<div id="footer" class="footer-container">
-		<span>&copy; 2025 <a href="https://encompagniedesetoiles.fr/">En Compagnie des Étoiles</a></span> · 
+		<span>&copy; 2026 <a href="http://localhost:1313/">En Compagnie des Étoiles</a></span> · 
 		<a href="/mentions-legales/">Mentions légales</a> ·  
 		<a href="/conditions-generales-vente/">CGV</a> · 
 		<a href="/politique-confidentialite/">Confidentialité</a>

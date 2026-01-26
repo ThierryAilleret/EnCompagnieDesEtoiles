@@ -1,0 +1,98 @@
+{{ define "main" }}
+<div class="product-gallery">
+	<h1>Nos cartes</h1>
+	<p class="promo-global">4 € par carte - Réduction de 20% dès 3 cartes</p>
+	<p class="promo-global-second">Frais d’envoi 2 €, offerts dès 3 cartes</p>
+  <div class="product-grid">
+    {{ range .Pages }}
+      <div class="product-item">
+
+        <a href="{{ .RelPermalink }}">
+          <div class="thumb-carousel">
+            <img src="{{ .Params.thumbnail }}" alt="{{ .Params.thumbnail_alt }}">
+            {{ range .Params.images }}
+              <img src="{{ . }}" alt="">
+            {{ end }}
+          </div>
+					<h2>{{ .Title }}</h2>
+					<p>{{ .Params.description }}</p>
+				</a>
+
+        <!-- Formulaire d’ajout au panier -->
+				<form class="add-to-cart" data-product-id="{{ .File.BaseFileName }}">
+					<select class="qty">
+						{{ range seq 1 10 }}
+							<option value="{{ . }}">{{ . }}</option>
+						{{ end }}
+					</select>
+					<button type="submit" class="add-btn">+</button>
+				</form>
+
+      </div>
+    {{ end }}
+  </div>
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const carousels = document.querySelectorAll('.thumb-carousel');
+
+  carousels.forEach(carousel => {
+    const imgs = Array.from(carousel.querySelectorAll('img'));
+    if (imgs.length === 0) return;
+
+    let index = 0;
+    let timer = null;
+
+    // image 1 visible par défaut
+    imgs[0].classList.add('active');
+
+    function show(newIndex) {
+      imgs[index].classList.remove('active');
+      index = newIndex;
+      imgs[index].classList.add('active');
+    }
+
+    function startCycle() {
+      if (imgs.length < 2) return;
+      // on part de l’image courante et on tourne
+      timer = setInterval(() => {
+        const next = (index + 1) % imgs.length;
+        show(next);
+      }, 2500); // durée d’affichage de chaque image
+    }
+
+    function stopCycle() {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+      // retour à la première image
+      show(0);
+    }
+
+    // Desktop : hover
+    carousel.addEventListener('mouseenter', () => {
+      if (imgs.length < 2) return;
+      // 1 → 2 immédiatement (avec fondu grâce au CSS)
+      show(1);
+      // puis on enclenche le cycle
+      startCycle();
+    });
+
+    carousel.addEventListener('mouseleave', () => {
+      stopCycle();
+    });
+
+    // Mobile : carrousel automatique
+    if (window.matchMedia('(pointer: coarse)').matches) {
+      if (imgs.length > 1) {
+        startCycle();
+      }
+    }
+  });
+});
+</script>
+
+{{ end }}

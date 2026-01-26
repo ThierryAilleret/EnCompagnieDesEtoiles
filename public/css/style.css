@@ -647,7 +647,6 @@ article.product-item {
   margin: 0;
 }
 
-
 .product-gallery {
 	max-width: 900px;
 	margin: 0 auto;
@@ -721,6 +720,19 @@ body.dark .product-item p {
   margin-top: 0px;
 	margin-bottom: 0px;
 }
+
+/* Liens dans les cartes produits : neutres, pas de bleu, pas de soulignement */
+.product-item a {
+  color: inherit;          /* même couleur que le texte */
+  text-decoration: none;   /* enlève le soulignement */
+  border: none;            /* supprime ton style global de lien */
+}
+
+/* Titre non bleu, mais effet subtil au survol */
+.product-item a:hover h2 {
+  color: #4A90E2;          /* bleu doux au survol, optionnel */
+}
+
 .product-thumb {
 	max-width: 100%;
 	height: auto;
@@ -1121,4 +1133,108 @@ body.dark .carte-relai  {
 .link-modern:hover {
   color: #ffd700;
 }
+
+.thumb-carousel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.thumb-carousel img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.4s ease; /* fondu enchaîné */
+}
+
+.thumb-carousel img.active {
+  opacity: 1;
+}
+
+.prix-produit {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 6px 0 4px 0;
+  color: #333;
+}
+
+body.dark .prix-produit {
+  color: #ddd;
+}
+
+.promo-global {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #444;
+  margin-top: -10px;
+  margin-bottom: 0px;
+}
+
+body.dark .promo-global {
+  color: #ddd;
+}
+
+.promo-global-second {
+  text-align: center;
+  font-size: 1rem;
+  color: #666;
+  margin-top: 0px;
+  margin-bottom: 25px;
+}
+
+body.dark .promo-global-second {
+  color: #ccc;
+}
+
+
+/* pour le formulaire d'ajout des cartes dans le carrousel */
+/* Ligne quantité + bouton, centrée et légère */
+.add-to-cart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+}
+
+/* Select compact, élégant, minimaliste */
+.add-to-cart select.qty {
+  width: 48px;
+  padding: 3px 4px;
+  font-size: 0.9rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background-color: #fff;
+
+
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.add-to-cart select.qty:hover {
+  border-color: #888;
+}
+
+/* Bouton minimaliste + */
+.add-btn {
+  padding: 4px 10px;
+  font-size: 1rem;
+  background: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.add-btn:hover {
+  background: #444;
+}
+
+
+
 

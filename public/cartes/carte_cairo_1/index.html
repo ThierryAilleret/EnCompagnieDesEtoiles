@@ -80,8 +80,8 @@ fetch("/.netlify/functions/increment-views", {
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Carte Alhambra n°1</title>
-<meta name="description" content="Inspirée de décors de l&#39;Alhambra">
+<title>Carte Sultan Hassan</title>
+<meta name="description" content="Inspirée de décors de la mosquée du sultan Hassan au Caire">
 
 <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
 
@@ -438,8 +438,8 @@ window.addEventListener("DOMContentLoaded", () => {
 			&lt; Retour à la galerie
 		</a>
 		<article>
-			<h1>Carte Alhambra n°1</h1>
-			<h3>Inspirée de décors de l&#39;Alhambra</h3>
+			<h1>Carte Sultan Hassan</h1>
+			<h3>Inspirée de décors de la mosquée du sultan Hassan au Caire</h3>
 
 			
 			<div class="gallery-container">
@@ -454,12 +454,15 @@ window.addEventListener("DOMContentLoaded", () => {
 
 				<div class="gallery">
 					
-						<img src="/images/ALHAMBRA_1_1.jpg" alt="Description de la carte Alhambra n°1"
-								 onclick="openModal('\/images\/ALHAMBRA_1_1.jpg','Description de la carte Alhambra n°1')">
+						<img src="/images/SultanHassan_1_1.jpg" alt="Description de la carte Hassan"
+								 onclick="openModal('\/images\/SultanHassan_1_1.jpg','Description de la carte Hassan')">
 					
 					
-						<img src="/images/ALHAMBRA_1_2.jpg" alt=""
-								 onclick="openModal('\/images\/ALHAMBRA_1_2.jpg','')">
+						<img src="/images/SultanHassan_1_2.jpg" alt=""
+								 onclick="openModal('\/images\/SultanHassan_1_2.jpg','')">
+					
+						<img src="/images/SultanHassan_1_3.jpg" alt=""
+								 onclick="openModal('\/images\/SultanHassan_1_3.jpg','')">
 					
 
 				</div>
@@ -612,20 +615,20 @@ window.addEventListener("DOMContentLoaded", () => {
 				const stripeEnv = window.stripeEnv || "test"; 
 
 				const stripeProduct = stripeEnv === "live"
-					? "prod_TrHHro2oh5zJ6O"
+					? "prod_TrHyfWQ80BZdR0"
 					: "";
 
 				const priceIdStripe = stripeEnv === "live"
-					? "price_1StYiWGEPWcc8pKFeLyCIEIQ"
+					? "price_1StZOpGEPWcc8pKFuM542jPv"
 					: "";
 
-				const nom = "Carte Alhambra n°1";
-				const description = "Inspirée de décors de l\u0027Alhambra";
+				const nom = "Carte Sultan Hassan";
+				const description = "Inspirée de décors de la mosquée du sultan Hassan au Caire";
 				const prix = parseFloat("4");
 				const monnaie = "€";
-				const image = "\/images\/ALHAMBRA_1_1.jpg".startsWith("http")
-						? "\/images\/ALHAMBRA_1_1.jpg"
-						: `https://encompagniedesetoiles.fr\/images\/ALHAMBRA_1_1.jpg`;
+				const image = "\/images\/SultanHassan_1_1.jpg".startsWith("http")
+						? "\/images\/SultanHassan_1_1.jpg"
+						: `https://encompagniedesetoiles.fr\/images\/SultanHassan_1_1.jpg`;
 
 				
 				if (isNaN(prix) || !monnaie || !nom) {
@@ -685,7 +688,7 @@ window.addEventListener("DOMContentLoaded", () => {
 				const stripeEnv = window.stripeEnv || "test"; 
 
 				const stripeProduct = stripeEnv === "live"
-					? "prod_TrHHro2oh5zJ6O"
+					? "prod_TrHyfWQ80BZdR0"
 					: "";
 
 				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);

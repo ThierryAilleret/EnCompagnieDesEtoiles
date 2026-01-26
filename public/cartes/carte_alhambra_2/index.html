@@ -80,7 +80,7 @@ fetch("/.netlify/functions/increment-views", {
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Carte Alhambra n°1</title>
+<title>Carte Alhambra n°2</title>
 <meta name="description" content="Inspirée de décors de l&#39;Alhambra">
 
 <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
@@ -438,7 +438,7 @@ window.addEventListener("DOMContentLoaded", () => {
 			&lt; Retour à la galerie
 		</a>
 		<article>
-			<h1>Carte Alhambra n°1</h1>
+			<h1>Carte Alhambra n°2</h1>
 			<h3>Inspirée de décors de l&#39;Alhambra</h3>
 
 			
@@ -454,12 +454,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
 				<div class="gallery">
 					
-						<img src="/images/ALHAMBRA_1_1.jpg" alt="Description de la carte Alhambra n°1"
-								 onclick="openModal('\/images\/ALHAMBRA_1_1.jpg','Description de la carte Alhambra n°1')">
+						<img src="/images/ALHAMBRA_2_1.jpg" alt="Description de la carte Alhambra n°2"
+								 onclick="openModal('\/images\/ALHAMBRA_2_1.jpg','Description de la carte Alhambra n°2')">
 					
 					
-						<img src="/images/ALHAMBRA_1_2.jpg" alt=""
-								 onclick="openModal('\/images\/ALHAMBRA_1_2.jpg','')">
+						<img src="/images/ALHAMBRA_2_2.jpg" alt=""
+								 onclick="openModal('\/images\/ALHAMBRA_2_2.jpg','')">
 					
 
 				</div>
@@ -612,20 +612,20 @@ window.addEventListener("DOMContentLoaded", () => {
 				const stripeEnv = window.stripeEnv || "test"; 
 
 				const stripeProduct = stripeEnv === "live"
-					? "prod_TrHHro2oh5zJ6O"
+					? "prod_TrHQt9cZZZ2oyF"
 					: "";
 
 				const priceIdStripe = stripeEnv === "live"
-					? "price_1StYiWGEPWcc8pKFeLyCIEIQ"
+					? "price_1StYrzGEPWcc8pKFHjLvJhsk"
 					: "";
 
-				const nom = "Carte Alhambra n°1";
+				const nom = "Carte Alhambra n°2";
 				const description = "Inspirée de décors de l\u0027Alhambra";
 				const prix = parseFloat("4");
 				const monnaie = "€";
-				const image = "\/images\/ALHAMBRA_1_1.jpg".startsWith("http")
-						? "\/images\/ALHAMBRA_1_1.jpg"
-						: `https://encompagniedesetoiles.fr\/images\/ALHAMBRA_1_1.jpg`;
+				const image = "\/images\/ALHAMBRA_2_1.jpg".startsWith("http")
+						? "\/images\/ALHAMBRA_2_1.jpg"
+						: `https://encompagniedesetoiles.fr\/images\/ALHAMBRA_2_1.jpg`;
 
 				
 				if (isNaN(prix) || !monnaie || !nom) {
@@ -685,7 +685,7 @@ window.addEventListener("DOMContentLoaded", () => {
 				const stripeEnv = window.stripeEnv || "test"; 
 
 				const stripeProduct = stripeEnv === "live"
-					? "prod_TrHHro2oh5zJ6O"
+					? "prod_TrHQt9cZZZ2oyF"
 					: "";
 
 				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);

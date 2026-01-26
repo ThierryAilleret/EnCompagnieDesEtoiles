@@ -9,7 +9,7 @@ type = "homepage"
 
   <a href="/cartes/" class="home-tile">
     <h2>Carterie</h2>
-    <img src="/images/ALHAMBRA_1.jpg" alt="Carterie artisanale" class="tile-img">
+    <img src="/images/ALHAMBRA_1_1.jpg" alt="Carterie artisanale" class="tile-img">
     <p class="tile-subtitle">Des cartes qui subliment vos messages.</p>
   </a>
 

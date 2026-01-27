@@ -20,11 +20,14 @@
 
         <!-- Formulaire d’ajout au panier -->
 				<form class="add-to-cart"
-								data-product-id="{{ .File.BaseFileName }}"
-								data-stripe-test="{{ .Params.stripeProductTest }}"
-								data-stripe-live="{{ .Params.stripeProductLive }}"
-								data-price-test="{{ .Params.priceIdStripeTest }}"
-								data-price-live="{{ .Params.priceIdStripeLive }}">
+							data-product-id="{{ .File.BaseFileName }}"
+							data-stripe-test="{{ .Params.stripeProductTest }}"
+							data-stripe-live="{{ .Params.stripeProductLive }}"
+							data-price-test="{{ .Params.priceIdStripeTest }}"
+							data-price-live="{{ .Params.priceIdStripeLive }}"
+							data-price="{{ .Params.price }}"
+							data-currency="{{ .Params.currency }}">
+
 				
 					<select class="qty"></select>
 
@@ -63,8 +66,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const item = form.closest(".product-item");
       const nom = item.querySelector("h2").textContent.trim();
       const description = item.querySelector("p").textContent.trim();
-      const prix = parseFloat("{{ .Params.price }}"); // même prix pour toutes les cartes
-      const monnaie = "{{ .Params.currency }}";
+			const prix = parseFloat(form.dataset.price);
+			const monnaie = form.dataset.currency;
       const image = item.querySelector("img").src;
 
       // Vérification du stock

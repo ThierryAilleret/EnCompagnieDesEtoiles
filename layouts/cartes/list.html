@@ -71,12 +71,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const image = item.querySelector("img").src;
 
       // Vérification du stock
-      const ok = await verifierQuantiteDisponible(stripeProduct, quantiteChoisie);
-      if (!ok) {
-        afficherMiniPanier();
-        ouvrirPanier();
-        return;
-      }
+			const panier = JSON.parse(localStorage.getItem("panier")) || [];
+			const index = panier.findIndex(p => p.nom === nom);
+			const quantiteExistante = index >= 0 ? panier[index].quantite : 0;
+			const quantiteTotale = quantiteExistante + quantiteChoisie;
+
+			const ok = await verifierQuantiteDisponible(stripeProduct, quantiteTotale);
+			if (!ok) return;
 
       // Ajout au panier
       const panier = JSON.parse(localStorage.getItem("panier")) || [];

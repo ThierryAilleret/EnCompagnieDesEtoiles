@@ -346,6 +346,7 @@ window.addEventListener("DOMContentLoaded", () => {
 				}
 				localStorage.setItem("panier", JSON.stringify(panier));
 				window.dispatchEvent(new Event("panierMisAJour"));
+
 				afficherMiniPanier();
 			}
 			const indicateurEl = document.getElementById("panier-toggle");
@@ -361,7 +362,6 @@ window.addEventListener("DOMContentLoaded", () => {
 			localStorage.setItem("panier", JSON.stringify(nouveau));
 			afficherMiniPanier();
 			window.dispatchEvent(new Event("panierMisAJour"));
-
 			
 			const indicateurEl = document.getElementById("panier-toggle");
 			if (indicateurEl) {

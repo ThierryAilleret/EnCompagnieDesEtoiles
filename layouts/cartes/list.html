@@ -40,6 +40,9 @@
 </div>
 
 <script>
+
+window.addEventListener("panierMisAJour", mettreAJourStockVignettes);
+
 // --- AJOUT AU PANIER DEPUIS LA LISTE ---
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -200,6 +203,46 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+async function mettreAJourStockVignettes() {
+  const stripeEnv = window.stripeEnv || "test";
+
+  document.querySelectorAll(".add-to-cart").forEach(async form => {
+    const select = form.querySelector(".qty");
+    const button = form.querySelector(".add-btn");
+
+    const stripeProduct = stripeEnv === "live"
+      ? form.dataset.stripeLive
+      : form.dataset.stripeTest;
+
+    const response = await fetch(`/.netlify/functions/getInventory?product=${stripeProduct}`);
+    const data = await response.json();
+    const stock = parseInt(data.inventory, 10);
+
+    // Si plus de stock → désactiver
+    if (stock <= 0) {
+      button.disabled = true;
+      button.textContent = "Stock épuisé";
+      select.innerHTML = "";
+      return;
+    }
+
+    // Remplir le select
+    select.innerHTML = "";
+    const max = Math.min(stock, 10);
+    for (let i = 1; i <= max; i++) {
+      const opt = document.createElement("option");
+      opt.value = i;
+      opt.textContent = i;
+      select.appendChild(opt);
+    }
+
+    // Réactiver le bouton si besoin
+    button.disabled = false;
+    button.textContent = "+";
+  });
+}
+
 
 </script>
 

@@ -20,11 +20,13 @@
 
         <!-- Formulaire d’ajout au panier -->
 				<form class="add-to-cart" data-product-id="{{ .File.BaseFileName }}">
-					<select class="qty">
-						{{ range seq 1 10 }}
-							<option value="{{ . }}">{{ . }}</option>
-						{{ end }}
-					</select>
+					<form class="add-to-cart"
+								data-product-id="{{ .File.BaseFileName }}"
+								data-stripe-test="{{ .Params.stripeProductTest }}"
+								data-stripe-live="{{ .Params.stripeProductLive }}">
+				
+					<select class="qty"></select>
+
 					<button type="submit" class="add-btn">+</button>
 				</form>
 
@@ -93,6 +95,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+//Récupération du stock sur Stripe
+document.addEventListener("DOMContentLoaded", () => {
+  const stripeEnv = window.stripeEnv || "test";
+
+  document.querySelectorAll(".add-to-cart").forEach(async form => {
+    const select = form.querySelector(".qty");
+    const button = form.querySelector(".add-btn");
+
+    // Récupération de l’ID Stripe selon l’environnement
+    const stripeProduct = stripeEnv === "live"
+      ? form.dataset.stripeLive
+      : form.dataset.stripeTest;
+
+    // Appel Netlify
+    const response = await fetch(`/.netlify/functions/getInventory?product=${stripeProduct}`);
+    const data = await response.json();
+    const stock = parseInt(data.inventory, 10);
+
+    // Si pas de stock → désactiver
+    if (stock <= 0) {
+      button.disabled = true;
+      button.textContent = "Stock épuisé";
+      select.innerHTML = "";
+      return;
+    }
+
+    // Remplir le select avec les quantités disponibles
+    select.innerHTML = "";
+    const max = Math.min(stock, 10); // limite à 10 si tu veux garder une limite
+    for (let i = 1; i <= max; i++) {
+      const opt = document.createElement("option");
+      opt.value = i;
+      opt.textContent = i;
+      select.appendChild(opt);
+    }
+  });
+});
+
 </script>
 
 {{ end }}

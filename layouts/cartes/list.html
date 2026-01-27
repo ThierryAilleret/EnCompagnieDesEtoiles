@@ -34,8 +34,87 @@
   </div>
 </div>
 
-
 <script>
+// --- AJOUT AU PANIER DEPUIS LA LISTE ---
+
+document.addEventListener("DOMContentLoaded", () => {
+  const stripeEnv = window.stripeEnv || "test";
+
+  document.querySelectorAll(".add-to-cart").forEach(form => {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const select = form.querySelector(".qty");
+      const quantiteChoisie = parseInt(select.value, 10);
+
+      if (!quantiteChoisie || quantiteChoisie <= 0) return;
+
+      const stripeProduct = stripeEnv === "live"
+        ? form.dataset.stripeLive
+        : form.dataset.stripeTest;
+
+      const priceIdStripe = stripeEnv === "live"
+        ? form.dataset.priceLive
+        : form.dataset.priceTest;
+
+      // Récupération des infos produit dans la vignette
+      const item = form.closest(".product-item");
+      const nom = item.querySelector("h2").textContent.trim();
+      const description = item.querySelector("p").textContent.trim();
+      const prix = parseFloat("{{ .Params.price }}"); // même prix pour toutes les cartes
+      const monnaie = "{{ .Params.currency }}";
+      const image = item.querySelector("img").src;
+
+      // Vérification du stock
+      const ok = await verifierQuantiteDisponibleListe(stripeProduct, quantiteChoisie);
+      if (!ok) {
+        afficherMiniPanier();
+        ouvrirPanier();
+        return;
+      }
+
+      // Ajout au panier
+      const panier = JSON.parse(localStorage.getItem("panier")) || [];
+      const index = panier.findIndex(p => p.nom === nom);
+
+      if (index >= 0) {
+        panier[index].quantite += quantiteChoisie;
+      } else {
+        panier.push({
+          nom,
+          description,
+          prix,
+          stripeProduct,
+          priceIdStripe,
+          monnaie,
+          image,
+          quantite: quantiteChoisie
+        });
+      }
+
+      localStorage.setItem("panier", JSON.stringify(panier));
+      window.dispatchEvent(new Event("panierMisAJour"));
+
+      afficherMiniPanier();
+      ouvrirPanier();
+    });
+  });
+});
+
+// Vérification du stock (version liste)
+async function verifierQuantiteDisponibleListe(stripeProduct, quantiteDemandee) {
+  const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
+  const data = await response.json();
+  const quantiteDisponible = parseInt(data.inventory, 10);
+
+  if (quantiteDemandee > quantiteDisponible) {
+    alert("⚠️ Stock insuffisant : quantité demandée supérieure au stock disponible.");
+    return false;
+  }
+
+  return true;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const carousels = document.querySelectorAll('.thumb-carousel');
 

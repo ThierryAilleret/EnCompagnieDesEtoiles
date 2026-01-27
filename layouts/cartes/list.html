@@ -216,7 +216,7 @@ async function mettreAJourStockVignettes() {
       ? form.dataset.stripeLive
       : form.dataset.stripeTest;
 
-    // Quantité déjà dans le panier pour ce produit
+    // Quantité déjà dans le panier
     const itemPanier = panier.find(p => p.stripeProduct === stripeProduct);
     const quantiteDansPanier = itemPanier ? itemPanier.quantite : 0;
 
@@ -225,21 +225,32 @@ async function mettreAJourStockVignettes() {
     const data = await response.json();
     const stockTotal = parseInt(data.inventory, 10);
 
-    // Stock restant = stock Stripe - quantité déjà dans le panier
+    // Stock restant
     const stockRestant = Math.max(0, stockTotal - quantiteDansPanier);
 
-    // Si plus de stock → désactiver
+    // --- CAS : STOCK ÉPUISÉ ---
     if (stockRestant <= 0) {
       button.disabled = true;
       button.textContent = "Stock épuisé";
+
+      // Masquer le select
+      select.style.display = "none";
       select.innerHTML = "";
+
       return;
     }
 
-    // Sauvegarder la valeur actuelle du select
+    // --- CAS : STOCK DISPONIBLE ---
+    button.disabled = false;
+    button.textContent = "+";
+
+    // Réafficher le select si besoin
+    select.style.display = "inline-block";
+
+    // Sauvegarder la valeur actuelle
     const ancienneValeur = parseInt(select.value, 10);
 
-    // Remplir le select avec les quantités disponibles
+    // Remplir le select
     select.innerHTML = "";
     const max = Math.min(stockRestant, 10);
     for (let i = 1; i <= max; i++) {
@@ -249,20 +260,14 @@ async function mettreAJourStockVignettes() {
       select.appendChild(opt);
     }
 
-    // Restaurer la valeur précédente si possible
+    // Restaurer la valeur si possible
     if (ancienneValeur && ancienneValeur <= max) {
       select.value = ancienneValeur;
     } else {
-      select.value = max; // sinon on met la valeur max disponible
+      select.value = max;
     }
-
-    // Réactiver le bouton si besoin
-    button.disabled = false;
-    button.textContent = "+";
   });
 }
-
-
 
 </script>
 

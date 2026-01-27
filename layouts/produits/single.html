@@ -227,27 +227,6 @@
 
 		}
 
-		async function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
-				const panier = JSON.parse(localStorage.getItem("panier")) || [];
-
-				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
-				const data = await response.json();
-				quantiteDisponible = parseInt(data.inventory, 10);
-
-				// 🧾 Log de diagnostic
-				//console.log(`📦 Stock disponible : ${quantiteDisponible}`);
-				//console.log(`📥 Quantité demandée : ${quantiteDemandee}`);
-
-				// Vérifie si la quantité demandée dépasse le stock
-				if (quantiteDemandee > quantiteDisponible) {
-						alert("⚠️ Stock insuffisant : quantité demandée supérieure au stock disponible.");
-						return false;
-				}
-
-				return true;
-		}
-
-
 		//Récupération du stock sur Stripe
 		async function fetchInventoryCurrentProduct() {
 				const stripeEnv = window.stripeEnv || "test"; // fallback si non défini

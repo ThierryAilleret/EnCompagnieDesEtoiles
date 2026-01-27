@@ -206,6 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function mettreAJourStockVignettes() {
   const stripeEnv = window.stripeEnv || "test";
+  const panier = JSON.parse(localStorage.getItem("panier")) || [];
 
   document.querySelectorAll(".add-to-cart").forEach(async form => {
     const select = form.querySelector(".qty");
@@ -215,21 +216,32 @@ async function mettreAJourStockVignettes() {
       ? form.dataset.stripeLive
       : form.dataset.stripeTest;
 
+    // Quantité déjà dans le panier pour ce produit
+    const itemPanier = panier.find(p => p.stripeProduct === stripeProduct);
+    const quantiteDansPanier = itemPanier ? itemPanier.quantite : 0;
+
+    // Stock Stripe
     const response = await fetch(`/.netlify/functions/getInventory?product=${stripeProduct}`);
     const data = await response.json();
-    const stock = parseInt(data.inventory, 10);
+    const stockTotal = parseInt(data.inventory, 10);
+
+    // Stock restant = stock Stripe - quantité déjà dans le panier
+    const stockRestant = Math.max(0, stockTotal - quantiteDansPanier);
 
     // Si plus de stock → désactiver
-    if (stock <= 0) {
+    if (stockRestant <= 0) {
       button.disabled = true;
       button.textContent = "Stock épuisé";
       select.innerHTML = "";
       return;
     }
 
-    // Remplir le select
+    // Sauvegarder la valeur actuelle du select
+    const ancienneValeur = parseInt(select.value, 10);
+
+    // Remplir le select avec les quantités disponibles
     select.innerHTML = "";
-    const max = Math.min(stock, 10);
+    const max = Math.min(stockRestant, 10);
     for (let i = 1; i <= max; i++) {
       const opt = document.createElement("option");
       opt.value = i;
@@ -237,11 +249,19 @@ async function mettreAJourStockVignettes() {
       select.appendChild(opt);
     }
 
+    // Restaurer la valeur précédente si possible
+    if (ancienneValeur && ancienneValeur <= max) {
+      select.value = ancienneValeur;
+    } else {
+      select.value = max; // sinon on met la valeur max disponible
+    }
+
     // Réactiver le bouton si besoin
     button.disabled = false;
     button.textContent = "+";
   });
 }
+
 
 
 </script>

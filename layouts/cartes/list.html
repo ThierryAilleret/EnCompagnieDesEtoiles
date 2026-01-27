@@ -22,7 +22,9 @@
 				<form class="add-to-cart"
 								data-product-id="{{ .File.BaseFileName }}"
 								data-stripe-test="{{ .Params.stripeProductTest }}"
-								data-stripe-live="{{ .Params.stripeProductLive }}">
+								data-stripe-live="{{ .Params.stripeProductLive }}"
+								data-price-test="{{ .Params.priceIdStripeTest }}"
+								data-price-live="{{ .Params.priceIdStripeLive }}">
 				
 					<select class="qty"></select>
 
@@ -66,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const image = item.querySelector("img").src;
 
       // Vérification du stock
-      const ok = await verifierQuantiteDisponibleListe(stripeProduct, quantiteChoisie);
+      const ok = await verifierQuantiteDisponible(stripeProduct, quantiteChoisie);
       if (!ok) {
         afficherMiniPanier();
         ouvrirPanier();
@@ -100,20 +102,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
-
-// Vérification du stock (version liste)
-async function verifierQuantiteDisponibleListe(stripeProduct, quantiteDemandee) {
-  const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
-  const data = await response.json();
-  const quantiteDisponible = parseInt(data.inventory, 10);
-
-  if (quantiteDemandee > quantiteDisponible) {
-    alert("⚠️ Stock insuffisant : quantité demandée supérieure au stock disponible.");
-    return false;
-  }
-
-  return true;
-}
 
 document.addEventListener('DOMContentLoaded', () => {
   const carousels = document.querySelectorAll('.thumb-carousel');

@@ -308,6 +308,27 @@ window.addEventListener("DOMContentLoaded", () => {
 
 		}
 
+		async function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
+				const panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
+				const data = await response.json();
+				quantiteDisponible = parseInt(data.inventory, 10);
+
+				// 🧾 Log de diagnostic
+				//console.log(`📦 Stock disponible : ${quantiteDisponible}`);
+				//console.log(`📥 Quantité demandée : ${quantiteDemandee}`);
+
+				// Vérifie si la quantité demandée dépasse le stock
+				if (quantiteDemandee > quantiteDisponible) {
+						alert("⚠️ Stock insuffisant : quantité demandée supérieure au stock disponible.");
+						return false;
+				}
+
+				return true;
+		}
+		
+		
 		async function modifierQuantite(nom, delta) {
 			const panier = JSON.parse(localStorage.getItem("panier")) || [];
 			const index = panier.findIndex(p => p.nom === nom);

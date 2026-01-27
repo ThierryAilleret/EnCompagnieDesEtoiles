@@ -80,9 +80,6 @@ document.addEventListener("DOMContentLoaded", () => {
 			if (!ok) return;
 
       // Ajout au panier
-      const panier = JSON.parse(localStorage.getItem("panier")) || [];
-      const index = panier.findIndex(p => p.nom === nom);
-
       if (index >= 0) {
         panier[index].quantite += quantiteChoisie;
       } else {

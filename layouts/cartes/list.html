@@ -16,12 +16,10 @@
           </div>
 					<h2>{{ .Title }}</h2>
 					<p>{{ .Params.description }}</p>
-				<p>{{ .Params.stripeProductLive }}</p>
 				</a>
 
         <!-- Formulaire d’ajout au panier -->
-				<form class="add-to-cart" data-product-id="{{ .File.BaseFileName }}">
-					<form class="add-to-cart"
+				<form class="add-to-cart"
 								data-product-id="{{ .File.BaseFileName }}"
 								data-stripe-test="{{ .Params.stripeProductTest }}"
 								data-stripe-live="{{ .Params.stripeProductLive }}">

@@ -338,7 +338,7 @@ window.addEventListener("DOMContentLoaded", () => {
 			// On ajoute les détails sous le total
 			let details = "";
 			if (totaux.reduction > 0) {
-				details += `Réduction cartes : –${totaux.reduction.toFixed(2)} € · `;
+				details += `Réduction de 15% sur les cartes : –${totaux.reduction.toFixed(2)} € · `;
 			}
 			if (totaux.fraisPort === 0) {
 				details += `Frais de port offerts`;
@@ -346,8 +346,17 @@ window.addEventListener("DOMContentLoaded", () => {
 				details += `Frais de port : ${totaux.fraisPort.toFixed(2)} €`;
 			}
 
-			document.getElementById("total-panier").textContent =
-				`${texteTotal} (${details})`;
+			document.getElementById("total-panier").innerHTML = `
+				<div>Total : ${totaux.totalFinal.toFixed(2)} €</div>
+				${totaux.reduction > 0 ? `
+					<div style="color:#777; font-style:italic;">
+						Réduction de 15% appliquée sur les cartes : -${totaux.reduction.toFixed(2)} €
+					</div>` : ``}
+				<div style="color:#777; font-style:italic;">
+					${totaux.fraisPort === 0 ? `Frais de port offerts` : `Frais de port : ${totaux.fraisPort.toFixed(2)} €`}
+				</div>
+			`;
+
 
 			const btnCommander = document.querySelector(".bouton-checkout");
 			if (btnCommander) {

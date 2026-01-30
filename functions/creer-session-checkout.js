@@ -37,7 +37,7 @@ exports.handler = async (event) => {
 
     panier.forEach(item => {
       const subtotal = item.prix * item.quantite;
-      if (item.type === "carte") {
+      if (item.categorie === "carte") {
         cardTotal += subtotal;
       } else {
         otherTotal += subtotal;
@@ -63,7 +63,7 @@ exports.handler = async (event) => {
     const line_items = [];
 
     panier.forEach(item => {
-      const isCard = item.type === "carte";
+      const isCard = item.categorie === "carte";
 
       // prix unitaire après réduction éventuelle
       let unitPrice = item.prix;
@@ -87,18 +87,30 @@ exports.handler = async (event) => {
     });
 
     // --- 5) Ajouter les frais de port si nécessaires ---
-    if (shippingCost > 0) {
-      line_items.push({
-        quantity: 1,
-        price_data: {
-          currency: "eur",
-          unit_amount: shippingCost * 100,
-          product_data: {
-            name: "Frais de port"
-          }
-        }
-      });
-    }
+		if (shippingCost > 0) {
+			line_items.push({
+				quantity: 1,
+				price_data: {
+					currency: "eur",
+					unit_amount: shippingCost * 100,
+					product_data: {
+						name: "Frais de port"
+					}
+				}
+			});
+		} else {
+			line_items.push({
+				quantity: 1,
+				price_data: {
+					currency: "eur",
+					unit_amount: 0,
+					product_data: {
+						name: "Frais de port — Offerts"
+					}
+				}
+			});
+		}
+
 
     // --- 6) Créer la session Stripe ---
     const session = await stripe.checkout.sessions.create({

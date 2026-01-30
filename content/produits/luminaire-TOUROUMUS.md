@@ -1,11 +1,10 @@
 +++
-
 stripeProductTest = "prod_SzukvjrRoDqbfv"
 stripeProductLive = "prod_T6RH6zHZXroFr9"
 priceIdStripeTest = "price_1S3uuaGEPWcc8pKF8RU6WlPp"
 priceIdStripeLive = "price_1SAEPOGEPWcc8pKFKV0uAtFi"
 
-type = "luminaire"
+categorie = "luminaire"
 product = "TOUROUMUS"
 title = "Luminaire Lyra"
 thumbnail = "/images/TOUROUMUS_1.jpg"

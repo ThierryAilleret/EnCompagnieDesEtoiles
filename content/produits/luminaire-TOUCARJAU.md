@@ -4,7 +4,7 @@ stripeProductLive = "prod_T6REuDNunr9Fnb"
 priceIdStripeTest = "price_1S3usVGEPWcc8pKFBUzxyJ9f"
 priceIdStripeLive = "price_1SAELlGEPWcc8pKFpfr4YshI"
 
-type = "luminaire"
+categorie = "luminaire"
 product = "TOUCARJAU"
 title = "Luminaire Carte vintage"
 thumbnail = "/images/TOUCARJAU_1.jpg"

@@ -4,7 +4,7 @@ stripeProductLive = "prod_T6RSxQVzqHDMgk"
 priceIdStripeTest = "price_1S3ulwGEPWcc8pKF4lTyCE4u"
 priceIdStripeLive = "price_1SAEZBGEPWcc8pKFzZRbYYgS"
 
-type = "luminaire"
+categorie = "luminaire"
 product = "TOUROUTIN"
 title = "Luminaire BD"
 thumbnail = "/images/TOUROUTIN_1.jpg"

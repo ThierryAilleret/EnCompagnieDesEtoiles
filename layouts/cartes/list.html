@@ -25,7 +25,7 @@
 							data-stripe-live="{{ .Params.stripeProductLive }}"
 							data-price-test="{{ .Params.priceIdStripeTest }}"
 							data-price-live="{{ .Params.priceIdStripeLive }}"
-							data-type="{{ .Params.type }}"
+							data-categorie="{{ .Params.categorie }}"
 							data-price="{{ .Params.price }}"
 							data-currency="{{ .Params.currency }}">
 
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const item = form.closest(".product-item");
       const nom = item.querySelector("h2").textContent.trim();
       const description = item.querySelector("p").textContent.trim();
-			const type = form.dataset.type;
+			const categorie = form.dataset.categorie;
 			const prix = parseFloat(form.dataset.price);
 			const monnaie = form.dataset.currency;
       const image = item.querySelector("img").src;
@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
         panier[index].quantite += quantiteChoisie;
       } else {
         panier.push({
-          type,
+          categorie,
 					nom,
           description,
           prix,

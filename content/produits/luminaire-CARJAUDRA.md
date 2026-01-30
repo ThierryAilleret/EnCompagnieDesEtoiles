@@ -1,11 +1,10 @@
 +++
-
 stripeProductTest = "prod_Szt6zvf1SoR67P"
 stripeProductLive = "prod_T6RTF3v7xtrTtW"
 priceIdStripeTest = "price_1S3tKlGEPWcc8pKF3ByVuVck"
 priceIdStripeLive = "price_1SAEaFGEPWcc8pKFDxEJfZV4"
 
-type = "luminaire"
+categorie = "luminaire"
 title = "Luminaire Manga"
 thumbnail = "/images/CARJAUDRA_1.jpg"
 thumbnail_alt = "Description de l'image miniature du Luminaire Manga"

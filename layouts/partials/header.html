@@ -265,15 +265,53 @@ window.addEventListener("DOMContentLoaded", () => {
 			volet.classList.remove('actif');
 		}
 
+		function calculerTotaux(panier) {
+			let totalCartes = 0;
+			let totalAutres = 0;
+
+			panier.forEach(item => {
+				const sousTotal = item.prix * item.quantite;
+				if (item.type === "carte") {
+					totalCartes += sousTotal;
+				} else {
+					totalAutres += sousTotal;
+				}
+			});
+
+			// Réduction cartes
+			let reduction = 0;
+			if (totalCartes >= 10) {
+				reduction = totalCartes * 0.15;
+			}
+
+			const totalCartesApresReduc = totalCartes - reduction;
+
+			// Frais de port
+			let fraisPort = 2;
+			const totalAvantPort = totalCartesApresReduc + totalAutres;
+
+			if (totalAutres > 0 || totalAvantPort >= 10) {
+				fraisPort = 0;
+			}
+
+			const totalFinal = totalAvantPort + fraisPort;
+
+			return {
+				totalCartes,
+				reduction,
+				totalAutres,
+				fraisPort,
+				totalFinal
+			};
+		}
+
+
 		function afficherMiniPanier() {
 			const panier = JSON.parse(localStorage.getItem("panier")) || [];
 			const conteneur = document.getElementById("contenu-panier");
 			conteneur.innerHTML = "";
 
-			let total = 0;
-
 			panier.forEach(item => {
-				total += parseFloat(item.prix) * item.quantite;
 				const bloc = document.createElement("div");
 				bloc.className = "item-panier";
 				bloc.innerHTML = `
@@ -293,7 +331,23 @@ window.addEventListener("DOMContentLoaded", () => {
 				conteneur.appendChild(bloc);
 			});
 
-			document.getElementById("total-panier").textContent = `Total : ${total.toFixed(2)} € frais de port inclus`;
+			const totaux = calculerTotaux(panier);
+
+			let texteTotal = `Total : ${totaux.totalFinal.toFixed(2)} €`;
+
+			// On ajoute les détails sous le total
+			let details = "";
+			if (totaux.reduction > 0) {
+				details += `Réduction cartes : –${totaux.reduction.toFixed(2)} € · `;
+			}
+			if (totaux.fraisPort === 0) {
+				details += `Frais de port offerts`;
+			} else {
+				details += `Frais de port : ${totaux.fraisPort.toFixed(2)} €`;
+			}
+
+			document.getElementById("total-panier").textContent =
+				`${texteTotal} (${details})`;
 
 			const btnCommander = document.querySelector(".bouton-checkout");
 			if (btnCommander) {
@@ -305,8 +359,8 @@ window.addEventListener("DOMContentLoaded", () => {
 					btnCommander.classList.remove("bouton-verrouille");
 				}
 			}
-
 		}
+
 
 		async function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];

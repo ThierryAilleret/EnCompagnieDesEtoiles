@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
   <head>
-	<meta name="generator" content="Hugo 0.147.9">
+	<meta name="generator" content="Hugo 0.147.9"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
     
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZQ2FL4130K"></script>
 
@@ -274,15 +274,53 @@ window.addEventListener("DOMContentLoaded", () => {
 			volet.classList.remove('actif');
 		}
 
+		function calculerTotaux(panier) {
+			let totalCartes = 0;
+			let totalAutres = 0;
+
+			panier.forEach(item => {
+				const sousTotal = item.prix * item.quantite;
+				if (item.type === "carte") {
+					totalCartes += sousTotal;
+				} else {
+					totalAutres += sousTotal;
+				}
+			});
+
+			
+			let reduction = 0;
+			if (totalCartes >= 10) {
+				reduction = totalCartes * 0.15;
+			}
+
+			const totalCartesApresReduc = totalCartes - reduction;
+
+			
+			let fraisPort = 2;
+			const totalAvantPort = totalCartesApresReduc + totalAutres;
+
+			if (totalAutres > 0 || totalAvantPort >= 10) {
+				fraisPort = 0;
+			}
+
+			const totalFinal = totalAvantPort + fraisPort;
+
+			return {
+				totalCartes,
+				reduction,
+				totalAutres,
+				fraisPort,
+				totalFinal
+			};
+		}
+
+
 		function afficherMiniPanier() {
 			const panier = JSON.parse(localStorage.getItem("panier")) || [];
 			const conteneur = document.getElementById("contenu-panier");
 			conteneur.innerHTML = "";
 
-			let total = 0;
-
 			panier.forEach(item => {
-				total += parseFloat(item.prix) * item.quantite;
 				const bloc = document.createElement("div");
 				bloc.className = "item-panier";
 				bloc.innerHTML = `
@@ -302,7 +340,23 @@ window.addEventListener("DOMContentLoaded", () => {
 				conteneur.appendChild(bloc);
 			});
 
-			document.getElementById("total-panier").textContent = `Total : ${total.toFixed(2)} € frais de port inclus`;
+			const totaux = calculerTotaux(panier);
+
+			let texteTotal = `Total : ${totaux.totalFinal.toFixed(2)} €`;
+
+			
+			let details = "";
+			if (totaux.reduction > 0) {
+				details += `Réduction cartes : –${totaux.reduction.toFixed(2)} € · `;
+			}
+			if (totaux.fraisPort === 0) {
+				details += `Frais de port offerts`;
+			} else {
+				details += `Frais de port : ${totaux.fraisPort.toFixed(2)} €`;
+			}
+
+			document.getElementById("total-panier").textContent =
+				`${texteTotal} (${details})`;
 
 			const btnCommander = document.querySelector(".bouton-checkout");
 			if (btnCommander) {
@@ -314,8 +368,8 @@ window.addEventListener("DOMContentLoaded", () => {
 					btnCommander.classList.remove("bouton-verrouille");
 				}
 			}
-
 		}
+
 
 		async function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
@@ -478,7 +532,7 @@ window.addEventListener("DOMContentLoaded", () => {
     
 <footer class="footer">
 	<div id="footer" class="footer-container">
-		<span>&copy; 2026 <a href="https://encompagniedesetoiles.fr/">En Compagnie des Étoiles</a></span> · 
+		<span>&copy; 2026 <a href="http://localhost:1313/">En Compagnie des Étoiles</a></span> · 
 		<a href="/mentions-legales/">Mentions légales</a> ·  
 		<a href="/conditions-generales-vente/">CGV</a> · 
 		<a href="/politique-confidentialite/">Confidentialité</a>

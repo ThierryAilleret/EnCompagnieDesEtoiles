@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZQ2FL4130K"></script>
 
 
@@ -273,15 +273,53 @@ window.addEventListener("DOMContentLoaded", () => {
 			volet.classList.remove('actif');
 		}
 
+		function calculerTotaux(panier) {
+			let totalCartes = 0;
+			let totalAutres = 0;
+
+			panier.forEach(item => {
+				const sousTotal = item.prix * item.quantite;
+				if (item.type === "carte") {
+					totalCartes += sousTotal;
+				} else {
+					totalAutres += sousTotal;
+				}
+			});
+
+			
+			let reduction = 0;
+			if (totalCartes >= 10) {
+				reduction = totalCartes * 0.15;
+			}
+
+			const totalCartesApresReduc = totalCartes - reduction;
+
+			
+			let fraisPort = 2;
+			const totalAvantPort = totalCartesApresReduc + totalAutres;
+
+			if (totalAutres > 0 || totalAvantPort >= 10) {
+				fraisPort = 0;
+			}
+
+			const totalFinal = totalAvantPort + fraisPort;
+
+			return {
+				totalCartes,
+				reduction,
+				totalAutres,
+				fraisPort,
+				totalFinal
+			};
+		}
+
+
 		function afficherMiniPanier() {
 			const panier = JSON.parse(localStorage.getItem("panier")) || [];
 			const conteneur = document.getElementById("contenu-panier");
 			conteneur.innerHTML = "";
 
-			let total = 0;
-
 			panier.forEach(item => {
-				total += parseFloat(item.prix) * item.quantite;
 				const bloc = document.createElement("div");
 				bloc.className = "item-panier";
 				bloc.innerHTML = `
@@ -301,7 +339,23 @@ window.addEventListener("DOMContentLoaded", () => {
 				conteneur.appendChild(bloc);
 			});
 
-			document.getElementById("total-panier").textContent = `Total : ${total.toFixed(2)} € frais de port inclus`;
+			const totaux = calculerTotaux(panier);
+
+			let texteTotal = `Total : ${totaux.totalFinal.toFixed(2)} €`;
+
+			
+			let details = "";
+			if (totaux.reduction > 0) {
+				details += `Réduction cartes : –${totaux.reduction.toFixed(2)} € · `;
+			}
+			if (totaux.fraisPort === 0) {
+				details += `Frais de port offerts`;
+			} else {
+				details += `Frais de port : ${totaux.fraisPort.toFixed(2)} €`;
+			}
+
+			document.getElementById("total-panier").textContent =
+				`${texteTotal} (${details})`;
 
 			const btnCommander = document.querySelector(".bouton-checkout");
 			if (btnCommander) {
@@ -313,8 +367,8 @@ window.addEventListener("DOMContentLoaded", () => {
 					btnCommander.classList.remove("bouton-verrouille");
 				}
 			}
-
 		}
+
 
 		async function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
@@ -454,31 +508,265 @@ window.addEventListener("DOMContentLoaded", () => {
 		});
 </script>
 <main class="main">
+	<div class="single-container">
+		<a href="/cartes" class="back-arrow" aria-label="Retour à la galerie">
+			&lt; Retour à la galerie
+		</a>
+		<article>
+			<h1>Carte Sultan Hassan</h1>
+			<h3>Inspirée de décors de la mosquée du Sultan Hassan au Caire</h3>
 
-<article class="post-single">
-  <header class="post-header">
-    
-    <h1 class="post-title entry-hint-parent">
-      Carte Sultan Hassan
-    </h1>
-    <div class="post-description">
-      Inspirée de décors de la mosquée du Sultan Hassan au Caire
+			
+			<div class="gallery-container">
+				<button id="left-scroll" class="scroll-button arrow"
+								onclick="scrollGallery(-1)" aria-label="Défiler vers la gauche">
+					<svg width="24" height="40" viewBox="0 0 24 40">
+						<polyline points="20,4 4,20 20,36"
+											fill="none" stroke="#888" stroke-width="2"
+											stroke-linecap="round" stroke-linejoin="round"/>
+					</svg>
+				</button>
+
+				<div class="gallery">
+					
+						<img src="/images/SultanHassan_1_1.jpg" alt="Description de la carte Hassan"
+								 onclick="openModal('\/images\/SultanHassan_1_1.jpg','Description de la carte Hassan')">
+					
+					
+						<img src="/images/SultanHassan_1_2.jpg" alt=""
+								 onclick="openModal('\/images\/SultanHassan_1_2.jpg','')">
+					
+
+				</div>
+
+				<button id="right-scroll" class="scroll-button arrow"
+								onclick="scrollGallery(1)" aria-label="Défiler vers la droite">
+					<svg width="24" height="40" viewBox="0 0 24 40">
+						<polyline points="4,4 20,20 4,36"
+											fill="none" stroke="#888" stroke-width="2"
+											stroke-linecap="round" stroke-linejoin="round"/>
+					</svg>
+				</button>
+			</div>
+
+			<div class="fiche-texte">
+				<p></p>
+				<ul>
+					<li><strong>Dimensions :</strong> 10 x 10 cm</li>
+					<li><strong>Matériaux :</strong> papier à grain</li>
+					<li><strong>Fabriqué à :</strong> Dunkerque, France</li>
+				</ul>
+			</div>
+			<p>Stock disponible : <span id="stock-display">Chargement...</span></p>
+			<p>Prix : 4 €</p>
+			<button class="btn-add-to-cart" onclick="ajouterAuPanier()">Ajouter au panier</button>
+		</article>
+	</div>
+
+  
+  <div id="imageModal" class="modal" onclick="closeModal()">
+    <div class="modal-content-wrapper" onclick="event.stopPropagation()">
+      <span class="close" onclick="closeModal()" aria-label="Fermer">&times;</span>
+
+      <div class="modal-body">
+        <button class="nav-button left-nav"
+                onclick="navigateImage(-1)" aria-label="Image précédente">&#10094;</button>
+        <img id="modalImage" class="modal-content" alt="">
+        <button class="nav-button right-nav"
+                onclick="navigateImage(1)" aria-label="Image suivante">&#10095;</button>
+      </div>
+
+      <div id="modalCaption" class="caption"></div>
     </div>
-    <div class="post-meta">
+  </div>
 
-</div>
-  </header> 
 
-  <footer class="post-footer">
-    <ul class="post-tags">
-    </ul>
-  </footer>
-</article>
+
+  
+  <script>
+    let stockDisponible = 0;
+		let currentImageIndex = 0;
+    let images = [];
+
+    function collectGalleryImages() {
+      return Array.from(document.querySelectorAll('.gallery img'))
+        .map(img => ({ src: img.src, alt: img.alt }));
+    }
+
+    function getFilename(url) {
+      return new URL(url, window.location.origin).pathname;
+    }
+
+    function scrollGallery(direction) {
+      const gallery = document.querySelector('.gallery');
+      const moveBy = gallery.clientWidth * 0.8;
+      gallery.scrollBy({ left: direction * moveBy, behavior: 'smooth' });
+    }
+
+    function checkScrollPosition() {
+      const g = document.querySelector('.gallery');
+      document.getElementById('left-scroll').style.visibility =
+        g.scrollLeft <= 5 ? 'hidden' : 'visible';
+      document.getElementById('right-scroll').style.visibility =
+        g.scrollLeft + g.clientWidth >= g.scrollWidth - 5 ? 'hidden' : 'visible';
+    }
+
+		window.addEventListener('load', () => {
+			
+			const gallery = document.querySelector('.gallery');
+			gallery.addEventListener('scroll', checkScrollPosition);
+			setTimeout(checkScrollPosition, 100);
+			images = collectGalleryImages();
+
+			
+			window.dispatchEvent(new Event("panierMisAJour"));
+		});
+
+    function openModal(src, alt) {
+      images = collectGalleryImages();
+      currentImageIndex = images.findIndex(img =>
+        getFilename(img.src) === getFilename(src)
+      );
+      if (currentImageIndex < 0) currentImageIndex = 0;
+
+      const imgEl = document.getElementById('modalImage');
+      const cap   = document.getElementById('modalCaption');
+      imgEl.src = src;
+      imgEl.alt = alt;
+      cap.textContent = alt;
+      imgEl.style.transform = 'translateX(0)';
+
+      const modal = document.getElementById('imageModal');
+      modal.style.display = 'flex';
+      setTimeout(() => modal.classList.add('show'), 10);
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('imageModal');
+      modal.classList.remove('show');
+      setTimeout(() => modal.style.display = 'none', 300);
+    }
+
+		function navigateImage(direction) {
+			if (!images.length || currentImageIndex < 0) return;
+
+			const imgEl = document.getElementById('modalImage');
+			const cap   = document.getElementById('modalCaption');
+
+			
+			const outX = direction > 0 ? '-100%' : '100%';
+			const inX  = direction > 0 ? '100%'  : '-100%';
+
+			
+			imgEl.style.transition = 'transform 0.3s ease';
+			imgEl.style.transform  = `translateX(${outX})`;
+
+			setTimeout(() => {
+				
+				currentImageIndex = (currentImageIndex + direction + images.length) % images.length;
+
+				
+				imgEl.style.transition = 'none';
+				imgEl.style.transform  = `translateX(${inX})`;
+				imgEl.src   = images[currentImageIndex].src;
+				imgEl.alt   = images[currentImageIndex].alt;
+				cap.textContent = images[currentImageIndex].alt;
+
+				
+				void imgEl.offsetWidth;
+
+				
+				imgEl.style.transition = 'transform 0.3s ease';
+				imgEl.style.transform  = 'translateX(0)';
+			}, 300);
+		}
+		
+		async function ajouterAuPanier() {
+				const panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+				const stripeEnv = window.stripeEnv || "test"; 
+
+				const stripeProduct = stripeEnv === "live"
+					? "prod_TrHyfWQ80BZdR0"
+					: "";
+
+				const priceIdStripe = stripeEnv === "live"
+					? "price_1StZOpGEPWcc8pKFuM542jPv"
+					: "";
+
+				const nom = "Carte Sultan Hassan";
+				const description = "Inspirée de décors de la mosquée du Sultan Hassan au Caire";
+				const categorie = "carte";
+				const prix = parseFloat("4");
+				const monnaie = "€";
+				const image = "\/images\/SultanHassan_1_1.jpg".startsWith("http")
+						? "\/images\/SultanHassan_1_1.jpg"
+						: `https://encompagniedesetoiles.fr\/images\/SultanHassan_1_1.jpg`;
+
+				
+				if (isNaN(prix) || !monnaie || !nom) {
+						console.error("Article invalide – vérifie les données !");
+						alert("⚠️ Impossible d'ajouter cet article : données manquantes ou invalides.");
+						return;
+				}
+
+				const index = panier.findIndex(p => p.nom === nom);
+				
+				const quantiteDemandee = index >= 0 ? panier[index].quantite + 1 : 1;
+
+				const ok = await verifierQuantiteDisponible(stripeProduct, quantiteDemandee);
+				if (!ok) {
+					afficherMiniPanier();
+					ouvrirPanier();
+					return;
+				}
+				
+				if (index >= 0) {
+						panier[index].quantite += 1;
+				} else {
+						panier.push({ categorie, nom, description, prix , stripeProduct, priceIdStripe, monnaie, image, quantite: 1 });
+				}
+
+				localStorage.setItem("panier", JSON.stringify(panier));
+				window.dispatchEvent(new Event("panierMisAJour"));
+				
+				afficherMiniPanier();
+				ouvrirPanier();
+
+		}
+
+		
+		async function fetchInventoryCurrentProduct() {
+				const stripeEnv = window.stripeEnv || "test"; 
+
+				const stripeProduct = stripeEnv === "live"
+					? "prod_TrHyfWQ80BZdR0"
+					: "";
+
+				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
+
+				const data = await response.json();
+				stockDisponible = parseInt(data.inventory, 10);
+				
+				document.getElementById("stock-display").textContent = stockDisponible;
+				
+				if (stockDisponible <= 0) {
+						const bouton = document.querySelector(".btn-add-to-cart");
+						if (bouton) {
+								bouton.disabled = true;
+								bouton.textContent = "Stock épuisé";
+						}
+				}
+		}
+
+		fetchInventoryCurrentProduct();
+</script>
+
     </main>
     
 <footer class="footer">
 	<div id="footer" class="footer-container">
-		<span>&copy; 2026 <a href="https://encompagniedesetoiles.fr/">En Compagnie des Étoiles</a></span> · 
+		<span>&copy; 2026 <a href="http://localhost:1313/">En Compagnie des Étoiles</a></span> · 
 		<a href="/mentions-legales/">Mentions légales</a> ·  
 		<a href="/conditions-generales-vente/">CGV</a> · 
 		<a href="/politique-confidentialite/">Confidentialité</a>

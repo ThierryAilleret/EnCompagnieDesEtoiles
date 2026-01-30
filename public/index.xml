@@ -2,79 +2,79 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Bienvenue En Compagnie des Étoiles on En Compagnie des Étoiles</title>
-    <link>https://encompagniedesetoiles.fr/</link>
+    <link>http://localhost:1313/</link>
     <description>Recent content in Bienvenue En Compagnie des Étoiles on En Compagnie des Étoiles</description>
     <generator>Hugo -- 0.147.9</generator>
     <language>FR-fr</language>
-    <atom:link href="https://encompagniedesetoiles.fr/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Al dente</title>
-      <link>https://encompagniedesetoiles.fr/produits/luminaire-toubarbla/</link>
+      <link>http://localhost:1313/produits/luminaire-toubarbla/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/produits/luminaire-toubarbla/</guid>
+      <guid>http://localhost:1313/produits/luminaire-toubarbla/</guid>
       <description>Sphère lumineuse en... boîtes de pâtes !</description>
     </item>
     <item>
       <title>Carte Alhambra n°1</title>
-      <link>https://encompagniedesetoiles.fr/cartes/carte_alhambra_1/</link>
+      <link>http://localhost:1313/cartes/carte_alhambra_1/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/cartes/carte_alhambra_1/</guid>
+      <guid>http://localhost:1313/cartes/carte_alhambra_1/</guid>
       <description>Inspirée de décors de l&amp;#39;Alhambra</description>
     </item>
     <item>
       <title>Carte Alhambra n°2</title>
-      <link>https://encompagniedesetoiles.fr/cartes/carte_alhambra_2/</link>
+      <link>http://localhost:1313/cartes/carte_alhambra_2/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/cartes/carte_alhambra_2/</guid>
+      <guid>http://localhost:1313/cartes/carte_alhambra_2/</guid>
       <description>Inspirée de décors de l&amp;#39;Alhambra</description>
     </item>
     <item>
       <title>Carte Alhambra n°3</title>
-      <link>https://encompagniedesetoiles.fr/cartes/carte_alhambra_3/</link>
+      <link>http://localhost:1313/cartes/carte_alhambra_3/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/cartes/carte_alhambra_3/</guid>
+      <guid>http://localhost:1313/cartes/carte_alhambra_3/</guid>
       <description>Inspirée de décors de l&amp;#39;Alhambra</description>
     </item>
     <item>
       <title>Carte Alhambra n°4</title>
-      <link>https://encompagniedesetoiles.fr/cartes/carte_alhambra_4/</link>
+      <link>http://localhost:1313/cartes/carte_alhambra_4/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/cartes/carte_alhambra_4/</guid>
+      <guid>http://localhost:1313/cartes/carte_alhambra_4/</guid>
       <description>Inspirée de décors de l&amp;#39;Alhambra</description>
     </item>
     <item>
       <title>Carte Alhambra n°5</title>
-      <link>https://encompagniedesetoiles.fr/cartes/carte_alhambra_5/</link>
+      <link>http://localhost:1313/cartes/carte_alhambra_5/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/cartes/carte_alhambra_5/</guid>
+      <guid>http://localhost:1313/cartes/carte_alhambra_5/</guid>
       <description>Inspirée de décors de l&amp;#39;Alhambra</description>
     </item>
     <item>
       <title>Carte Sultan Hassan</title>
-      <link>https://encompagniedesetoiles.fr/cartes/carte_sultanhassan_1/</link>
+      <link>http://localhost:1313/cartes/carte_sultanhassan_1/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/cartes/carte_sultanhassan_1/</guid>
+      <guid>http://localhost:1313/cartes/carte_sultanhassan_1/</guid>
       <description>Inspirée de décors de la mosquée du Sultan Hassan au Caire</description>
     </item>
     <item>
       <title>Commande annulée</title>
-      <link>https://encompagniedesetoiles.fr/cancel.html</link>
+      <link>http://localhost:1313/cancel.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/cancel.html</guid>
+      <guid>http://localhost:1313/cancel.html</guid>
       <description>&lt;p&gt;😕 Paiement annulé&lt;/p&gt;
 &lt;p&gt;Il semble que vous ayez annulé le processus de paiement.&lt;/p&gt;
 &lt;p&gt;Si c&amp;rsquo;était une erreur, vous pouvez réessayer à tout moment.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://encompagniedesetoiles.fr/&#34;&gt;Retour à la boutique&lt;/a&gt;&lt;/p&gt;</description>
+&lt;p&gt;&lt;a href=&#34;http://localhost:1313/&#34;&gt;Retour à la boutique&lt;/a&gt;&lt;/p&gt;</description>
     </item>
     <item>
       <title>Commande validée</title>
-      <link>https://encompagniedesetoiles.fr/success.html</link>
+      <link>http://localhost:1313/success.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/success.html</guid>
+      <guid>http://localhost:1313/success.html</guid>
       <description>&lt;p&gt;Merci pour votre commande !&lt;/p&gt;
 &lt;p&gt;Votre paiement a été effectué avec succès.&lt;/p&gt;
 &lt;p&gt;Nous préparons votre commande avec soin et vous informerons par email.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://encompagniedesetoiles.fr/&#34;&gt;Retour à l&amp;rsquo;accueil&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://localhost:1313/&#34;&gt;Retour à l&amp;rsquo;accueil&lt;/a&gt;&lt;/p&gt;
 &lt;script&gt;
   // 🧹 Vider le panier
   localStorage.removeItem(&#34;panier&#34;);
@@ -86,16 +86,16 @@
     </item>
     <item>
       <title>Conditions Générales de Vente</title>
-      <link>https://encompagniedesetoiles.fr/conditions-generales-vente/</link>
+      <link>http://localhost:1313/conditions-generales-vente/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/conditions-generales-vente/</guid>
+      <guid>http://localhost:1313/conditions-generales-vente/</guid>
       <description>CGV applicables aux commandes sur le site encompagniedesetoiles.fr</description>
     </item>
     <item>
       <title>Finaliser ma commande</title>
-      <link>https://encompagniedesetoiles.fr/checkout.html</link>
+      <link>http://localhost:1313/checkout.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/checkout.html</guid>
+      <guid>http://localhost:1313/checkout.html</guid>
       <description>&lt;div class=&#34;checkout-wrapper&#34;&gt;
   &lt;div class=&#34;checkout-left&#34;&gt;
     &lt;form id=&#34;checkout-form&#34;&gt;
@@ -152,9 +152,9 @@
     </item>
     <item>
       <title>Finaliser ma commande</title>
-      <link>https://encompagniedesetoiles.fr/checkout.html</link>
+      <link>http://localhost:1313/checkout.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/checkout.html</guid>
+      <guid>http://localhost:1313/checkout.html</guid>
       <description>&lt;!-- Pour Mondial Relay --&gt;
 &lt;script src=&#34;//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js&#34;&gt;&lt;/script&gt;
 &lt;script src=&#34;//unpkg.com/leaflet/dist/leaflet.js&#34;&gt;&lt;/script&gt;
@@ -473,86 +473,86 @@ window.addEventListener(&#34;panierMisAJour&#34;, function () {
     </item>
     <item>
       <title>Luminaire BD</title>
-      <link>https://encompagniedesetoiles.fr/produits/luminaire-touroutin/</link>
+      <link>http://localhost:1313/produits/luminaire-touroutin/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/produits/luminaire-touroutin/</guid>
+      <guid>http://localhost:1313/produits/luminaire-touroutin/</guid>
       <description>Sphère lumineuse en carton coloré et planches de bande dessinée</description>
     </item>
     <item>
       <title>Luminaire Carte vintage</title>
-      <link>https://encompagniedesetoiles.fr/produits/luminaire-toucarjau/</link>
+      <link>http://localhost:1313/produits/luminaire-toucarjau/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/produits/luminaire-toucarjau/</guid>
+      <guid>http://localhost:1313/produits/luminaire-toucarjau/</guid>
       <description>Sphère lumineuse en carton coloré et cartes scolaires vintage</description>
     </item>
     <item>
       <title>Luminaire du Côté de chez Swann</title>
-      <link>https://encompagniedesetoiles.fr/produits/luminaire-tourosswa/</link>
+      <link>http://localhost:1313/produits/luminaire-tourosswa/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/produits/luminaire-tourosswa/</guid>
+      <guid>http://localhost:1313/produits/luminaire-tourosswa/</guid>
       <description>Sphère lumineuse en carton coloré et feuilles du Côté de chez Swann</description>
     </item>
     <item>
       <title>Luminaire Iridescent bleu- vert</title>
-      <link>https://encompagniedesetoiles.fr/produits/luminaire-seriritra/</link>
+      <link>http://localhost:1313/produits/luminaire-seriritra/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/produits/luminaire-seriritra/</guid>
+      <guid>http://localhost:1313/produits/luminaire-seriritra/</guid>
       <description>Sphère lumineuse en plexiglas iridescent</description>
     </item>
     <item>
       <title>Luminaire Lyra</title>
-      <link>https://encompagniedesetoiles.fr/produits/luminaire-touroumus/</link>
+      <link>http://localhost:1313/produits/luminaire-touroumus/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/produits/luminaire-touroumus/</guid>
+      <guid>http://localhost:1313/produits/luminaire-touroumus/</guid>
       <description>Sphère lumineuse en carton coloré et partitions anciennes</description>
     </item>
     <item>
       <title>Luminaire Maestro</title>
-      <link>https://encompagniedesetoiles.fr/produits/luminaire-serblemus/</link>
+      <link>http://localhost:1313/produits/luminaire-serblemus/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/produits/luminaire-serblemus/</guid>
+      <guid>http://localhost:1313/produits/luminaire-serblemus/</guid>
       <description>Sphère lumineuse en carton coloré et partitions anciennes</description>
     </item>
     <item>
       <title>Luminaire Manga</title>
-      <link>https://encompagniedesetoiles.fr/produits/luminaire-carjaudra/</link>
+      <link>http://localhost:1313/produits/luminaire-carjaudra/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/produits/luminaire-carjaudra/</guid>
+      <guid>http://localhost:1313/produits/luminaire-carjaudra/</guid>
       <description>Sphère lumineuse en carton coloré et planches de manga</description>
     </item>
     <item>
       <title>Luminaire Manga 2</title>
-      <link>https://encompagniedesetoiles.fr/produits/luminaire-caroranar/</link>
+      <link>http://localhost:1313/produits/luminaire-caroranar/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/produits/luminaire-caroranar/</guid>
+      <guid>http://localhost:1313/produits/luminaire-caroranar/</guid>
       <description>Sphère lumineuse en carton coloré et planches de manga (Naruto)</description>
     </item>
     <item>
       <title>Luminaire Nuit Étoilée</title>
-      <link>https://encompagniedesetoiles.fr/produits/luminaire-crunoiorb/</link>
+      <link>http://localhost:1313/produits/luminaire-crunoiorb/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/produits/luminaire-crunoiorb/</guid>
+      <guid>http://localhost:1313/produits/luminaire-crunoiorb/</guid>
       <description>Sphère lumineuse en carton coloré et intérieur doré</description>
     </item>
     <item>
       <title>Mentions légales</title>
-      <link>https://encompagniedesetoiles.fr/mentions-legales/</link>
+      <link>http://localhost:1313/mentions-legales/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/mentions-legales/</guid>
+      <guid>http://localhost:1313/mentions-legales/</guid>
       <description>Mentions légales du site encompagniedesetoiles.fr</description>
     </item>
     <item>
       <title>Politique de confidentialité</title>
-      <link>https://encompagniedesetoiles.fr/politique-confidentialite/</link>
+      <link>http://localhost:1313/politique-confidentialite/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/politique-confidentialite/</guid>
+      <guid>http://localhost:1313/politique-confidentialite/</guid>
       <description>Politique de confidentialité du site encompagniedesetoiles.fr</description>
     </item>
     <item>
       <title>Statistiques des pages vues</title>
-      <link>https://encompagniedesetoiles.fr/stats/</link>
+      <link>http://localhost:1313/stats/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/stats/</guid>
+      <guid>http://localhost:1313/stats/</guid>
       <description>&lt;div id=&#34;summary&#34; style=&#34;margin-bottom:20px; font-size:1.2em;&#34;&gt;
   Chargement…
 &lt;/div&gt;

@@ -105,7 +105,7 @@ exports.handler = async (event) => {
 					currency: "eur",
 					unit_amount: 0,
 					product_data: {
-						name: "Frais de port — Offerts"
+						name: "Frais de port - Offerts"
 					}
 				}
 			});

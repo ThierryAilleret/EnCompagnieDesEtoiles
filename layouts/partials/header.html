@@ -348,14 +348,17 @@ window.addEventListener("DOMContentLoaded", () => {
 
 			document.getElementById("total-panier").innerHTML = `
 				<div>Total : ${totaux.totalFinal.toFixed(2)} €</div>
+
 				${totaux.reduction > 0 ? `
-					<div style="color:#777; font-style:italic;">
+					<div style="color:#777; font-style:italic; font-size:0.8rem;">
 						Réduction de 15% appliquée sur les cartes : -${totaux.reduction.toFixed(2)} €
 					</div>` : ``}
-				<div style="color:#777; font-style:italic;">
+
+				<div style="color:#777; font-style:italic; font-size:0.8rem;">
 					${totaux.fraisPort === 0 ? `Frais de port offerts` : `Frais de port : ${totaux.fraisPort.toFixed(2)} €`}
 				</div>
 			`;
+
 
 
 			const btnCommander = document.querySelector(".bouton-checkout");

@@ -308,6 +308,22 @@ window.addEventListener("DOMContentLoaded", () => {
 
 		function afficherMiniPanier() {
 			const panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+			if (panier.length === 0) {
+				document.getElementById("contenu-panier").innerHTML = `
+					<p style="padding:10px; color:#777; font-style:italic;">Votre panier est vide.</p>
+				`;
+				document.getElementById("total-panier").innerHTML = `Total : 0 €`;
+				
+				const btnCommander = document.querySelector(".bouton-checkout");
+				if (btnCommander) {
+					btnCommander.disabled = true;
+					btnCommander.classList.add("bouton-verrouille");
+				}
+
+				return; // ⛔ On sort, on ne calcule rien d'autre
+			}
+
 			const conteneur = document.getElementById("contenu-panier");
 			conteneur.innerHTML = "";
 

@@ -7,14 +7,18 @@ exports.handler = async (event) => {
   ];
 
   const origin = event.headers.origin || "";
-  const isAllowedOrigin = allowedOrigins.includes(origin) || origin.startsWith("https://deploy-preview");
+  const isAllowedOrigin =
+    allowedOrigins.includes(origin) ||
+    origin.startsWith("https://deploy-preview");
 
-  // 🔧 Réponse à la requête OPTIONS (préflight CORS)
+  // --- Préflight CORS ---
   if (event.httpMethod === "OPTIONS") {
     return {
       statusCode: 200,
       headers: {
-        "Access-Control-Allow-Origin": isAllowedOrigin ? origin : "https://encompagniedesetoiles.fr",
+        "Access-Control-Allow-Origin": isAllowedOrigin
+          ? origin
+          : "https://encompagniedesetoiles.fr",
         "Access-Control-Allow-Headers": "Content-Type",
         "Access-Control-Allow-Methods": "POST, OPTIONS"
       },
@@ -22,34 +26,94 @@ exports.handler = async (event) => {
     };
   }
 
-	const baseUrl = process.env.URL_SITE;
-	console.log("Base URL:", baseUrl);
-	
+  const baseUrl = process.env.URL_SITE;
+
   try {
     const { panier } = JSON.parse(event.body);
-    const isLive = process.env.STRIPE_ENV === "live";
 
+    // --- 1) Séparer cartes / autres produits ---
+    let cardTotal = 0;
+    let otherTotal = 0;
+
+    panier.forEach(item => {
+      const subtotal = item.prix * item.quantite;
+      if (item.type === "carte") {
+        cardTotal += subtotal;
+      } else {
+        otherTotal += subtotal;
+      }
+    });
+
+    // --- 2) Réduction cartes ---
+    let cardDiscount = 0;
+    if (cardTotal >= 10) {
+      cardDiscount = cardTotal * 0.15;
+    }
+    const cardTotalAfterDiscount = cardTotal - cardDiscount;
+
+    // --- 3) Frais de port ---
+    let shippingCost = 2;
+    const totalBeforeShipping = cardTotalAfterDiscount + otherTotal;
+
+    if (otherTotal > 0 || totalBeforeShipping >= 10) {
+      shippingCost = 0;
+    }
+
+    // --- 4) Construire les line_items détaillés ---
+    const line_items = [];
+
+    panier.forEach(item => {
+      const isCard = item.type === "carte";
+
+      // prix unitaire après réduction éventuelle
+      let unitPrice = item.prix;
+
+      if (isCard && cardDiscount > 0) {
+        const reductionFactor = (cardTotal - cardDiscount) / cardTotal;
+        unitPrice = unitPrice * reductionFactor;
+      }
+
+      line_items.push({
+        quantity: item.quantite,
+        price_data: {
+          currency: "eur",
+          unit_amount: Math.round(unitPrice * 100),
+          product_data: {
+            name: item.nom,
+            images: [item.image]
+          }
+        }
+      });
+    });
+
+    // --- 5) Ajouter les frais de port si nécessaires ---
+    if (shippingCost > 0) {
+      line_items.push({
+        quantity: 1,
+        price_data: {
+          currency: "eur",
+          unit_amount: shippingCost * 100,
+          product_data: {
+            name: "Frais de port"
+          }
+        }
+      });
+    }
+
+    // --- 6) Créer la session Stripe ---
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
       customer_creation: "always",
-
-      line_items: panier.map(item => ({
-        price: item.priceIdStripe,
-        quantity: item.quantite || 1,
-      })),
-
-			success_url: `${baseUrl}/success`,
-			cancel_url: `${baseUrl}/cancel`,
-
-			// Ajout pour collecter l’adresse 
-			billing_address_collection: "required",
-			shipping_address_collection: {
-				allowed_countries: ["FR"]
-			},
-
+      line_items,
+      success_url: `${baseUrl}/success`,
+      cancel_url: `${baseUrl}/cancel`,
+      billing_address_collection: "required",
+      shipping_address_collection: {
+        allowed_countries: ["FR"]
+      },
       metadata: {
-        environnement: isLive ? "live" : "test"
+        environnement: process.env.STRIPE_ENV === "live" ? "live" : "test"
       }
     });
 
@@ -57,20 +121,23 @@ exports.handler = async (event) => {
       statusCode: 200,
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": isAllowedOrigin ? origin : "https://encompagniedesetoiles.fr"
+        "Access-Control-Allow-Origin": isAllowedOrigin
+          ? origin
+          : "https://encompagniedesetoiles.fr"
       },
       body: JSON.stringify({ sessionId: session.id })
     };
   } catch (err) {
     console.error("Stripe error:", err);
-    console.error("Stack:", err.stack);
     return {
       statusCode: 500,
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": isAllowedOrigin ? origin : "https://encompagniedesetoiles.fr"
+        "Access-Control-Allow-Origin": isAllowedOrigin
+          ? origin
+          : "https://encompagniedesetoiles.fr"
       },
-      body: JSON.stringify({ error: err.message || "Erreur inconnue" })
+      body: JSON.stringify({ error: err.message })
     };
   }
 };

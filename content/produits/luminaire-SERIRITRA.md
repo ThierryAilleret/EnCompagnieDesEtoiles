@@ -4,6 +4,7 @@ stripeProductLive = "prod_TATGnm7xa5q4Hr"
 priceIdStripeTest = ""
 priceIdStripeLive = "price_1SdtXmGEPWcc8pKF8AvUkzs1"
 
+type = "luminaire"
 product = "SERIRITRA"
 title = "Luminaire Iridescent bleu- vert"
 thumbnail = "/images/SERIRITRA_1.jpg"

@@ -189,6 +189,7 @@
 
 				const nom = "{{ .Params.title }}";//document.querySelector("h1")?.textContent.trim() || "";
 				const description = "{{ .Params.description }}";//document.querySelector("h3")?.textContent.trim() || "";
+				const type = "{{ .Params.type }}";
 				const prix = parseFloat("{{ .Params.price }}");
 				const monnaie = "{{ .Params.currency }}";
 				const image = "{{ .Params.thumbnail }}".startsWith("http")
@@ -216,7 +217,7 @@
 				if (index >= 0) {
 						panier[index].quantite += 1;
 				} else {
-						panier.push({ nom, description, prix , stripeProduct, priceIdStripe, monnaie, image, quantite: 1 });
+						panier.push({ type, nom, description, prix , stripeProduct, priceIdStripe, monnaie, image, quantite: 1 });
 				}
 
 				localStorage.setItem("panier", JSON.stringify(panier));

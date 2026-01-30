@@ -5,6 +5,7 @@ stripeProductLive = "prod_T6RJgwcUbth58n"
 priceIdStripeTest = "price_1S3utWGEPWcc8pKFDltICRV1"
 priceIdStripeLive = "price_1SAEQzGEPWcc8pKFsEoBoBrZ"
 
+type = "luminaire"
 product = "TOUROSSWA"
 title = "Luminaire du Côté de chez Swann"
 thumbnail = "/images/TOUROSSWA_1.jpg"

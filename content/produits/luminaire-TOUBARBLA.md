@@ -4,6 +4,7 @@ stripeProductLive = "prod_TSnEtW5G7NQg1M"
 priceIdStripeTest = "price_1SVrcUGEPWcc8pKFCYv2lQ93"
 priceIdStripeLive = "price_1SVrdlGEPWcc8pKFS51k1LuU"
 
+type = "luminaire"
 product = "TOUBARBLA"
 title = "Al dente"
 thumbnail = "/images/TOUBARBLA_1.jpg"

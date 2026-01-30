@@ -5,6 +5,7 @@ stripeProductLive = "prod_T6RQfetJP9tB6W"
 priceIdStripeTest = "price_1S3uoRGEPWcc8pKFvhiD75pt"
 priceIdStripeLive = "price_1SAEXlGEPWcc8pKF3tMdzfpq"
 
+type = "luminaire"
 product = "CARORANAR"
 title = "Luminaire Manga 2"
 thumbnail = "/images/CARORANAR_1.jpg"

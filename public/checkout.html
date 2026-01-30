@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZQ2FL4130K"></script>
+
+
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+
+  
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    analytics_storage: 'denied'
+  });
+
+  gtag('js', new Date());
+  gtag('config', 'G-ZQ2FL4130K');
+</script>
+
+
+<link rel="stylesheet" href="/js/tarteaucitron/css/tarteaucitron.custom.css">
+<script src="/js/tarteaucitron/tarteaucitron.js"></script>
+<script src="/js/tarteaucitron/tarteaucitron.services.js"></script>
+
+<script>
+  
+  tarteaucitron.user.gtagUa = 'G-ZQ2FL4130K';
+  tarteaucitron.job = tarteaucitron.job || [];
+  tarteaucitron.job.push('gtag');
+	
+	
+  tarteaucitron.user.facebookpixelId = '853229717470549';
+  tarteaucitron.job.push('facebookpixel');
+
+  tarteaucitron.init({
+    privacyUrl: "/politique-confidentialite/",
+    hashtag: "#tarteaucitron",
+    cookieName: "tarteaucitron",
+    orientation: "bottom",
+    showAlertSmall: false,
+    cookieslist: true,
+    showIcon: false,
+    iconPosition: "BottomRight",
+    DenyAllCta: true,
+    AcceptAllCta: true,
+    highPrivacy: true,
+    handleBrowserDNTRequest: false,
+    removeCredit: true,
+    moreInfoLink: true,
+    useExternalCss: true,
+    useExternalJs: false
+  });
+
+  
+  document.addEventListener('tac.root_available', function () {
+    const cookie = tarteaucitron.cookie.read();
+
+    if (cookie.includes('!gtag=true')) {
+      gtag('consent', 'update', {
+        ad_storage: 'granted',
+        analytics_storage: 'granted'
+      });
+    } else if (cookie.includes('!gtag=false')) {
+      gtag('consent', 'update', {
+        ad_storage: 'denied',
+        analytics_storage: 'denied'
+      });
+    }
+  });
+</script>
+<script>
+
+fetch("/.netlify/functions/increment-views", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ path: window.location.pathname })
+});
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finaliser ma commande</title>
+<meta name="description" content="">
+
+<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+  <meta name="robots" content="noindex, follow">
+
+
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+<script>
+class PanierManager {
+    constructor() {
+        this.indicateurEl = document.getElementById("panier-toggle");
+        this.compteEl = document.getElementById("panier-compte");
+        this.panierKey = "panier";
+        this.compteurKey = "compteurPanier";
+
+        this.init();
+    }
+
+		init() {
+				this.attendreDOM(() => {
+						this.afficherCompteur();
+						this.revelerBouton();
+				});
+
+				window.addEventListener("pageshow", () => this.mettreAJourCompteur());
+
+				
+				window.addEventListener("panierMisAJour", () => this.mettreAJourCompteur());
+		}
+
+
+    attendreDOM(callback) {
+        const interval = setInterval(() => {
+            if (this.compteEl && this.indicateurEl) {
+                clearInterval(interval);
+                callback();
+            }
+        }, 50);
+    }
+
+    afficherCompteur() {
+        const totalSauvegarde = localStorage.getItem(this.compteurKey);
+        this.compteEl.textContent = totalSauvegarde ?? "0";
+    }
+
+    revelerBouton() {
+        this.indicateurEl.classList.remove("masque");
+    }
+
+    mettreAJourCompteur() {
+        const panier = JSON.parse(localStorage.getItem(this.panierKey)) || [];
+        const total = panier.reduce((sum, item) => sum + item.quantite, 0);
+
+        localStorage.setItem(this.compteurKey, total);
+        this.compteEl.textContent = total;
+
+        this.styliserIndicateur(total);
+
+				const indicateurEl = document.getElementById("panier-toggle");
+				if (indicateurEl) {
+					indicateurEl.classList.add("pulse");
+					setTimeout(() => indicateurEl.classList.remove("pulse"), 300);
+				}
+    }
+
+    styliserIndicateur(total) {
+        if (total === 0) {
+            this.indicateurEl.style.background = "white";
+            this.indicateurEl.style.color = "black";
+        } else {
+            this.indicateurEl.style.background = "black";
+            this.indicateurEl.style.color = "white";
+        }
+    }
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    new PanierManager();
+});
+
+</script>
+<header class="header">
+	<div class="header-container">
+    <nav class="nav">
+        <div class="logo">
+
+						<div class="site-header-content">
+								<a href="/" accesskey="h" class="site-title" title="En Compagnie des Étoiles (Alt + H)">En Compagnie des Étoiles</a>							<button id="theme-toggle" accesskey="t" title="Basculer le thème (Alt + T)" aria-label="Basculer le thème">
+								<svg id="moon-icon" class="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+									<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+								</svg>
+								<svg id="sun-icon" class="theme-icon" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+									<circle cx="12" cy="12" r="5"></circle>
+									<line x1="12" y1="1" x2="12" y2="3"></line>
+									<line x1="12" y1="21" x2="12" y2="23"></line>
+									<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+									<line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+									<line x1="1" y1="12" x2="3" y2="12"></line>
+									<line x1="21" y1="12" x2="23" y2="12"></line>
+									<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+									<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+								</svg>
+							</button>
+							</div>
+            <div class="logo-switches">
+            </div>
+        </div>
+    </nav>
+
+		<button
+				id="panier-toggle"
+				class="panier-indicateur masque"
+				onclick="ouvrirOuFermerPanier()"
+				aria-label="Ouvrir ou fermer le panier"
+		>
+				🛒<span id="panier-compte">0</span>
+		</button>
+		
+		<div id="mini-panier" class="volet-panier">
+			<div class="entete-panier">
+				<h2>Mon panier</h2>
+				<button class="btn-fermer" onclick="fermerPanier()">×</button>
+			</div>
+			<div id="contenu-panier" class="contenu-panier">
+				
+			</div>
+			<div class="footer-panier">
+				<p id="total-panier">Total : 0 €</p>
+				
+				<button type="button" id="checkout-button" class="bouton-checkout">
+          Finaliser ma commande
+        </button>
+				<script src="https://js.stripe.com/v3/"></script>
+			</div>
+		</div>
+	</div>
+</header>
+
+<script>
+			window.stripeEnv = "";
+			window.stripePublicKey = "";
+			
+		 
+		function ouvrirOuFermerPanier() {
+			const volet = document.getElementById('mini-panier');
+			const indicateur = document.getElementById('panier-toggle');
+
+			if (volet.classList.contains('actif')) {
+				
+				volet.classList.remove('actif');
+			} else {
+				
+				volet.classList.add('actif', 'slide-in');
+				afficherMiniPanier();
+				setTimeout(() => volet.classList.remove('slide-in'), 300);
+			}
+		}
+		function ouvrirPanier() {
+			const volet = document.getElementById('mini-panier');
+			const indicateur = document.getElementById('panier-toggle');
+
+			if (!volet.classList.contains('actif')) {
+				
+				volet.classList.add('actif', 'slide-in');
+				afficherMiniPanier();
+				setTimeout(() => volet.classList.remove('slide-in'), 300);
+			}
+		}
+
+		function fermerPanier() {
+			const volet = document.getElementById('mini-panier');
+			const indicateur = document.getElementById('panier-toggle');
+
+			volet.classList.remove('actif');
+		}
+
+		function afficherMiniPanier() {
+			const panier = JSON.parse(localStorage.getItem("panier")) || [];
+			const conteneur = document.getElementById("contenu-panier");
+			conteneur.innerHTML = "";
+
+			let total = 0;
+
+			panier.forEach(item => {
+				total += parseFloat(item.prix) * item.quantite;
+				const bloc = document.createElement("div");
+				bloc.className = "item-panier";
+				bloc.innerHTML = `
+					<img src="${item.image}" alt="${item.nom}">
+					<div class="info-item">
+						<strong>${item.nom}</strong><br>
+						${item.quantite} × ${item.prix} €
+						<div class="quantite-controls">
+							<button onclick="modifierQuantite('${item.nom}', 1)">+</button>
+							<button onclick="modifierQuantite('${item.nom}', -1)">−</button>
+						</div>
+						<button class="btn-supprimer" onclick="supprimerDuPanier('${item.nom}')" aria-label="Retirer du panier">
+							🗑️
+						</button>
+					</div>
+				`;
+				conteneur.appendChild(bloc);
+			});
+
+			document.getElementById("total-panier").textContent = `Total : ${total.toFixed(2)} € frais de port inclus`;
+
+			const btnCommander = document.querySelector(".bouton-checkout");
+			if (btnCommander) {
+				if (panier.length === 0) {
+					btnCommander.disabled = true;
+					btnCommander.classList.add("bouton-verrouille");
+				} else {
+					btnCommander.disabled = false;
+					btnCommander.classList.remove("bouton-verrouille");
+				}
+			}
+
+		}
+
+		async function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
+				const panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
+				const data = await response.json();
+				quantiteDisponible = parseInt(data.inventory, 10);
+
+				
+				
+				
+
+				
+				if (quantiteDemandee > quantiteDisponible) {
+						alert("⚠️ Stock insuffisant : quantité demandée supérieure au stock disponible.");
+						return false;
+				}
+
+				return true;
+		}
+		
+		
+		async function modifierQuantite(nom, delta) {
+			const panier = JSON.parse(localStorage.getItem("panier")) || [];
+			const index = panier.findIndex(p => p.nom === nom);
+			if (index >= 0) {
+			
+				const nouvelleQuantite = panier[index].quantite + delta;
+				if (delta > 0) {
+					const ok = await verifierQuantiteDisponible( panier[index].stripeProduct, nouvelleQuantite);
+					if (!ok) return;
+				}
+				
+				panier[index].quantite += delta;
+				if (panier[index].quantite <= 0) {
+					panier.splice(index, 1);
+				}
+				localStorage.setItem("panier", JSON.stringify(panier));
+				window.dispatchEvent(new Event("panierMisAJour"));
+
+				afficherMiniPanier();
+			}
+			const indicateurEl = document.getElementById("panier-toggle");
+			if (indicateurEl) {
+				indicateurEl.classList.add("pulse");
+				setTimeout(() => indicateurEl.classList.remove("pulse"), 300);
+			}
+		}
+
+		function supprimerDuPanier(nom) {
+			const panier = JSON.parse(localStorage.getItem("panier")) || [];
+			const nouveau = panier.filter(p => p.nom !== nom);
+			localStorage.setItem("panier", JSON.stringify(nouveau));
+			afficherMiniPanier();
+			window.dispatchEvent(new Event("panierMisAJour"));
+			
+			const indicateurEl = document.getElementById("panier-toggle");
+			if (indicateurEl) {
+				indicateurEl.classList.add("pulse");
+				setTimeout(() => indicateurEl.classList.remove("pulse"), 300);
+			}
+
+		}
+
+		document.addEventListener("click", function (event) {
+			const volet = document.getElementById("mini-panier");
+			const toggle = document.getElementById("panier-toggle");
+
+			
+			const ajouterBtn = event.target.closest(".btn-add-to-cart");
+
+			
+			const quantiteBtn = event.target.closest(".quantite-controls");
+			const supprimerBtn = event.target.closest(".btn-supprimer");
+
+			if (!volet || !volet.classList.contains("actif")) return;
+
+			if (
+				volet.contains(event.target) ||
+				toggle.contains(event.target) ||
+				ajouterBtn ||
+				quantiteBtn ||
+				supprimerBtn
+			) {
+				return; 
+			}
+
+			
+			fermerPanier();
+		});
+		
+		
+		document.getElementById("checkout-button").addEventListener("click", function (event) {
+			event.preventDefault(); 
+
+			
+			let panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+			
+			panier = panier.map(item => ({
+				...item,
+				monnaie: item.monnaie === "€" ? "eur" : item.monnaie
+			}));
+
+			console.log(panier);
+
+			
+			fetch("/.netlify/functions/creer-session-checkout", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ panier })
+			})
+			.then(response => {
+				if (!response.ok) throw new Error("Réponse serveur non valide");
+				return response.json();
+			})
+			.then(data => {
+				if (!data.sessionId) throw new Error("Session Stripe non reçue");
+
+				
+				localStorage.setItem("stripeSessionId", data.sessionId);
+				console.log("Session enregistrée :", data.sessionId);
+
+				if (!window.stripePublicKey || !window.stripePublicKey.startsWith("pk_")) {
+					alert("Clé Stripe invalide ou manquante.");
+					console.error("❌ Clé Stripe non valide :", window.stripePublicKey);
+					return;
+				}
+				
+				const stripe = Stripe(window.stripePublicKey);
+				stripe.redirectToCheckout({ sessionId: data.sessionId });
+			})
+			.catch(error => {
+				console.error("💥 Erreur Stripe :", error);
+				alert("Erreur : " + error.message);
+			});
+		});
+</script>
+<main class="main">
+<main>
+  <!-- Pour Mondial Relay -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="//unpkg.com/leaflet/dist/leaflet.js"></script>
+<link rel="stylesheet" href="//unpkg.com/leaflet/dist/leaflet.css" />
+<script src="//widget.mondialrelay.com/parcelshop-picker/jquery.plugin.mondialrelay.parcelshoppicker.min.js"></script>
+<!-- Autocomplétion d'adresse via Geoportail -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  // 🔁 Surveille les champs nom, prénom, adresse, mail
+  ["nom", "prenom", "adresse", "mail"].forEach(id => {
+    const champ = document.getElementById(id);
+    if (champ) {
+      champ.addEventListener("input", surveillerEtape1);
+    }
+  });
+
+  const adresseInput = document.getElementById("adresse");
+  const cpInput      = document.getElementById("code-postal");
+  
+	adresseInput.addEventListener("input", async e => {
+    const q = e.target.value.trim();
+    if (q.length < 3) return;
+
+		const res = await fetch(`https://data.geopf.fr/geocodage/completion?text=${encodeURIComponent(q)}&limit=5&terr=METROPOLE`);
+
+    const data = await res.json();
+		//console.log("🔵 Suggestions reçues :", data);
+
+    const cont = document.getElementById("autocomplete-container");
+		cont.innerHTML = "";
+		cont.style.display = "none";
+
+		let count = 0;
+		data.results?.forEach(item => {
+			const div = document.createElement("div");
+			div.className = "suggestion";
+			div.textContent = item.fulltext || `${item.number} ${item.street} ${item.city}`;
+			div.addEventListener("click", () => {
+				adresseInput.value = div.textContent;
+				remplirAdresseGeo(item);
+				cont.innerHTML = "";
+				cont.style.display = "none";
+			});
+			cont.appendChild(div);
+			count++;
+		});
+
+		cont.style.display = count ? "block" : "none"
+
+  });
+
+	// document.getElementById("bouton-relai").addEventListener("click", afficherPopupMondialRelay);
+
+	const cp = localStorage.getItem('codePostal')?.trim() || "";
+	const ville = localStorage.getItem('ville')?.trim() || "";
+
+	$("#Zone_Widget").MR_ParcelShopPicker({
+		Target: "#Target_Widget",
+		Brand: "CC23JV2D",
+		Country: "FR",
+		AllowedCountries: "FR",
+		Language: "FR",
+		EnableGeolocalisatedSearch: "Yes",
+		PostCode: cp,
+		City: ville,
+		NbResults: "10",
+		ColLivMod: "XL",
+		Responsive: true,
+		ShowResultsOnMap: false,
+		OnParcelShopSelected: function (data) {
+      const zoneInfo = document.getElementById("relai-selectionne");
+      const champ = document.getElementById("info-relai");
+      if (!zoneInfo || !champ) return;
+
+      const fullName = `<strong>${data.Nom}</strong><br>${data.Adresse1}, ${data.CP} ${data.Ville}`;
+      let horaires = "";
+
+      if (data.HoursHtmlTable) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(data.HoursHtmlTable, "text/html");
+        const rows = doc.querySelectorAll("table tr");
+        const horairesBruts = [];
+
+        rows.forEach(row => {
+          const jour = row.querySelector("th")?.textContent?.trim()?.slice(0, 3);
+          const tds = row.querySelectorAll("td");
+          const heures = Array.from(tds).map(td => td.textContent.trim()).filter(Boolean).join(" / ");
+          if (jour) horairesBruts.push({ jour, horaires: heures || "-" });
+        });
+
+        const groupes = {};
+        horairesBruts.forEach(({ jour, horaires }) => {
+          if (!groupes[horaires]) groupes[horaires] = [];
+          groupes[horaires].push(jour);
+        });
+
+        const joursFR = { Mon: "Lun", Tue: "Mar", Wed: "Mer", Thu: "Jeu", Fri: "Ven", Sat: "Sam", Sun: "Dim" };
+
+        const lignes = Object.entries(groupes).map(([horaires, jours]) => {
+          const trad = jours.map(j => joursFR[j] || j);
+          const etiquette = trad.length === 1 ? trad[0] : `${trad[0]}–${trad[trad.length - 1]}`;
+          return `<div id="horaires-relai"><strong>${etiquette}</strong> : ${horaires}</div>`;
+        });
+
+        horaires = lignes.join("");
+      }
+
+      const html = `
+        <div class="carte-relai">
+          <div class="entete-relai"><span class="icone-carte">📍</span><strong>${data.Nom}</strong></div>
+          <div class="adresse-relai">${data.Adresse1}<br>${data.CP} ${data.Ville}</div>
+          <div class="horaire-relai">
+            <div class="horloge">🕒 Horaires :</div>
+            <div class="table-horaire">${horaires}</div>
+          </div>
+        </div>
+      `;
+
+      champ.innerHTML = html;
+      zoneInfo.style.display = "block";
+
+      window._pointRelaisAdresse = `${data.Nom}, ${data.Adresse1}, ${data.CP} ${data.Ville}`;
+      window._pointRelaisId = data.ID;
+
+			// On affiche le bouton de validation du relais
+			const boutonValidationRelais = document.getElementById("validation-relais-button");
+			boutonValidationRelais.classList.remove("bouton-verrouille");
+			boutonValidationRelais.style.display = "block";
+			
+			// On désactive le bouton de paiment (juste pour donner l'impression au client qu'il doit valider son relais
+			const etape3 = document.getElementById("step-3");
+			etape3.classList.remove("actif");
+			const boutonPaiement = document.getElementById("checkout-button");
+			boutonPaiement.classList.add("bouton-verrouille");
+    }
+	});
+
+	//Affichage du contenu du panier
+	afficherPanierDansCheckout();
+});
+
+window.addEventListener("panierMisAJour", () => {
+  afficherPanierDansCheckout();
+});
+
+function afficherPanierDansCheckout() {
+	const panierJSON = localStorage.getItem("panier");
+	if (!panierJSON) return;
+
+	let total = 0;
+	const panier = JSON.parse(panierJSON);
+	const ul = document.getElementById("panier-resume");
+
+	ul.innerHTML = "";
+	panier.forEach(article => {
+		const li = document.createElement("li");
+		li.innerHTML = `
+			<div style="display:flex; gap:10px; margin-bottom:10px;">
+				<img src="${article.image}" alt="${article.nom}" style="height:48px; width:auto; border-radius:4px;">
+				<div>
+					<strong>${article.nom}</strong><br>
+					<span style="font-size:0.9em;">${article.description}</span><br>
+					<span>${article.quantite} × ${article.prix}${article.monnaie}</span>
+				</div>
+			</div>
+		`;
+		ul.appendChild(li);
+		total += article.prix * article.quantite;
+	});
+
+	document.getElementById("total-commande").innerHTML = `<strong>Total :</strong> ${total} € frais de port inclus`;
+  const totalPaiement = document.getElementById("prix-total");
+  if (totalPaiement) {
+    totalPaiement.innerHTML = `Total : ${total} €`;
+  }
+}
+
+function remplirAdresseGeo(item) {
+  const cp    = item.zipcode || "";
+  const ville = item.city || item.oldcity || "";
+  const pays  = item.country || "";
+  const adresse = item.fulltext || `${item.street}, ${cp} ${ville}`;
+
+  // Préremplit le champ Adresse
+  document.getElementById("adresse").value = adresse;
+
+	// Stockage
+	localStorage.setItem('codePostal', cp);
+	localStorage.setItem('ville', ville);
+
+  window.adresseGoogleValidee = true;
+
+}
+
+function surveillerEtape1() {
+  const nom     = document.getElementById("nom").value.trim();
+  const prenom  = document.getElementById("prenom").value.trim();
+  const adresse = document.getElementById("adresse").value.trim();
+  const mail = document.getElementById("mail").value.trim();
+
+  const etape1 = document.getElementById("step-1");
+  const etape2 = document.getElementById("step-2");
+  const etape3 = document.getElementById("step-3");
+
+  const etape_1_complete = nom && prenom && adresse && mail;
+
+  if (etape_1_complete) {
+    etape2.classList.add("actif");
+	  // Affiche ou masque les points relais
+		// const boutonrelai = document.getElementById("bouton-relai");
+		// boutonrelai.style.display = "inline-block";
+		const widgetrelai = document.getElementById("zone-widget-relai");
+		widgetrelai.style.display = "inline-block";
+  } else {
+    etape2.classList.remove("actif");
+		const widgetrelai = document.getElementById("zone-widget-relai");
+		widgetrelai.style.display = "none";
+
+		etape3.classList.remove("actif");
+		const boutonPaiement = document.getElementById("checkout-button");
+		boutonPaiement.classList.add("bouton-verrouille");
+  }
+}
+
+function verifierEtatPaiement() {
+  const panier = JSON.parse(localStorage.getItem("panier")) || [];
+  const boutonStripe = document.getElementById("checkout-button");
+
+  const steps = [
+    document.getElementById("step-1"),
+    document.getElementById("step-2"),
+    document.getElementById("step-3")
+  ];
+
+  if (!boutonStripe) return;
+
+  if (panier.length === 0) {
+    //boutonStripe.disabled = true;
+    //boutonStripe.classList.add("bouton-verrouille");
+
+    // ❌ Retire la classe actif pour les étapes
+    steps.forEach(step => step.classList.remove("actif"));
+  } else {
+   //boutonStripe.disabled = false;
+    //boutonStripe.classList.remove("bouton-verrouille");
+
+    // ✅ Ajoute actif pour les étapes si l'adresse est remplie
+    surveillerEtape1(); // Cela réactive step-2 et step-3 si conditions sont remplies
+  }
+}
+
+
+window.addEventListener("panierMisAJour", function () {
+    verifierEtatPaiement();
+});
+
+</script>
+<div class="checkout-wrapper">
+  <div class="checkout-left">
+    <form id="checkout-form">
+      <!-- Étape 1 : Facturation -->
+      <fieldset id="step-1" class="etape actif">
+        <legend><span class="etape-numero">1</span> Facturation</legend>
+        <label>Nom :<br><input type="text" name="nom" id="nom" required /></label>
+        <label>Prénom :<br><input type="text" name="prenom" id="prenom" required /></label>
+				<div style="position:relative;">
+					<label>Adresse :<br>
+						<input type="text" id="adresse" name="adresse" autocomplete="off" required
+									 placeholder="Saisissez une adresse" />
+					</label>
+					<div id="autocomplete-container"></div>
+				</div>
+        <label>Complément d'addresse :<br><input type="text" name="complement_adresse" id="complement_adresse"/></label>
+        <label>Mail :<br><input type="text" name="mail" id="mail" required /></label>
+			</fieldset>
+      <!-- Étape 2 : Livraison -->
+      <fieldset id="step-2" class="etape">
+        <legend><span class="etape-numero">2</span> Livraison</legend>
+        <div id="livraison-section">
+          <div id="bloc-ville-cp" style="display:none; margin-bottom:1em;">
+              <input type="text" id="code-postal" name="code-postal" maxlength="5" style="display:none;">
+              <input type="text" id="ville" name="ville"  style="display:none;">
+          </div>
+					<!-- Zone d’intégration directe du widget Mondial Relay -->
+					<div id="zone-widget-relai" style="display:none; margin-top:0em;">
+						<div id="Zone_Widget"></div>
+						<input type="hidden" id="Target_Widget" name="point-relay" />
+					</div>
+					<!-- Zone d'affichage du point relais choisi -->
+					<div id="relai-selectionne" style="display:none; margin-top:0.5em; margin-bottom:0.5em;">
+						<div id="titre-relai-selectionne"><strong>Relais sélectionné :</strong></div>
+						<div id="info-relai"></div>
+					</div>
+					<button type="button" id="validation-relais-button" class="bouton-validation-relai  bouton-verrouille" style="display:none">
+						Choisir ce point relais
+					</button>
+        </div>
+			</fieldset>
+      <!-- Étape 3 : Paiement -->
+      <fieldset id="step-3" class="etape">
+        <legend><span class="etape-numero">3</span> Paiement</legend>
+        <div id="prix-total" style="display:none">Total : ... €</div>
+				<button type="button" id="checkout-button" class="bouton-checkout  bouton-verrouille" style="display:none">
+          Payer avec Stripe
+        </button>
+				<script src="https://js.stripe.com/v3/"></script>
+      </fieldset>
+    </form>
+  </div>
+	<!-- Résumé commande -->
+	<div class="checkout-right">
+		<h3>Résumé de la commande</h3>
+		<ul id="panier-resume"></ul>
+		<p id="total-commande"><strong>Total :</strong> ... € frais de port inclus</p>
+	</div>
+</div>
+<script>
+document.getElementById("validation-relais-button").addEventListener("click", function (event) {
+	event.preventDefault(); // Empêche la soumission du formulaire
+	// On passe à l'étape 3
+	const etape3 = document.getElementById("step-3");
+	etape3.classList.add("actif");
+	
+	const prixTotal = document.getElementById("prix-total");
+	prixTotal.style.display = "block";
+
+	const boutonPaiement = document.getElementById("checkout-button");
+	boutonPaiement.classList.remove("bouton-verrouille");
+	boutonPaiement.style.display = "block";
+
+});
+document.getElementById("checkout-button").addEventListener("click", function (event) {
+  event.preventDefault(); // Empêche la soumission du formulaire
+
+  // Récupération du panier
+  let panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+  // Normaliser la monnaie pour Stripe
+  panier = panier.map(item => ({
+    ...item,
+    monnaie: item.monnaie === "€" ? "eur" : item.monnaie
+  }));
+
+  // Récupération des données client depuis le formulaire
+  const client = {
+    nom: document.getElementById("nom").value.trim(),
+    prenom: document.getElementById("prenom").value.trim(),
+    email: document.getElementById("mail").value.trim(),
+    adresse: document.getElementById("adresse").value.trim(),
+    complement: document.querySelector("[name='complement_adresse']").value.trim(),
+    codePostal: localStorage.getItem("codePostal") || "",
+    ville: localStorage.getItem("ville") || "",
+    pointRelais: window._pointRelaisAdresse || ""
+  };
+
+  // Vérification minimale
+  if (!client.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(client.email)) {
+    alert("Veuillez entrer une adresse e-mail valide.");
+    return;
+  }
+
+  // Envoi au backend
+  fetch("/.netlify/functions/creer-session-checkout", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ panier, client })
+  })
+  .then(response => {
+    if (!response.ok) throw new Error("Réponse serveur non valide");
+    return response.json();
+  })
+  .then(data => {
+    if (!data.sessionId) throw new Error("Session Stripe non reçue");
+
+    // ✅ Stocker l'ID de session pour la page success
+    localStorage.setItem("stripeSessionId", data.sessionId);
+		console.log("Session enregistrée :", data.sessionId);
+
+		if (!window.stripePublicKey || !window.stripePublicKey.startsWith("pk_")) {
+			alert("Clé Stripe invalide ou manquante.");
+			console.error("❌ Clé Stripe non valide :", window.stripePublicKey);
+			return;
+		}
+    // Redirection vers Stripe Checkout
+		const stripe = Stripe(window.stripePublicKey);
+    stripe.redirectToCheckout({ sessionId: data.sessionId });
+  })
+  .catch(error => {
+    console.error("💥 Erreur Stripe :", error);
+    alert("Erreur : " + error.message);
+  });
+});
+</script>
+</main>
+
+    </main>
+    
+<footer class="footer">
+	<div id="footer" class="footer-container">
+		<span>&copy; 2026 <a href="https://encompagniedesetoiles.fr/">En Compagnie des Étoiles</a></span> · 
+		<a href="/mentions-legales/">Mentions légales</a> ·  
+		<a href="/conditions-generales-vente/">CGV</a> · 
+		<a href="/politique-confidentialite/">Confidentialité</a>
+		<span id="info-cookie"  class="info-cookie" style="display: none;">
+			 · Zéro cookie, zéro suivi
+			<span class="tooltip">Conformément à votre choix, aucun cookie publicitaire ou de mesure d'audience.<br>Seul un cookie technique est utilisé pour mémoriser votre choix de consentement.<br>Le panier fonctionne uniquement via le stockage local du navigateur.</span>
+		</span>
+	</div>
+</footer>
+<script>
+function updateFooterDisplay() {
+    const infoCookie = document.getElementById('info-cookie');
+    const footer = document.getElementById('footer');
+    if (!infoCookie || !footer) return;
+
+    const rawCookie = document.cookie.split('; ').find(row => row.startsWith('tarteaucitron='));
+    if (!rawCookie) {
+        infoCookie.style.display = 'inline';
+        footer.classList.add('visible');
+        return;
+    }
+
+    const cookieValue = decodeURIComponent(rawCookie.substring('tarteaucitron='.length));
+
+    if (cookieValue.includes('!gtag=false')) {
+        infoCookie.style.display = 'inline';
+    } else {
+        infoCookie.style.display = 'none';
+    }
+
+    footer.classList.add('visible');
+}
+
+
+document.addEventListener('DOMContentLoaded', updateFooterDisplay);
+
+
+document.addEventListener('tac.consent_updated', () => {
+    updateFooterDisplay();
+});
+</script>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

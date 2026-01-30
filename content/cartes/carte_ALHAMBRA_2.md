@@ -4,6 +4,7 @@ stripeProductLive = "prod_TrHQt9cZZZ2oyF"
 priceIdStripeTest = ""
 priceIdStripeLive = "price_1StYrzGEPWcc8pKFHjLvJhsk"
 
+type = "carte"
 product = "ALHAMBRA_2_1"
 title = "Carte Alhambra n°2"
 thumbnail = "/images/ALHAMBRA_2_1.jpg"

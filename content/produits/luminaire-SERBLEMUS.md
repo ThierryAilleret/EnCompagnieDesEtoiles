@@ -5,6 +5,7 @@ stripeProductLive = "prod_T6RJgwcUbth58n"
 priceIdStripeTest = "price_1S3urNGEPWcc8pKFghwGyJGZ"
 priceIdStripeLive = "price_1SAEQzGEPWcc8pKFsEoBoBrZ"
 
+type = "luminaire"
 product = "SERBLEMUS"
 title = "Luminaire Maestro"
 thumbnail = "/images/SERBLEMUS_1.jpg"

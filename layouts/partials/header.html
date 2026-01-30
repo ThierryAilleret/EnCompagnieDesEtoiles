@@ -271,7 +271,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 			panier.forEach(item => {
 				const sousTotal = item.prix * item.quantite;
-				if (item.type === "carte") {
+				if (item.categorie === "carte") {
 					totalCartes += sousTotal;
 				} else {
 					totalAutres += sousTotal;

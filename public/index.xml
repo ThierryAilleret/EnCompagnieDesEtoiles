@@ -603,9 +603,9 @@ fetch(&#34;/.netlify/functions/get-stats&#34;)
     </item>
     <item>
       <title>Tableau Origami Dunes</title>
-      <link>http://localhost:1313/origami/origami_dunes/</link>
+      <link>http://localhost:1313/tableaux_origami/origami_dunes/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/origami/origami_dunes/</guid>
+      <guid>http://localhost:1313/tableaux_origami/origami_dunes/</guid>
       <description>Rêvez devant ce paysage de dunes qui change selon l&amp;#39;heure, selon votre point de vue, selon votre regard.</description>
     </item>
   </channel>

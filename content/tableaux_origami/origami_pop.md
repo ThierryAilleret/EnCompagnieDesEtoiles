@@ -10,7 +10,7 @@ title = "Tableau Origami Pop"
 thumbnail = "/images/Origami_Pop_1.jpg"
 thumbnail_alt = "Description du tableau Origami Pop"
 images = [
-	"/images/Origami_Pop_1.jpg"
+	"/images/Origami_Pop_2.mp4"
 ]
 description = "Tableau d'art cinétique"
 description_longue = "Mettez du pep's dans votre intérieur avec cette œuvre d'art cinétique.<br>Chaque tableau est signé et numéroté, série limitée à 10 exemplaires."

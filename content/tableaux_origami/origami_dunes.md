@@ -10,7 +10,7 @@ title = "Tableau Origami Dunes"
 thumbnail = "/images/Origami_Dunes_1.jpg"
 thumbnail_alt = "Description du tableau Origami Dunes"
 images = [
-	"/images/Origami_Dunes_1.jpg"
+	"/images/Origami_Dunes_2.mp4"
 ]
 description = "Tableau d'art cinétique"
 description_longue = "Rêvez devant ce paysage de dunes qui change selon la lumière, selon votre point de vue, selon votre regard.<br>Chaque tableau est signé et numéroté, série limitée à 10 exemplaires."

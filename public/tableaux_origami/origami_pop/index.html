@@ -561,9 +561,14 @@ window.addEventListener("DOMContentLoaded", () => {
 								 onclick="openModal('\/images\/Origami_Pop_1.jpg','Description du tableau Origami Pop')">
 					
 					
-						<img src="/images/Origami_Pop_2.mp4" alt=""
-								 onclick="openModal('\/images\/Origami_Pop_2.mp4','')">
+							
+									<video src="/images/Origami_Pop_2.mp4" muted playsinline
+												 onclick="openModal('\/images\/Origami_Pop_2.mp4','', 'video')"></video>
+							
 					
+
+
+
 
 				</div>
 
@@ -602,6 +607,7 @@ window.addEventListener("DOMContentLoaded", () => {
         <button class="nav-button left-nav"
                 onclick="navigateImage(-1)" aria-label="Image précédente">&#10094;</button>
         <img id="modalImage" class="modal-content" alt="">
+				<video id="modalVideo" class="modal-content" controls></video>
         <button class="nav-button right-nav"
                 onclick="navigateImage(1)" aria-label="Image suivante">&#10095;</button>
       </div>
@@ -618,10 +624,16 @@ window.addEventListener("DOMContentLoaded", () => {
 		let currentImageIndex = 0;
     let images = [];
 
-    function collectGalleryImages() {
-      return Array.from(document.querySelectorAll('.gallery img'))
-        .map(img => ({ src: img.src, alt: img.alt }));
-    }
+		function collectGalleryImages() {
+			const imgs = Array.from(document.querySelectorAll('.gallery img'))
+				.map(el => ({ type: 'image', src: el.src, alt: el.alt }));
+
+			const vids = Array.from(document.querySelectorAll('.gallery video'))
+				.map(el => ({ type: 'video', src: el.src, alt: '' }));
+
+			return [...imgs, ...vids];
+		}
+
 
     function getFilename(url) {
       return new URL(url, window.location.origin).pathname;
@@ -652,24 +664,32 @@ window.addEventListener("DOMContentLoaded", () => {
 			window.dispatchEvent(new Event("panierMisAJour"));
 		});
 
-    function openModal(src, alt) {
-      images = collectGalleryImages();
-      currentImageIndex = images.findIndex(img =>
-        getFilename(img.src) === getFilename(src)
-      );
-      if (currentImageIndex < 0) currentImageIndex = 0;
+		function openModal(src, alt, type = null) {
+			images = collectGalleryImages();
 
-      const imgEl = document.getElementById('modalImage');
-      const cap   = document.getElementById('modalCaption');
-      imgEl.src = src;
-      imgEl.alt = alt;
-      cap.textContent = alt;
-      imgEl.style.transform = 'translateX(0)';
+			currentImageIndex = images.findIndex(item => getFilename(item.src) === getFilename(src));
+			if (currentImageIndex < 0) currentImageIndex = 0;
 
-      const modal = document.getElementById('imageModal');
-      modal.style.display = 'flex';
-      setTimeout(() => modal.classList.add('show'), 10);
-    }
+			const item = images[currentImageIndex];
+
+			const imgEl = document.getElementById('modalImage');
+			const vidEl = document.getElementById('modalVideo');
+
+			if (item.type === 'image') {
+				imgEl.style.display = 'block';
+				vidEl.style.display = 'none';
+				imgEl.src = item.src;
+				imgEl.alt = item.alt;
+			} else {
+				imgEl.style.display = 'none';
+				vidEl.style.display = 'block';
+				vidEl.src = item.src;
+			}
+
+			document.getElementById('modalCaption').textContent = item.alt || '';
+			document.getElementById('imageModal').style.display = 'flex';
+		}
+
 
     function closeModal() {
       const modal = document.getElementById('imageModal');
@@ -678,38 +698,25 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
 		function navigateImage(direction) {
-			if (!images.length || currentImageIndex < 0) return;
+			currentImageIndex = (currentImageIndex + direction + images.length) % images.length;
+			const item = images[currentImageIndex];
 
 			const imgEl = document.getElementById('modalImage');
-			const cap   = document.getElementById('modalCaption');
+			const vidEl = document.getElementById('modalVideo');
 
-			
-			const outX = direction > 0 ? '-100%' : '100%';
-			const inX  = direction > 0 ? '100%'  : '-100%';
+			if (item.type === 'image') {
+				imgEl.style.display = 'block';
+				vidEl.style.display = 'none';
+				imgEl.src = item.src;
+			} else {
+				imgEl.style.display = 'none';
+				vidEl.style.display = 'block';
+				vidEl.src = item.src;
+			}
 
-			
-			imgEl.style.transition = 'transform 0.3s ease';
-			imgEl.style.transform  = `translateX(${outX})`;
-
-			setTimeout(() => {
-				
-				currentImageIndex = (currentImageIndex + direction + images.length) % images.length;
-
-				
-				imgEl.style.transition = 'none';
-				imgEl.style.transform  = `translateX(${inX})`;
-				imgEl.src   = images[currentImageIndex].src;
-				imgEl.alt   = images[currentImageIndex].alt;
-				cap.textContent = images[currentImageIndex].alt;
-
-				
-				void imgEl.offsetWidth;
-
-				
-				imgEl.style.transition = 'transform 0.3s ease';
-				imgEl.style.transform  = 'translateX(0)';
-			}, 300);
+			document.getElementById('modalCaption').textContent = item.alt || '';
 		}
+
 		
 		async function ajouterAuPanier() {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];

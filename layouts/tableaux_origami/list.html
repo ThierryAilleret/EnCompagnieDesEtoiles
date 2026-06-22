@@ -1,275 +1,34 @@
 {{ define "main" }}
 <div class="product-gallery">
-	<h1>Nos tableaux Origami</h1>
+  <h1>Nos luminaires</h1>
+
+  {{/* Vignettes textuelles */}}
+  {{ $vignettes := slice
+    (dict "title" "Fabriqués en France" "text" "Imaginés et fabriqués dans notre atelier à Dunkerque.")
+    (dict "title" "Très petite séries" "text" "Chaque tableau est signé et numéroté, séries limitées à 10 exemplaires.")
+  }}
+
   <div class="product-grid">
-    {{ range .Pages }}
-      <div class="product-item">
+    {{ range $i, $p := .Pages }}
 
-        <a href="{{ .RelPermalink }}">
-          <div class="thumb-carousel">
-            <img src="{{ .Params.thumbnail }}" alt="{{ .Params.thumbnail_alt }}">
-            {{ range .Params.images }}
-              <img src="{{ . }}" alt="">
-            {{ end }}
-          </div>
-					<h2>{{ .Title }}</h2>
-					<p>{{ .Params.description }}</p>
-				</a>
+      {{/* Produit */}}
+      <a href="{{ $p.RelPermalink }}" class="product-item">
+        {{ if $p.Params.thumbnail }}
+          <img src="{{ $p.Params.thumbnail }}" alt="{{ $p.Params.thumbnail_alt }}" class="product-thumb" />
+        {{ end }}
+        <h2>{{ $p.Title }}</h2>
+        <p>{{ $p.Params.description }}</p>
+      </a>
 
-        <!-- Formulaire d’ajout au panier -->
-				<form class="add-to-cart"
-							data-product-id="{{ .File.BaseFileName }}"
-							data-stripe-test="{{ .Params.stripeProductTest }}"
-							data-stripe-live="{{ .Params.stripeProductLive }}"
-							data-price-test="{{ .Params.priceIdStripeTest }}"
-							data-price-live="{{ .Params.priceIdStripeLive }}"
-							data-categorie="{{ .Params.categorie }}"
-							data-price="{{ .Params.price }}"
-							data-currency="{{ .Params.currency }}">
-
-				
-					<select class="qty"></select>
-
-					<button type="submit" class="add-btn">+</button>
-				</form>
-
-      </div>
+      {{/* Vignette */}}
+			{{ $v := index $vignettes (mod $i (len $vignettes)) }}
+			<article class="product-item item alt vignette">
+				<div class="text">
+					<h3>{{ $v.title }}</h3>
+					<p>{{ $v.text }}</p>
+				</div>
+			</article>
     {{ end }}
   </div>
 </div>
-
-<script>
-
-window.addEventListener("panierMisAJour", mettreAJourStockVignettes);
-
-// --- AJOUT AU PANIER DEPUIS LA LISTE ---
-
-document.addEventListener("DOMContentLoaded", () => {
-  const stripeEnv = window.stripeEnv || "test";
-
-  document.querySelectorAll(".add-to-cart").forEach(form => {
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const select = form.querySelector(".qty");
-      const quantiteChoisie = parseInt(select.value, 10);
-
-      if (!quantiteChoisie || quantiteChoisie <= 0) return;
-
-      const stripeProduct = stripeEnv === "live"
-        ? form.dataset.stripeLive
-        : form.dataset.stripeTest;
-
-      const priceIdStripe = stripeEnv === "live"
-        ? form.dataset.priceLive
-        : form.dataset.priceTest;
-
-      // Récupération des infos produit dans la vignette
-      const item = form.closest(".product-item");
-      const nom = item.querySelector("h2").textContent.trim();
-      const description = item.querySelector("p").textContent.trim();
-			const categorie = form.dataset.categorie;
-			const prix = parseFloat(form.dataset.price);
-			const monnaie = form.dataset.currency;
-      const image = item.querySelector("img").src;
-
-      // Vérification du stock
-			const panier = JSON.parse(localStorage.getItem("panier")) || [];
-			const index = panier.findIndex(p => p.nom === nom);
-			const quantiteExistante = index >= 0 ? panier[index].quantite : 0;
-			const quantiteTotale = quantiteExistante + quantiteChoisie;
-
-			const ok = await verifierQuantiteDisponible(stripeProduct, quantiteTotale);
-			if (!ok) return;
-
-      // Ajout au panier
-      if (index >= 0) {
-        panier[index].quantite += quantiteChoisie;
-      } else {
-        panier.push({
-          categorie,
-					nom,
-          description,
-          prix,
-          stripeProduct,
-          priceIdStripe,
-          monnaie,
-          image,
-          quantite: quantiteChoisie
-        });
-      }
-
-      localStorage.setItem("panier", JSON.stringify(panier));
-      window.dispatchEvent(new Event("panierMisAJour"));
-
-      afficherMiniPanier();
-      ouvrirPanier();
-    });
-  });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  const carousels = document.querySelectorAll('.thumb-carousel');
-
-  carousels.forEach(carousel => {
-    const imgs = Array.from(carousel.querySelectorAll('img'));
-    if (imgs.length === 0) return;
-
-    let index = 0;
-    let timer = null;
-
-    // image 1 visible par défaut
-    imgs[0].classList.add('active');
-
-    function show(newIndex) {
-      imgs[index].classList.remove('active');
-      index = newIndex;
-      imgs[index].classList.add('active');
-    }
-
-    function startCycle() {
-      if (imgs.length < 2) return;
-      // on part de l’image courante et on tourne
-      timer = setInterval(() => {
-        const next = (index + 1) % imgs.length;
-        show(next);
-      }, 2500); // durée d’affichage de chaque image
-    }
-
-    function stopCycle() {
-      if (timer) {
-        clearInterval(timer);
-        timer = null;
-      }
-      // retour à la première image
-      show(0);
-    }
-
-    // Desktop : hover
-    carousel.addEventListener('mouseenter', () => {
-      if (imgs.length < 2) return;
-      // 1 → 2 immédiatement (avec fondu grâce au CSS)
-      show(1);
-      // puis on enclenche le cycle
-      startCycle();
-    });
-
-    carousel.addEventListener('mouseleave', () => {
-      stopCycle();
-    });
-
-    // Mobile : carrousel automatique
-    if (window.matchMedia('(pointer: coarse)').matches) {
-      if (imgs.length > 1) {
-        startCycle();
-      }
-    }
-  });
-});
-
-//Récupération du stock sur Stripe
-document.addEventListener("DOMContentLoaded", () => {
-  const stripeEnv = window.stripeEnv || "test";
-
-  document.querySelectorAll(".add-to-cart").forEach(async form => {
-    const select = form.querySelector(".qty");
-    const button = form.querySelector(".add-btn");
-
-    // Récupération de l’ID Stripe selon l’environnement
-    const stripeProduct = stripeEnv === "live"
-      ? form.dataset.stripeLive
-      : form.dataset.stripeTest;
-
-    // Appel Netlify
-    const response = await fetch(`/.netlify/functions/getInventory?product=${stripeProduct}`);
-    const data = await response.json();
-    const stock = parseInt(data.inventory, 10);
-
-    // Si pas de stock → désactiver
-    if (stock <= 0) {
-      button.disabled = true;
-      button.textContent = "Stock épuisé";
-      select.innerHTML = "";
-      return;
-    }
-
-    // Remplir le select avec les quantités disponibles
-    select.innerHTML = "";
-    const max = Math.min(stock, 10); // limite à 10 si tu veux garder une limite
-    for (let i = 1; i <= max; i++) {
-      const opt = document.createElement("option");
-      opt.value = i;
-      opt.textContent = i;
-      select.appendChild(opt);
-    }
-  });
-});
-
-async function mettreAJourStockVignettes() {
-  const stripeEnv = window.stripeEnv || "test";
-  const panier = JSON.parse(localStorage.getItem("panier")) || [];
-
-  document.querySelectorAll(".add-to-cart").forEach(async form => {
-    const select = form.querySelector(".qty");
-    const button = form.querySelector(".add-btn");
-
-    const stripeProduct = stripeEnv === "live"
-      ? form.dataset.stripeLive
-      : form.dataset.stripeTest;
-
-    // Quantité déjà dans le panier
-    const itemPanier = panier.find(p => p.stripeProduct === stripeProduct);
-    const quantiteDansPanier = itemPanier ? itemPanier.quantite : 0;
-
-    // Stock Stripe
-    const response = await fetch(`/.netlify/functions/getInventory?product=${stripeProduct}`);
-    const data = await response.json();
-    const stockTotal = parseInt(data.inventory, 10);
-
-    // Stock restant
-    const stockRestant = Math.max(0, stockTotal - quantiteDansPanier);
-
-    // --- CAS : STOCK ÉPUISÉ ---
-    if (stockRestant <= 0) {
-      button.disabled = true;
-      button.textContent = "Stock épuisé";
-
-      // Masquer le select
-      select.style.display = "none";
-      select.innerHTML = "";
-
-      return;
-    }
-
-    // --- CAS : STOCK DISPONIBLE ---
-    button.disabled = false;
-    button.textContent = "+";
-
-    // Réafficher le select si besoin
-    select.style.display = "inline-block";
-
-    // Sauvegarder la valeur actuelle
-    const ancienneValeur = parseInt(select.value, 10);
-
-    // Remplir le select
-    select.innerHTML = "";
-    const max = Math.min(stockRestant, 10);
-    for (let i = 1; i <= max; i++) {
-      const opt = document.createElement("option");
-      opt.value = i;
-      opt.textContent = i;
-      select.appendChild(opt);
-    }
-
-    // Restaurer la valeur si possible
-    if (ancienneValeur && ancienneValeur <= max) {
-      select.value = ancienneValeur;
-    } else {
-      select.value = max;
-    }
-  });
-}
-
-</script>
-
 {{ end }}

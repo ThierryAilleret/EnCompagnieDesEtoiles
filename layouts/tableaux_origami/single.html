@@ -1,6 +1,6 @@
 {{ define "main" }}
 	<div class="single-container">
-		<a href="/cartes" class="back-arrow" aria-label="Retour à la galerie">
+		<a href="/produits" class="back-arrow" aria-label="Retour à la galerie">
 			&lt; Retour à la galerie
 		</a>
 		<article>
@@ -45,6 +45,8 @@
 				<ul>
 					<li><strong>Dimensions :</strong> {{ .Params.dimensions | safeHTML }}</li>
 					<li><strong>Matériaux :</strong> {{ .Params.materiaux | safeHTML }}</li>
+					<li><strong>Ampoule :</strong> {{ .Params.ampoule | safeHTML }}</li>
+					<li><strong>Normes :</strong> <img src="/images/CE.png" alt="Logo CE" class="img-icon"></li>
 					<li><strong>Fabriqué à :</strong> Dunkerque, France</li>
 				</ul>
 			</div>

@@ -12,8 +12,8 @@ thumbnail_alt = "Description du tableau Origami Dunes"
 images = [
 	"/images/Origami_Dunes_1.jpg"
 ]
-description = "Rêvez devant ce paysage de dunes qui change selon l'heure, selon votre point de vue, selon votre regard."
-description_longue = ""
+description = "Tableau d'art cinétique"
+description_longue = "Rêvez devant ce paysage de dunes qui change selon la lumière, selon votre point de vue, selon votre regard.<br>Chaque tableau est signé et numéroté, série limitée à 10 exemplaires."
 dimensions = "46 x 46 cm"
 materiaux = "papier à grain"
 price = 250

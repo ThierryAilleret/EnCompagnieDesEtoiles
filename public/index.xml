@@ -606,7 +606,14 @@ fetch(&#34;/.netlify/functions/get-stats&#34;)
       <link>http://localhost:1313/tableaux_origami/origami_dunes/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/tableaux_origami/origami_dunes/</guid>
-      <description>Rêvez devant ce paysage de dunes qui change selon l&amp;#39;heure, selon votre point de vue, selon votre regard.</description>
+      <description>Tableau d&amp;#39;art cinétique</description>
+    </item>
+    <item>
+      <title>Tableau Origami Pop</title>
+      <link>http://localhost:1313/tableaux_origami/origami_pop/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/tableaux_origami/origami_pop/</guid>
+      <description>Tableau d&amp;#39;art cinétique</description>
     </item>
   </channel>
 </rss>

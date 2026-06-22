@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Origamis on En Compagnie des Étoiles</title>
+    <link>http://localhost:1313/origami/</link>
+    <description>Recent content in Origamis on En Compagnie des Étoiles</description>
+    <generator>Hugo -- 0.147.9</generator>
+    <language>FR-fr</language>
+    <atom:link href="http://localhost:1313/origami/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Carte Alhambra n°1</title>
+      <link>http://localhost:1313/origami/carte_alhambra_1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/origami/carte_alhambra_1/</guid>
+      <description>Inspirée de décors de l&amp;#39;Alhambra</description>
+    </item>
+  </channel>
+</rss>

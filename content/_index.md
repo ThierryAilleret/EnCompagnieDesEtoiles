@@ -2,7 +2,6 @@
 title = "Bienvenue En Compagnie des Étoiles"
 description = "Découvrez notre univers artisanal — luminaires et cartes conçus en France."
 draft = false
-# Optionnel: définir comme page d'accueil
 type = "homepage"
 +++
 <div class="home-grid">
@@ -16,6 +15,11 @@ type = "homepage"
     <h2>Carterie</h2>
     <img src="/images/ALHAMBRA_1_1.jpg" alt="Carterie artisanale" class="tile-img">
     <p class="tile-subtitle">Des cartes qui subliment vos messages.</p>
+  </a>	
+  <a href="/tableau_origami/" class="home-tile">
+    <h2>Tableaux Origami</h2>
+    <img src="/images/Origami_Dunes_1.jpg" alt="Tableaux Origami" class="tile-img">
+    <p class="tile-subtitle">Des paysages à rêver.</p>
   </a>
 
 </div>

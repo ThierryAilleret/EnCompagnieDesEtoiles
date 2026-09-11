@@ -192,16 +192,18 @@ article h1, article h3 {
 .gallery video:hover { transform: scale(1.05); }
 
 .gallery-video::after {
-  content: "▶";
+  content: "";
   position: absolute;
-  font-size: 40px;
-  color: white;
+  width: 40px;
+  height: 40px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 50'><polygon points='15,10 40,25 15,40' fill='white'/></svg>") no-repeat center;
   opacity: 0.8;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   pointer-events: none;
 }
+
 
 
 .gallery-container {

@@ -660,27 +660,33 @@ window.addEventListener("DOMContentLoaded", () => {
 			window.dispatchEvent(new Event("panierMisAJour"));
 		});
 
-    function openModal(src, alt) {
+		function openModal(src, alt) {
 			images = collectGalleryImages();
+
+			
+			const clicked = images.findIndex(img =>
+				getFilename(img.src) === getFilename(src)
+			);
+
+			currentImageIndex = clicked >= 0 ? clicked : 0;
+
+			const modal = document.getElementById('imageModal');
+			const cap   = document.getElementById('modalCaption');
 
 			const isVideo = src.endsWith(".mp4") || src.endsWith(".webm");
 
-			const modal = document.getElementById('imageModal');
-			const imgEl = document.getElementById('modalImage');
-			const cap   = document.getElementById('modalCaption');
-
 			if (isVideo) {
-				imgEl.outerHTML = '<video id="modalImage" class="modal-content" controls playsinline></video>';
-				const vid = document.getElementById('modalImage');
-				vid.src = src;
-				cap.textContent = "Vidéo";
+				modal.querySelector('.modal-content').outerHTML =
+					'<video id="modalImage" class="modal-content" controls playsinline></video>';
 			} else {
-				imgEl.outerHTML = '<img id="modalImage" class="modal-content" alt="">';
-				const img = document.getElementById('modalImage');
-				img.src = src;
-				img.alt = alt;
-				cap.textContent = alt;
+				modal.querySelector('.modal-content').outerHTML =
+					'<img id="modalImage" class="modal-content" alt="">';
 			}
+
+			const mediaEl = document.getElementById('modalImage');
+			mediaEl.src = src;
+			mediaEl.alt = alt;
+			cap.textContent = alt || (isVideo ? "Vidéo" : "");
 
 			modal.style.display = 'flex';
 			setTimeout(() => modal.classList.add('show'), 10);

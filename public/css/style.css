@@ -186,8 +186,23 @@ article h1, article h3 {
     scroll-snap-align: center;
     transition: transform 0.2s;
     object-fit: cover;
+    position: relative;
 }
+
 .gallery video:hover { transform: scale(1.05); }
+
+.gallery-video::after {
+  content: "▶";
+  position: absolute;
+  font-size: 40px;
+  color: white;
+  opacity: 0.8;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
 
 .gallery-container {
 	display: grid;

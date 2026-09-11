@@ -165,21 +165,18 @@
 			let mediaEl = document.getElementById('modalImage');
 			const cap   = document.getElementById('modalCaption');
 
-			// calcul des positions de sortie et d’entrée
 			const outX = direction > 0 ? '-100%' : '100%';
 			const inX  = direction > 0 ? '100%'  : '-100%';
 
-			// slide out
 			mediaEl.style.transition = 'transform 0.3s ease';
 			mediaEl.style.transform  = `translateX(${outX})`;
 
 			setTimeout(() => {
-				// mise à jour de l’index
 				currentImageIndex = (currentImageIndex + direction + images.length) % images.length;
 				const next = images[currentImageIndex];
 				const isVideo = next.src.endsWith(".mp4") || next.src.endsWith(".webm");
 
-				// remplacer l’élément par un <img> ou <video>
+				// remplacer l’élément
 				if (isVideo) {
 					mediaEl.outerHTML = '<video id="modalImage" class="modal-content" controls playsinline></video>';
 				} else {
@@ -197,7 +194,7 @@
 				mediaEl.src = next.src;
 				cap.textContent = isVideo ? "Vidéo" : next.alt;
 
-				// forcer le reflow
+				// reflow
 				void mediaEl.offsetWidth;
 
 				// slide in
@@ -205,6 +202,7 @@
 				mediaEl.style.transform  = 'translateX(0)';
 			}, 300);
 		}
+
 
 		
 		async function ajouterAuPanier() {

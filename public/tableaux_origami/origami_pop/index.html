@@ -699,16 +699,13 @@ window.addEventListener("DOMContentLoaded", () => {
 			let mediaEl = document.getElementById('modalImage');
 			const cap   = document.getElementById('modalCaption');
 
-			
 			const outX = direction > 0 ? '-100%' : '100%';
 			const inX  = direction > 0 ? '100%'  : '-100%';
 
-			
 			mediaEl.style.transition = 'transform 0.3s ease';
 			mediaEl.style.transform  = `translateX(${outX})`;
 
 			setTimeout(() => {
-				
 				currentImageIndex = (currentImageIndex + direction + images.length) % images.length;
 				const next = images[currentImageIndex];
 				const isVideo = next.src.endsWith(".mp4") || next.src.endsWith(".webm");
@@ -739,6 +736,7 @@ window.addEventListener("DOMContentLoaded", () => {
 				mediaEl.style.transform  = 'translateX(0)';
 			}, 300);
 		}
+
 
 		
 		async function ajouterAuPanier() {

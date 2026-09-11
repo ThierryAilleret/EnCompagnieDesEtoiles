@@ -19,21 +19,34 @@
 				</button>
 
 				<div class="gallery">
+
 					{{ if .Params.thumbnail }}
-						<img src="{{ .Params.thumbnail }}" alt="{{ .Params.thumbnail_alt }}"
-								 onclick="openModal('{{ .Params.thumbnail }}','{{ .Params.thumbnail_alt }}')">
+						<div class="gallery-item">
+							<img src="{{ .Params.thumbnail }}" alt="{{ .Params.thumbnail_alt }}"
+									 onclick="openModal('{{ .Params.thumbnail }}','{{ .Params.thumbnail_alt }}')">
+						</div>
 					{{ end }}
+
 					{{ range .Params.images }}
 						{{ $src := . }}
 						{{ if or (strings.HasSuffix $src ".mp4") (strings.HasSuffix $src ".webm") }}
-							<video src="{{ $src }}" class="gallery-video" muted playsinline
-										 onclick="openModal('{{ $src }}','video')"></video>
+
+							<!-- VIDÉO -->
+							<div class="gallery-item video-item">
+								<video src="{{ $src }}" muted playsinline
+											 onclick="openModal('{{ $src }}','video')"></video>
+							</div>
+
 						{{ else }}
-							<img src="{{ $src }}" alt=""
-									 onclick="openModal('{{ $src }}','')">
+
+							<!-- IMAGE -->
+							<div class="gallery-item">
+								<img src="{{ $src }}" alt=""
+										 onclick="openModal('{{ $src }}','')">
+							</div>
+
 						{{ end }}
 					{{ end }}
-
 
 				</div>
 

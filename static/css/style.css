@@ -157,73 +157,79 @@ article h1, article h3 {
 
 
 /* Galerie sans barre de scroll visible */
+/* Galerie horizontale sans barre de scroll visible */
 .gallery {
-	display: flex;
-	overflow-x: auto;
-	overflow-y: hidden;
-	gap: 10px;
-	padding: 10px 0;
-	scroll-behavior: smooth;
-	scroll-snap-type: x mandatory;
-	scrollbar-width: none;
-	-ms-overflow-style: none;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  gap: 10px;
+  padding: 10px 0;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 .gallery::-webkit-scrollbar { display: none; }
 
-.gallery img {
-	height: 300px;
-	cursor: pointer;
-	border: 1px solid #ddd;
-	scroll-snap-align: center;
-	transition: transform 0.2s;
-}
-.gallery img:hover { transform: scale(1.05); }
-
-.gallery video.gallery-video {
-    height: 300px;
-    cursor: pointer;
-    border: 1px solid #ddd;
-    scroll-snap-align: center;
-    transition: transform 0.2s;
-    object-fit: cover;
-    position: relative; /* indispensable pour l’overlay */
+/* Chaque élément de la galerie (image ou vidéo) */
+.gallery-item {
+  scroll-snap-align: center;
+  position: relative; /* nécessaire pour l’overlay vidéo */
 }
 
-.gallery video.gallery-video:hover {
-    transform: scale(1.05);
+/* Vignettes images et vidéos */
+.gallery-item img,
+.gallery-item video {
+  height: 300px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  object-fit: cover;
+  transition: transform 0.2s;
 }
 
-.gallery video.gallery-video::after {
-    content: "";
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 50'><polygon points='15,10 40,25 15,40' fill='white'/></svg>") no-repeat center;
-    opacity: 0.8;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
+.gallery-item img:hover,
+.gallery-item video:hover {
+  transform: scale(1.05);
+}
+
+/* Overlay “play” sur les vidéos */
+.video-item::after {
+  content: "";
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0.9;
+
+  background: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'>\
+  <circle cx='32' cy='32' r='30' fill='rgba(0,0,0,0.5)'/>\
+  <polygon points='26,20 46,32 26,44' fill='white'/>\
+</svg>") no-repeat center / contain;
 }
 
 
-
-
+/* Conteneur du carrousel avec boutons gauche/droite */
 .gallery-container {
-	display: grid;
-	grid-template-columns: 50px 1fr 50px;
-	align-items: center;
-	gap: 10px;
-	margin: 20px 0;
+  display: grid;
+  grid-template-columns: 50px 1fr 50px;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0;
 }
+
 .scroll-button {
-	background: none;
-	border: none;
-	padding: 5px;
-	cursor: pointer;
-	transition: background-color 0.3s;
+  background: none;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 .scroll-button:hover { background-color: #eee; }
+
 
 .fiche-texte ul {
 	list-style: none;

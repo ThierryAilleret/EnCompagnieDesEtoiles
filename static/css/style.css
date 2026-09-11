@@ -179,6 +179,16 @@ article h1, article h3 {
 }
 .gallery img:hover { transform: scale(1.05); }
 
+.gallery video {
+    height: 300px;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    scroll-snap-align: center;
+    transition: transform 0.2s;
+    object-fit: cover;
+}
+.gallery video:hover { transform: scale(1.05); }
+
 .gallery-container {
 	display: grid;
 	grid-template-columns: 50px 1fr 50px;

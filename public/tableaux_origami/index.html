@@ -537,278 +537,53 @@ window.addEventListener("DOMContentLoaded", () => {
 </script>
 <main class="main">
 <div class="product-gallery">
-	<h1>Nos tableaux Origami</h1>
+  <h1>Nos tableaux Origami</h1>
+
+  
+  
+
   <div class="product-grid">
     
-      <div class="product-item">
 
-        <a href="/tableaux_origami/origami_dunes/">
-          <div class="thumb-carousel">
-            <img src="/images/Origami_Dunes_1.jpg" alt="Description du tableau Origami Dunes">
-            
-              <img src="/images/Origami_Dunes_1.jpg" alt="">
-            
-          </div>
-					<h2>Tableau Origami Dunes</h2>
-					<p>Rêvez devant ce paysage de dunes qui change selon l&#39;heure, selon votre point de vue, selon votre regard.</p>
-				</a>
-
+      
+      <a href="/tableaux_origami/origami_dunes/" class="product-item">
         
-				<form class="add-to-cart"
-							data-product-id="origami_dunes"
-							data-stripe-test=""
-							data-stripe-live="prod_UkiOy96liEQe7l"
-							data-price-test=""
-							data-price-live="price_1TlCxWGEPWcc8pKFgesbKf0X"
-							data-categorie="tableaux_origami"
-							data-price="250"
-							data-currency="€">
+          <img src="/images/Origami_Dunes_1.jpg" alt="Description du tableau Origami Dunes" class="product-thumb" />
+        
+        <h2>Tableau Origami Dunes</h2>
+        <p>Tableau d&#39;art cinétique</p>
+      </a>
 
-				
-					<select class="qty"></select>
+      
+			
+			<article class="product-item item alt vignette">
+				<div class="text">
+					<h3>Très petites séries</h3>
+					<p>Chaque tableau est signé et numéroté, séries limitées à 10 exemplaires.</p>
+				</div>
+			</article>
+    
 
-					<button type="submit" class="add-btn">+</button>
-				</form>
+      
+      <a href="/tableaux_origami/origami_pop/" class="product-item">
+        
+          <img src="/images/Origami_Pop_1.jpg" alt="Description du tableau Origami Pop" class="product-thumb" />
+        
+        <h2>Tableau Origami Pop</h2>
+        <p>Tableau d&#39;art cinétique</p>
+      </a>
 
-      </div>
+      
+			
+			<article class="product-item item alt vignette">
+				<div class="text">
+					<h3>Très petites séries</h3>
+					<p>Chaque tableau est signé et numéroté, séries limitées à 10 exemplaires.</p>
+				</div>
+			</article>
     
   </div>
 </div>
-
-<script>
-
-window.addEventListener("panierMisAJour", mettreAJourStockVignettes);
-
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  const stripeEnv = window.stripeEnv || "test";
-
-  document.querySelectorAll(".add-to-cart").forEach(form => {
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const select = form.querySelector(".qty");
-      const quantiteChoisie = parseInt(select.value, 10);
-
-      if (!quantiteChoisie || quantiteChoisie <= 0) return;
-
-      const stripeProduct = stripeEnv === "live"
-        ? form.dataset.stripeLive
-        : form.dataset.stripeTest;
-
-      const priceIdStripe = stripeEnv === "live"
-        ? form.dataset.priceLive
-        : form.dataset.priceTest;
-
-      
-      const item = form.closest(".product-item");
-      const nom = item.querySelector("h2").textContent.trim();
-      const description = item.querySelector("p").textContent.trim();
-			const categorie = form.dataset.categorie;
-			const prix = parseFloat(form.dataset.price);
-			const monnaie = form.dataset.currency;
-      const image = item.querySelector("img").src;
-
-      
-			const panier = JSON.parse(localStorage.getItem("panier")) || [];
-			const index = panier.findIndex(p => p.nom === nom);
-			const quantiteExistante = index >= 0 ? panier[index].quantite : 0;
-			const quantiteTotale = quantiteExistante + quantiteChoisie;
-
-			const ok = await verifierQuantiteDisponible(stripeProduct, quantiteTotale);
-			if (!ok) return;
-
-      
-      if (index >= 0) {
-        panier[index].quantite += quantiteChoisie;
-      } else {
-        panier.push({
-          categorie,
-					nom,
-          description,
-          prix,
-          stripeProduct,
-          priceIdStripe,
-          monnaie,
-          image,
-          quantite: quantiteChoisie
-        });
-      }
-
-      localStorage.setItem("panier", JSON.stringify(panier));
-      window.dispatchEvent(new Event("panierMisAJour"));
-
-      afficherMiniPanier();
-      ouvrirPanier();
-    });
-  });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  const carousels = document.querySelectorAll('.thumb-carousel');
-
-  carousels.forEach(carousel => {
-    const imgs = Array.from(carousel.querySelectorAll('img'));
-    if (imgs.length === 0) return;
-
-    let index = 0;
-    let timer = null;
-
-    
-    imgs[0].classList.add('active');
-
-    function show(newIndex) {
-      imgs[index].classList.remove('active');
-      index = newIndex;
-      imgs[index].classList.add('active');
-    }
-
-    function startCycle() {
-      if (imgs.length < 2) return;
-      
-      timer = setInterval(() => {
-        const next = (index + 1) % imgs.length;
-        show(next);
-      }, 2500); 
-    }
-
-    function stopCycle() {
-      if (timer) {
-        clearInterval(timer);
-        timer = null;
-      }
-      
-      show(0);
-    }
-
-    
-    carousel.addEventListener('mouseenter', () => {
-      if (imgs.length < 2) return;
-      
-      show(1);
-      
-      startCycle();
-    });
-
-    carousel.addEventListener('mouseleave', () => {
-      stopCycle();
-    });
-
-    
-    if (window.matchMedia('(pointer: coarse)').matches) {
-      if (imgs.length > 1) {
-        startCycle();
-      }
-    }
-  });
-});
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  const stripeEnv = window.stripeEnv || "test";
-
-  document.querySelectorAll(".add-to-cart").forEach(async form => {
-    const select = form.querySelector(".qty");
-    const button = form.querySelector(".add-btn");
-
-    
-    const stripeProduct = stripeEnv === "live"
-      ? form.dataset.stripeLive
-      : form.dataset.stripeTest;
-
-    
-    const response = await fetch(`/.netlify/functions/getInventory?product=${stripeProduct}`);
-    const data = await response.json();
-    const stock = parseInt(data.inventory, 10);
-
-    
-    if (stock <= 0) {
-      button.disabled = true;
-      button.textContent = "Stock épuisé";
-      select.innerHTML = "";
-      return;
-    }
-
-    
-    select.innerHTML = "";
-    const max = Math.min(stock, 10); 
-    for (let i = 1; i <= max; i++) {
-      const opt = document.createElement("option");
-      opt.value = i;
-      opt.textContent = i;
-      select.appendChild(opt);
-    }
-  });
-});
-
-async function mettreAJourStockVignettes() {
-  const stripeEnv = window.stripeEnv || "test";
-  const panier = JSON.parse(localStorage.getItem("panier")) || [];
-
-  document.querySelectorAll(".add-to-cart").forEach(async form => {
-    const select = form.querySelector(".qty");
-    const button = form.querySelector(".add-btn");
-
-    const stripeProduct = stripeEnv === "live"
-      ? form.dataset.stripeLive
-      : form.dataset.stripeTest;
-
-    
-    const itemPanier = panier.find(p => p.stripeProduct === stripeProduct);
-    const quantiteDansPanier = itemPanier ? itemPanier.quantite : 0;
-
-    
-    const response = await fetch(`/.netlify/functions/getInventory?product=${stripeProduct}`);
-    const data = await response.json();
-    const stockTotal = parseInt(data.inventory, 10);
-
-    
-    const stockRestant = Math.max(0, stockTotal - quantiteDansPanier);
-
-    
-    if (stockRestant <= 0) {
-      button.disabled = true;
-      button.textContent = "Stock épuisé";
-
-      
-      select.style.display = "none";
-      select.innerHTML = "";
-
-      return;
-    }
-
-    
-    button.disabled = false;
-    button.textContent = "+";
-
-    
-    select.style.display = "inline-block";
-
-    
-    const ancienneValeur = parseInt(select.value, 10);
-
-    
-    select.innerHTML = "";
-    const max = Math.min(stockRestant, 10);
-    for (let i = 1; i <= max; i++) {
-      const opt = document.createElement("option");
-      opt.value = i;
-      opt.textContent = i;
-      select.appendChild(opt);
-    }
-
-    
-    if (ancienneValeur && ancienneValeur <= max) {
-      select.value = ancienneValeur;
-    } else {
-      select.value = max;
-    }
-  });
-}
-
-</script>
-
 
     </main>
     

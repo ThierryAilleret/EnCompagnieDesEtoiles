@@ -27,8 +27,8 @@
 					{{ end }}
 					{{ range .Params.images }}
 					<div class="gallery-item">
-						<img src="{{ $src }}" alt=""
-								 onclick="openModal('{{ $src }}','')">
+						<img src="{{ . }}" alt=""
+								 onclick="openModal('{{ . }}','')">
 					</div>
 					{{ end }}
 

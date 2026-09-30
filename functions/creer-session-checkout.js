@@ -47,7 +47,7 @@ exports.handler = async (event) => {
     // --- 2) Réduction cartes ---
     let cardDiscount = 0;
     if (cardTotal >= 10) {
-      cardDiscount = cardTotal * 0.15;
+      cardDiscount = cardTotal * 0.150;
     }
     const cardTotalAfterDiscount = cardTotal - cardDiscount;
 

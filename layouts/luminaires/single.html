@@ -20,12 +20,16 @@
 
 				<div class="gallery">
 					{{ if .Params.thumbnail }}
+					<div class="gallery-item">
 						<img src="{{ .Params.thumbnail }}" alt="{{ .Params.thumbnail_alt }}"
 								 onclick="openModal('{{ .Params.thumbnail }}','{{ .Params.thumbnail_alt }}')">
+					</div>
 					{{ end }}
 					{{ range .Params.images }}
-						<img src="{{ . }}" alt=""
-								 onclick="openModal('{{ . }}','')">
+					<div class="gallery-item">
+						<img src="{{ $src }}" alt=""
+								 onclick="openModal('{{ $src }}','')">
+					</div>
 					{{ end }}
 
 				</div>

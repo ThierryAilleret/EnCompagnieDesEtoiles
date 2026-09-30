@@ -11,7 +11,7 @@ type = "homepage"
     <p class="tile-subtitle">Des paysages à rêver.</p>
   </a>
 
-  <a href="/produits/" class="home-tile">
+  <a href="/luminaires/" class="home-tile">
     <h2>Luminaires</h2>
     <img src="/images/SERBLEMUS_1.jpg" alt="Luminaires artisanaux" class="tile-img">
     <p class="tile-subtitle">Des créations lumineuses au design unique.</p>

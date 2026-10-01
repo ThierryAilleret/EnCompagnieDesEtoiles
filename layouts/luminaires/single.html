@@ -1,6 +1,6 @@
 {{ define "main" }}
 	<div class="single-container">
-		<a href="/luminaires" class="back-arrow" aria-label="Retour à la galerie">
+		<a href="/produits" class="back-arrow" aria-label="Retour à la galerie">
 			&lt; Retour à la galerie
 		</a>
 		<article>
@@ -20,16 +20,12 @@
 
 				<div class="gallery">
 					{{ if .Params.thumbnail }}
-					<div class="gallery-item">
 						<img src="{{ .Params.thumbnail }}" alt="{{ .Params.thumbnail_alt }}"
 								 onclick="openModal('{{ .Params.thumbnail }}','{{ .Params.thumbnail_alt }}')">
-					</div>
 					{{ end }}
 					{{ range .Params.images }}
-					<div class="gallery-item">
 						<img src="{{ . }}" alt=""
 								 onclick="openModal('{{ . }}','')">
-					</div>
 					{{ end }}
 
 				</div>
@@ -81,6 +77,8 @@
 
   <!-- Script -->
   <script>
+		//const stripeEnv = "{{ .Site.Params.stripeEnv }}"; // injecté depuis Netlify	
+	
     let stockDisponible = 0;
 		let currentImageIndex = 0;
     let images = [];
@@ -193,7 +191,6 @@
 
 				const nom = "{{ .Params.title }}";//document.querySelector("h1")?.textContent.trim() || "";
 				const description = "{{ .Params.description }}";//document.querySelector("h3")?.textContent.trim() || "";
-				const categorie = "{{ .Params.categorie }}";
 				const prix = parseFloat("{{ .Params.price }}");
 				const monnaie = "{{ .Params.currency }}";
 				const image = "{{ .Params.thumbnail }}".startsWith("http")
@@ -221,21 +218,40 @@
 				if (index >= 0) {
 						panier[index].quantite += 1;
 				} else {
-						panier.push({ categorie, nom, description, prix , stripeProduct, priceIdStripe, monnaie, image, quantite: 1 });
+						panier.push({ nom, description, prix , stripeProduct, priceIdStripe, monnaie, image, quantite: 1 });
 				}
 
 				localStorage.setItem("panier", JSON.stringify(panier));
-				window.dispatchEvent(new Event("panierMisAJour"));
+				window.dispatchEvent(new Event("panierMisAJour")); // ✅ déclenche la mise à jour
 				
 				afficherMiniPanier();
 				ouvrirPanier();
 
 		}
 
+		async function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
+				const panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
+				const data = await response.json();
+				quantiteDisponible = parseInt(data.inventory, 10);
+
+				// 🧾 Log de diagnostic
+				//console.log(`📦 Stock disponible : ${quantiteDisponible}`);
+				//console.log(`📥 Quantité demandée : ${quantiteDemandee}`);
+
+				// Vérifie si la quantité demandée dépasse le stock
+				if (quantiteDemandee > quantiteDisponible) {
+						alert("⚠️ Stock insuffisant : quantité demandée supérieure au stock disponible.");
+						return false;
+				}
+
+				return true;
+		}
+
+
 		//Récupération du stock sur Stripe
 		async function fetchInventoryCurrentProduct() {
-				const stripeEnv = window.stripeEnv || "test"; // fallback si non défini
-
 				const stripeProduct = stripeEnv === "live"
 					? "{{ .Params.stripeProductLive }}"
 					: "{{ .Params.stripeProductTest }}";

@@ -382,7 +382,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 </script><main class="main">
 	<div class="single-container">
-		<a href="/luminaires" class="back-arrow" aria-label="Retour à la galerie">
+		<a href="/produits" class="back-arrow" aria-label="Retour à la galerie">
 			&lt; Retour à la galerie
 		</a>
 		<article>
@@ -402,21 +402,15 @@ window.addEventListener("DOMContentLoaded", () => {
 
 				<div class="gallery">
 					
-					<div class="gallery-item">
 						<img src="/images/TOUCARJAU_1.jpg" alt="Description de l&#39;image miniature du Luminaire Carte vintage"
 								 onclick="openModal('\/images\/TOUCARJAU_1.jpg','Description de l\u0027image miniature du Luminaire Carte vintage')">
-					</div>
 					
 					
-					<div class="gallery-item">
 						<img src="/images/TOUCARJAU_2.jpg" alt=""
 								 onclick="openModal('\/images\/TOUCARJAU_2.jpg','')">
-					</div>
 					
-					<div class="gallery-item">
 						<img src="/images/TOUCARJAU_3.jpg" alt=""
 								 onclick="openModal('\/images\/TOUCARJAU_3.jpg','')">
-					</div>
 					
 
 				</div>
@@ -468,6 +462,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
   
   <script>
+		
+	
     let stockDisponible = 0;
 		let currentImageIndex = 0;
     let images = [];
@@ -580,7 +576,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
 				const nom = "Luminaire Carte vintage";
 				const description = "Sphère lumineuse en carton coloré et cartes scolaires vintage";
-				const categorie = "luminaire";
 				const prix = parseFloat("150");
 				const monnaie = "€";
 				const image = "\/images\/TOUCARJAU_1.jpg".startsWith("http")
@@ -608,21 +603,40 @@ window.addEventListener("DOMContentLoaded", () => {
 				if (index >= 0) {
 						panier[index].quantite += 1;
 				} else {
-						panier.push({ categorie, nom, description, prix , stripeProduct, priceIdStripe, monnaie, image, quantite: 1 });
+						panier.push({ nom, description, prix , stripeProduct, priceIdStripe, monnaie, image, quantite: 1 });
 				}
 
 				localStorage.setItem("panier", JSON.stringify(panier));
-				window.dispatchEvent(new Event("panierMisAJour"));
+				window.dispatchEvent(new Event("panierMisAJour")); 
 				
 				afficherMiniPanier();
 				ouvrirPanier();
 
 		}
 
+		async function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
+				const panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
+				const data = await response.json();
+				quantiteDisponible = parseInt(data.inventory, 10);
+
+				
+				
+				
+
+				
+				if (quantiteDemandee > quantiteDisponible) {
+						alert("⚠️ Stock insuffisant : quantité demandée supérieure au stock disponible.");
+						return false;
+				}
+
+				return true;
+		}
+
+
 		
 		async function fetchInventoryCurrentProduct() {
-				const stripeEnv = window.stripeEnv || "test"; 
-
 				const stripeProduct = stripeEnv === "live"
 					? "prod_T6REuDNunr9Fnb"
 					: "prod_SzuhOIYOtvalWd";

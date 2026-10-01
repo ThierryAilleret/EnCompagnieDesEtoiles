@@ -413,65 +413,6 @@ window.addEventListener(&#34;panierMisAJour&#34;, function () {
 		&lt;p id=&#34;total-commande&#34;&gt;&lt;strong&gt;Total :&lt;/strong&gt; ... € frais de port inclus&lt;/p&gt;</description>
     </item>
     <item>
-      <title>Finaliser ma commande</title>
-      <link>https://encompagniedesetoiles.fr/checkout.html</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://encompagniedesetoiles.fr/checkout.html</guid>
-      <description>&lt;div class=&#34;checkout-wrapper&#34;&gt;
-  &lt;div class=&#34;checkout-left&#34;&gt;
-    &lt;form id=&#34;checkout-form&#34;&gt;
-      &lt;!-- Étape 1 : Facturation --&gt;
-      &lt;fieldset id=&#34;step-1&#34; class=&#34;etape actif&#34;&gt;
-        &lt;legend&gt;&lt;span class=&#34;etape-numero&#34;&gt;1&lt;/span&gt; Facturation v5&lt;/legend&gt;
-        &lt;label&gt;Nom :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;nom&#34; id=&#34;nom&#34; required /&gt;&lt;/label&gt;
-        &lt;label&gt;Prénom :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;prenom&#34; id=&#34;prenom&#34; required /&gt;&lt;/label&gt;
-				&lt;div style=&#34;position:relative;&#34;&gt;
-					&lt;label&gt;Adresse :&lt;br&gt;
-						&lt;input type=&#34;text&#34; id=&#34;adresse&#34; name=&#34;adresse&#34; autocomplete=&#34;off&#34; required
-									 placeholder=&#34;Saisissez une adresse&#34; /&gt;
-					&lt;/label&gt;
-					&lt;div id=&#34;autocomplete-container&#34; class=&#34;autocomplete-container&#34;&gt;&lt;/div&gt;
-				&lt;/div&gt;
-        &lt;label&gt;Complément d&#39;adresse :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;complement_adresse&#34; id=&#34;complement_adresse&#34;/&gt;&lt;/label&gt;
-        &lt;label&gt;Mail :&lt;br&gt;&lt;input type=&#34;email&#34; name=&#34;mail&#34; id=&#34;mail&#34; required size=&#34;40&#34; /&gt;&lt;/label&gt;
-			&lt;/fieldset&gt;
-      &lt;!-- Étape 2 : Livraison --&gt;
-      &lt;fieldset id=&#34;step-2&#34; class=&#34;etape&#34;&gt;
-        &lt;legend&gt;&lt;span class=&#34;etape-numero&#34;&gt;2&lt;/span&gt; Livraison&lt;/legend&gt;
-				&lt;label&gt;
-					&lt;input type=&#34;checkbox&#34; id=&#34;copier-coordonnees&#34; /&gt;
-					Utiliser les mêmes coordonnées que pour la facturation
-				&lt;/label&gt;
-        &lt;label&gt;Nom :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;nom_liv&#34; id=&#34;nom_liv&#34; required /&gt;&lt;/label&gt;
-        &lt;label&gt;Prénom :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;prenom_liv&#34; id=&#34;prenom_liv&#34; required /&gt;&lt;/label&gt;
-				&lt;div style=&#34;position:relative;&#34;&gt;
-					&lt;label&gt;Adresse :&lt;br&gt;
-						&lt;input type=&#34;text&#34; id=&#34;adresse_liv&#34; name=&#34;adresse_liv&#34; autocomplete=&#34;off&#34; required
-									 placeholder=&#34;Saisissez une adresse&#34; /&gt;
-					&lt;/label&gt;
-					&lt;div id=&#34;autocomplete-container_liv&#34; class=&#34;autocomplete-container&#34;&gt;&lt;/div&gt;
-				&lt;/div&gt;
-        &lt;label&gt;Complément d&#39;adresse :&lt;br&gt;&lt;input type=&#34;text&#34; name=&#34;complement_adresse_liv&#34; id=&#34;complement_adresse_liv&#34;/&gt;&lt;/label&gt;
-        &lt;label&gt;Mail :&lt;br&gt;&lt;input type=&#34;email&#34; name=&#34;mail_liv&#34; id=&#34;mail_liv&#34; required /&gt;&lt;/label&gt;
-			&lt;/fieldset&gt;
-      &lt;!-- Étape 3 : Paiement --&gt;
-      &lt;fieldset id=&#34;step-3&#34; class=&#34;etape&#34;&gt;
-        &lt;legend&gt;&lt;span class=&#34;etape-numero&#34;&gt;3&lt;/span&gt; Paiement&lt;/legend&gt;
-        &lt;div id=&#34;prix-total&#34; style=&#34;display:none&#34;&gt;Total : ... € frais de port inclus&lt;/div&gt;
-				&lt;button type=&#34;button&#34; id=&#34;checkout-button&#34; class=&#34;bouton-checkout  bouton-verrouille&#34; style=&#34;display:none&#34;&gt;
-          Payer avec Stripe
-        &lt;/button&gt;
-				&lt;script src=&#34;https://js.stripe.com/v3/&#34;&gt;&lt;/script&gt;
-      &lt;/fieldset&gt;
-    &lt;/form&gt;
-  &lt;/div&gt;
-	&lt;!-- Résumé commande --&gt;
-	&lt;div class=&#34;checkout-right&#34;&gt;
-		&lt;h3&gt;Résumé de la commande&lt;/h3&gt;
-		&lt;ul id=&#34;panier-resume&#34;&gt;&lt;/ul&gt;
-		&lt;p id=&#34;total-commande&#34;&gt;&lt;strong&gt;Total :&lt;/strong&gt; ... € frais de port inclus&lt;/p&gt;</description>
-    </item>
-    <item>
       <title>Luminaire BD</title>
       <link>https://encompagniedesetoiles.fr/luminaires/luminaire-touroutin/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>

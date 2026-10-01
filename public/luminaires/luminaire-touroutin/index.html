@@ -382,7 +382,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 </script><main class="main">
 	<div class="single-container">
-		<a href="/luminaires" class="back-arrow" aria-label="Retour à la galerie">
+		<a href="/produits" class="back-arrow" aria-label="Retour à la galerie">
 			&lt; Retour à la galerie
 		</a>
 		<article>
@@ -402,16 +402,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
 				<div class="gallery">
 					
-					<div class="gallery-item">
 						<img src="/images/TOUROUTIN_1.jpg" alt="Description de l&#39;image miniature du Luminaire Tintin"
 								 onclick="openModal('\/images\/TOUROUTIN_1.jpg','Description de l\u0027image miniature du Luminaire Tintin')">
-					</div>
 					
 					
-					<div class="gallery-item">
 						<img src="/images/TOUROUTIN_2.jpg" alt=""
 								 onclick="openModal('\/images\/TOUROUTIN_2.jpg','')">
-					</div>
 					
 
 				</div>
@@ -463,6 +459,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
   
   <script>
+		
+	
     let stockDisponible = 0;
 		let currentImageIndex = 0;
     let images = [];
@@ -575,7 +573,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
 				const nom = "Luminaire BD";
 				const description = "Sphère lumineuse en carton coloré et planches de bande dessinée";
-				const categorie = "luminaire";
 				const prix = parseFloat("150");
 				const monnaie = "€";
 				const image = "\/images\/TOUROUTIN_1.jpg".startsWith("http")
@@ -603,21 +600,40 @@ window.addEventListener("DOMContentLoaded", () => {
 				if (index >= 0) {
 						panier[index].quantite += 1;
 				} else {
-						panier.push({ categorie, nom, description, prix , stripeProduct, priceIdStripe, monnaie, image, quantite: 1 });
+						panier.push({ nom, description, prix , stripeProduct, priceIdStripe, monnaie, image, quantite: 1 });
 				}
 
 				localStorage.setItem("panier", JSON.stringify(panier));
-				window.dispatchEvent(new Event("panierMisAJour"));
+				window.dispatchEvent(new Event("panierMisAJour")); 
 				
 				afficherMiniPanier();
 				ouvrirPanier();
 
 		}
 
+		async function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
+				const panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
+				const data = await response.json();
+				quantiteDisponible = parseInt(data.inventory, 10);
+
+				
+				
+				
+
+				
+				if (quantiteDemandee > quantiteDisponible) {
+						alert("⚠️ Stock insuffisant : quantité demandée supérieure au stock disponible.");
+						return false;
+				}
+
+				return true;
+		}
+
+
 		
 		async function fetchInventoryCurrentProduct() {
-				const stripeEnv = window.stripeEnv || "test"; 
-
 				const stripeProduct = stripeEnv === "live"
 					? "prod_T6RSxQVzqHDMgk"
 					: "prod_SzubaOJZIo0g4L";

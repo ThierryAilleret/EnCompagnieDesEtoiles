@@ -225,20 +225,15 @@ window.addEventListener("DOMContentLoaded", () => {
 			</div>
 			<div class="footer-panier">
 				<p id="total-panier">Total : 0 €</p>
-				
-				<button type="button" id="checkout-button" class="bouton-checkout">
-          Finaliser ma commande
-        </button>
-				<script src="https://js.stripe.com/v3/"></script>
+				<button onclick="window.location.href='/checkout.html'" class="btn-commander">
+					Finaliser ma commande
+				</button>
 			</div>
 		</div>
 	</div>
 </header>
 
 <script>
-			window.stripeEnv = "";
-			window.stripePublicKey = "";
-			
 		 
 		function ouvrirOuFermerPanier() {
 			const volet = document.getElementById('mini-panier');
@@ -273,69 +268,15 @@ window.addEventListener("DOMContentLoaded", () => {
 			volet.classList.remove('actif');
 		}
 
-		function calculerTotaux(panier) {
-			let totalCartes = 0;
-			let totalAutres = 0;
-
-			panier.forEach(item => {
-				const sousTotal = item.prix * item.quantite;
-				if (item.categorie === "carte") {
-					totalCartes += sousTotal;
-				} else {
-					totalAutres += sousTotal;
-				}
-			});
-
-			
-			let reduction = 0;
-			if (totalCartes >= 10) {
-				reduction = totalCartes * 0.15;
-			}
-
-			const totalCartesApresReduc = totalCartes - reduction;
-
-			
-			let fraisPort = 2;
-			const totalAvantPort = totalCartesApresReduc + totalAutres;
-
-			if (totalAutres > 0 || totalAvantPort >= 10) {
-				fraisPort = 0;
-			}
-
-			const totalFinal = totalAvantPort + fraisPort;
-
-			return {
-				totalCartes,
-				reduction,
-				totalAutres,
-				fraisPort,
-				totalFinal
-			};
-		}
-
-
 		function afficherMiniPanier() {
 			const panier = JSON.parse(localStorage.getItem("panier")) || [];
-
-			if (panier.length === 0) {
-				document.getElementById("contenu-panier").innerHTML = `
-					<p style="padding:10px; color:#777; font-style:italic;">Votre panier est vide.</p>
-				`;
-				document.getElementById("total-panier").innerHTML = `Total : 0 €`;
-				
-				const btnCommander = document.querySelector(".bouton-checkout");
-				if (btnCommander) {
-					btnCommander.disabled = true;
-					btnCommander.classList.add("bouton-verrouille");
-				}
-
-				return; 
-			}
-
 			const conteneur = document.getElementById("contenu-panier");
 			conteneur.innerHTML = "";
 
+			let total = 0;
+
 			panier.forEach(item => {
+				total += parseFloat(item.prix) * item.quantite;
 				const bloc = document.createElement("div");
 				bloc.className = "item-panier";
 				bloc.innerHTML = `
@@ -355,70 +296,21 @@ window.addEventListener("DOMContentLoaded", () => {
 				conteneur.appendChild(bloc);
 			});
 
-			const totaux = calculerTotaux(panier);
+			document.getElementById("total-panier").textContent = `Total : ${total.toFixed(2)} € frais de port inclus`;
 
-			let texteTotal = `Total : ${totaux.totalFinal.toFixed(2)} €`;
-
-			
-			let details = "";
-			if (totaux.reduction > 0) {
-				details += `Réduction de 15% sur les cartes : –${totaux.reduction.toFixed(2)} € · `;
-			}
-			if (totaux.fraisPort === 0) {
-				details += `Frais de port offerts`;
-			} else {
-				details += `Frais de port : ${totaux.fraisPort.toFixed(2)} €`;
-			}
-
-			document.getElementById("total-panier").innerHTML = `
-				<div>Total : ${totaux.totalFinal.toFixed(2)} €</div>
-
-				${totaux.reduction > 0 ? `
-					<div style="color:#777; font-style:italic; font-size:0.8rem;">
-						Réduction de 15% appliquée sur les cartes : -${totaux.reduction.toFixed(2)} €
-					</div>` : ``}
-
-				<div style="color:#777; font-style:italic; font-size:0.8rem;">
-					${totaux.fraisPort === 0 ? `Frais de port offerts` : `Frais de port : ${totaux.fraisPort.toFixed(2)} €`}
-				</div>
-			`;
-
-
-
-			const btnCommander = document.querySelector(".bouton-checkout");
+			const btnCommander = document.querySelector(".btn-commander");
 			if (btnCommander) {
 				if (panier.length === 0) {
 					btnCommander.disabled = true;
-					btnCommander.classList.add("bouton-verrouille");
+					btnCommander.classList.add("desactive");
 				} else {
 					btnCommander.disabled = false;
-					btnCommander.classList.remove("bouton-verrouille");
+					btnCommander.classList.remove("desactive");
 				}
 			}
+
 		}
 
-
-		async function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
-				const panier = JSON.parse(localStorage.getItem("panier")) || [];
-
-				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
-				const data = await response.json();
-				quantiteDisponible = parseInt(data.inventory, 10);
-
-				
-				
-				
-
-				
-				if (quantiteDemandee > quantiteDisponible) {
-						alert("⚠️ Stock insuffisant : quantité demandée supérieure au stock disponible.");
-						return false;
-				}
-
-				return true;
-		}
-		
-		
 		async function modifierQuantite(nom, delta) {
 			const panier = JSON.parse(localStorage.getItem("panier")) || [];
 			const index = panier.findIndex(p => p.nom === nom);
@@ -436,7 +328,6 @@ window.addEventListener("DOMContentLoaded", () => {
 				}
 				localStorage.setItem("panier", JSON.stringify(panier));
 				window.dispatchEvent(new Event("panierMisAJour"));
-
 				afficherMiniPanier();
 			}
 			const indicateurEl = document.getElementById("panier-toggle");
@@ -452,6 +343,7 @@ window.addEventListener("DOMContentLoaded", () => {
 			localStorage.setItem("panier", JSON.stringify(nouveau));
 			afficherMiniPanier();
 			window.dispatchEvent(new Event("panierMisAJour"));
+
 			
 			const indicateurEl = document.getElementById("panier-toggle");
 			if (indicateurEl) {
@@ -487,55 +379,8 @@ window.addEventListener("DOMContentLoaded", () => {
 			
 			fermerPanier();
 		});
-		
-		
-		document.getElementById("checkout-button").addEventListener("click", function (event) {
-			event.preventDefault(); 
 
-			
-			let panier = JSON.parse(localStorage.getItem("panier")) || [];
-
-			
-			panier = panier.map(item => ({
-				...item,
-				monnaie: item.monnaie === "€" ? "eur" : item.monnaie
-			}));
-
-			console.log(panier);
-
-			
-			fetch("/.netlify/functions/creer-session-checkout", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ panier })
-			})
-			.then(response => {
-				if (!response.ok) throw new Error("Réponse serveur non valide");
-				return response.json();
-			})
-			.then(data => {
-				if (!data.sessionId) throw new Error("Session Stripe non reçue");
-
-				
-				localStorage.setItem("stripeSessionId", data.sessionId);
-				console.log("Session enregistrée :", data.sessionId);
-
-				if (!window.stripePublicKey || !window.stripePublicKey.startsWith("pk_")) {
-					alert("Clé Stripe invalide ou manquante.");
-					console.error("❌ Clé Stripe non valide :", window.stripePublicKey);
-					return;
-				}
-				
-				const stripe = Stripe(window.stripePublicKey);
-				stripe.redirectToCheckout({ sessionId: data.sessionId });
-			})
-			.catch(error => {
-				console.error("💥 Erreur Stripe :", error);
-				alert("Erreur : " + error.message);
-			});
-		});
-</script>
-<main class="main">
+</script><main class="main">
 	<div class="single-container">
 		<a href="/luminaires" class="back-arrow" aria-label="Retour à la galerie">
 			&lt; Retour à la galerie
@@ -557,15 +402,21 @@ window.addEventListener("DOMContentLoaded", () => {
 
 				<div class="gallery">
 					
+					<div class="gallery-item">
 						<img src="/images/TOUCARJAU_1.jpg" alt="Description de l&#39;image miniature du Luminaire Carte vintage"
 								 onclick="openModal('\/images\/TOUCARJAU_1.jpg','Description de l\u0027image miniature du Luminaire Carte vintage')">
+					</div>
 					
 					
+					<div class="gallery-item">
 						<img src="/images/TOUCARJAU_2.jpg" alt=""
 								 onclick="openModal('\/images\/TOUCARJAU_2.jpg','')">
+					</div>
 					
+					<div class="gallery-item">
 						<img src="/images/TOUCARJAU_3.jpg" alt=""
 								 onclick="openModal('\/images\/TOUCARJAU_3.jpg','')">
+					</div>
 					
 
 				</div>

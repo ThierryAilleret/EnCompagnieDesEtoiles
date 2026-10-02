@@ -362,7 +362,7 @@ window.addEventListener("DOMContentLoaded", () => {
 				details += `Réduction de 15% sur les cartes : –${totaux.reductionCartes.toFixed(2)} € · `;
 			}
 			if (totaux.reductionOrigami > 0) {
-				details += `Réduction de 15% sur les cartes : –${totaux.reductionOrigami.toFixed(2)} € · `;
+				details += `Réduction de 15% sur les tableaux : –${totaux.reductionOrigami.toFixed(2)} € · `;
 			}
 			if (totaux.fraisPort === 0) {
 				details += `Frais de port offerts`;
@@ -373,9 +373,14 @@ window.addEventListener("DOMContentLoaded", () => {
 			document.getElementById("total-panier").innerHTML = `
 				<div>Total : ${totaux.totalFinal.toFixed(2)} €</div>
 
-				${totaux.reduction > 0 ? `
+				${totaux.reductionCartes > 0 ? `
 					<div style="color:#777; font-style:italic; font-size:0.8rem;">
-						Réduction de 15% appliquée sur les cartes : -${totaux.reduction.toFixed(2)} €
+						Réduction de 15% appliquée sur les cartes : -${totaux.reductionCartes.toFixed(2)} €
+					</div>` : ``}
+
+				${totaux.reductionOrigami > 0 ? `
+					<div style="color:#777; font-style:italic; font-size:0.8rem;">
+						Réduction de 15% appliquée sur les tableaux : -${totaux.reductionOrigami.toFixed(2)} €
 					</div>` : ``}
 
 				<div style="color:#777; font-style:italic; font-size:0.8rem;">

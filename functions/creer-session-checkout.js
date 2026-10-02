@@ -9,7 +9,8 @@ exports.handler = async (event) => {
   const origin = event.headers.origin || "";
   const isAllowedOrigin =
     allowedOrigins.includes(origin) ||
-    origin.startsWith("https://deploy-preview");
+    origin.startsWith("https://deploy-preview") ||
+    origin.startsWith("https://refonte--encompagniedesetoiles");
 
   // --- Préflight CORS ---
   if (event.httpMethod === "OPTIONS") {

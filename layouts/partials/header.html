@@ -378,10 +378,6 @@ window.addEventListener("DOMContentLoaded", () => {
 						Réduction de 15% appliquée sur les cartes : -${totaux.reductionCartes.toFixed(2)} €
 					</div>` : ``}
 
-				${totaux.reductionOrigami > 0 ? `
-					<div style="color:#777; font-style:italic; font-size:0.8rem;">
-						Réduction de 15% appliquée sur les tableaux : -${totaux.reductionOrigami.toFixed(2)} €
-					</div>` : ``}
 
 				<div style="color:#777; font-style:italic; font-size:0.8rem;">
 					${totaux.fraisPort === 0 ? `Frais de port offerts` : `Frais de port : ${totaux.fraisPort.toFixed(2)} €`}

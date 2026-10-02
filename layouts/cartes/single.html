@@ -20,18 +20,31 @@
 
 				<div class="gallery">
 					{{ if .Params.thumbnail }}
-					<div class="gallery-item">
-						<img src="{{ .Params.thumbnail }}" alt="{{ .Params.thumbnail_alt }}"
-								 onclick="openModal('{{ .Params.thumbnail }}','{{ .Params.thumbnail_alt }}')">
-					</div>
-					{{ end }}
-					{{ range .Params.images }}
-					<div class="gallery-item">
-						<img src="{{ . }}" alt=""
-								 onclick="openModal('{{ . }}','')">
-					</div>
+						<div class="gallery-item">
+							<img src="{{ .Params.thumbnail }}" alt="{{ .Params.thumbnail_alt }}"
+									 onclick="openModal('{{ .Params.thumbnail }}','{{ .Params.thumbnail_alt }}')">
+						</div>
 					{{ end }}
 
+					{{ range .Params.images }}
+						{{ $src := . }}
+						{{ if or (strings.HasSuffix $src ".mp4") (strings.HasSuffix $src ".webm") }}
+
+							<!-- VIDÉO -->
+							<div class="gallery-item video-item">
+								<video src="{{ $src }}" muted playsinline
+											 onclick="openModal('{{ $src }}','video')"></video>
+							</div>
+
+						{{ else }}
+
+							<!-- IMAGE -->
+							<div class="gallery-item">
+								<img src="{{ $src }}" alt=""
+										 onclick="openModal('{{ $src }}','')">
+							</div>
+						{{ end }}
+					{{ end }}
 				</div>
 
 				<button id="right-scroll" class="scroll-button arrow"
@@ -83,11 +96,15 @@
 		let currentImageIndex = 0;
     let images = [];
 
-    function collectGalleryImages() {
-      return Array.from(document.querySelectorAll('.gallery img'))
-        .map(img => ({ src: img.src, alt: img.alt }));
-    }
+		function collectGalleryImages() {
+			const imgs = Array.from(document.querySelectorAll('.gallery img'))
+				.map(el => ({ src: el.src, alt: el.alt, type: "image" }));
 
+			const vids = Array.from(document.querySelectorAll('.gallery video'))
+				.map(el => ({ src: el.src, alt: "", type: "video" }));
+
+			return [...imgs, ...vids];
+		}
     function getFilename(url) {
       return new URL(url, window.location.origin).pathname;
     }
@@ -117,24 +134,37 @@
 			window.dispatchEvent(new Event("panierMisAJour"));
 		});
 
-    function openModal(src, alt) {
-      images = collectGalleryImages();
-      currentImageIndex = images.findIndex(img =>
-        getFilename(img.src) === getFilename(src)
-      );
-      if (currentImageIndex < 0) currentImageIndex = 0;
+		function openModal(src, alt) {
+			images = collectGalleryImages();
 
-      const imgEl = document.getElementById('modalImage');
-      const cap   = document.getElementById('modalCaption');
-      imgEl.src = src;
-      imgEl.alt = alt;
-      cap.textContent = alt;
-      imgEl.style.transform = 'translateX(0)';
+			// IMPORTANT : comparer les URLs normalisées
+			const clicked = images.findIndex(img =>
+				getFilename(img.src) === getFilename(src)
+			);
 
-      const modal = document.getElementById('imageModal');
-      modal.style.display = 'flex';
-      setTimeout(() => modal.classList.add('show'), 10);
-    }
+			currentImageIndex = clicked >= 0 ? clicked : 0;
+
+			const modal = document.getElementById('imageModal');
+			const cap   = document.getElementById('modalCaption');
+
+			const isVideo = src.endsWith(".mp4") || src.endsWith(".webm");
+
+			if (isVideo) {
+				modal.querySelector('.modal-content').outerHTML =
+					'<video id="modalImage" class="modal-content" controls playsinline></video>';
+			} else {
+				modal.querySelector('.modal-content').outerHTML =
+					'<img id="modalImage" class="modal-content" alt="">';
+			}
+
+			const mediaEl = document.getElementById('modalImage');
+			mediaEl.src = src;
+			mediaEl.alt = alt;
+			cap.textContent = alt || (isVideo ? "Vidéo" : "");
+
+			modal.style.display = 'flex';
+			setTimeout(() => modal.classList.add('show'), 10);
+		}
 
     function closeModal() {
       const modal = document.getElementById('imageModal');
@@ -145,37 +175,47 @@
 		function navigateImage(direction) {
 			if (!images.length || currentImageIndex < 0) return;
 
-			const imgEl = document.getElementById('modalImage');
+			let mediaEl = document.getElementById('modalImage');
 			const cap   = document.getElementById('modalCaption');
 
-			// calcul des positions de sortie et d’entrée
 			const outX = direction > 0 ? '-100%' : '100%';
 			const inX  = direction > 0 ? '100%'  : '-100%';
 
-			// slide out
-			imgEl.style.transition = 'transform 0.3s ease';
-			imgEl.style.transform  = `translateX(${outX})`;
+			mediaEl.style.transition = 'transform 0.3s ease';
+			mediaEl.style.transform  = `translateX(${outX})`;
 
 			setTimeout(() => {
-				// mise à jour de l’index
 				currentImageIndex = (currentImageIndex + direction + images.length) % images.length;
+				const next = images[currentImageIndex];
+				const isVideo = next.src.endsWith(".mp4") || next.src.endsWith(".webm");
 
-				// préparation de l’image entrante hors champ
-				imgEl.style.transition = 'none';
-				imgEl.style.transform  = `translateX(${inX})`;
-				imgEl.src   = images[currentImageIndex].src;
-				imgEl.alt   = images[currentImageIndex].alt;
-				cap.textContent = images[currentImageIndex].alt;
+				// remplacer l’élément
+				if (isVideo) {
+					mediaEl.outerHTML = '<video id="modalImage" class="modal-content" controls playsinline></video>';
+				} else {
+					mediaEl.outerHTML = '<img id="modalImage" class="modal-content" alt="">';
+				}
 
-				// forcer le reflow pour que la transition soit prise en compte
-				void imgEl.offsetWidth;
+				// récupérer le nouvel élément
+				mediaEl = document.getElementById('modalImage');
+
+				// préparation hors champ
+				mediaEl.style.transition = 'none';
+				mediaEl.style.transform  = `translateX(${inX})`;
+
+				// mise à jour du contenu
+				mediaEl.src = next.src;
+				cap.textContent = isVideo ? "Vidéo" : next.alt;
+
+				// reflow
+				void mediaEl.offsetWidth;
 
 				// slide in
-				imgEl.style.transition = 'transform 0.3s ease';
-				imgEl.style.transform  = 'translateX(0)';
+				mediaEl.style.transition = 'transform 0.3s ease';
+				mediaEl.style.transform  = 'translateX(0)';
 			}, 300);
 		}
-		
+
 		async function ajouterAuPanier() {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
 
@@ -233,7 +273,6 @@
 		//Récupération du stock sur Stripe
 		async function fetchInventoryCurrentProduct() {
 				const stripeEnv = window.stripeEnv || "test"; // fallback si non défini
-
 				const stripeProduct = stripeEnv === "live"
 					? "{{ .Params.stripeProductLive }}"
 					: "{{ .Params.stripeProductTest }}";

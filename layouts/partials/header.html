@@ -270,27 +270,27 @@ window.addEventListener("DOMContentLoaded", () => {
 				const sousTotal = item.prix * item.quantite;
 				if (item.categorie === "carte") {
 					totalCartes += sousTotal;
-				elseif (item.categorie === "tableaux_origami") {
+				else if (item.categorie === "tableaux_origami") {
 					totalOrigami += sousTotal;
 				} else {
 					totalAutres += sousTotal;
 				}
 			});
 
-			// Réduction cartes
+			// Réductions
 			let reductionCartes = 0;
 			if (totalCartes >= 10) {
 				reductionCartes = totalCartes * 0.15;
 			}
 			let reductionOrigami = 0;
-			if (totalOrigami >= 250) {
+			if (totalOrigami > 250) {
 				reductionOrigami = totalOrigami * 0.15;
 			}
 
 			const totalCartesApresReduc = totalCartes - reductionCartes;
 			const totalOrigamiApresReduc = totalOrigami - reductionOrigami;
 
-			// Frais de port (gratuits si 
+			// Frais de port (gratuits si plus de 10 euros d'achat)
 			let fraisPort = 2;
 			const totalAvantPort = totalCartesApresReduc + totalOrigamiApresReduc + totalAutres;
 			if (totalAvantPort >= 10) {

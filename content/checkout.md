@@ -61,6 +61,10 @@ document.addEventListener("DOMContentLoaded", () => {
 	const cp = localStorage.getItem('codePostal')?.trim() || "";
 	const ville = localStorage.getItem('ville')?.trim() || "";
 
+	console.log("CP =", cp);
+	console.log("Ville =", ville);
+	console.log("Brand =", "CC23JV2D");
+
 	$("#Zone_Widget").MR_ParcelShopPicker({
 		Target: "#Target_Widget",
 		Brand: "CC23JV2D",

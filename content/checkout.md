@@ -440,8 +440,8 @@ function afficherPanierDansCheckout() {
         <div id="livraison-section">
           <!-- Choix du mode : uniquement si cartes seules -->
           <div id="choix-poste" style="display:none; margin-bottom:1em;">
-            <label><input type="radio" name="mode-cartes" value="poste" checked> Envoi par La Poste</label><br>
             <label><input type="radio" name="mode-cartes" value="relais"> Point relais Mondial Relay</label>
+            <label><input type="radio" name="mode-cartes" value="poste" checked> Envoi par La Poste</label><br>
           </div>
           <!-- Explication deux colis -->
           <div id="message-deux-colis" style="display:none; padding:0.8em; background:#f5f5f0; border-radius:6px; margin-bottom:1em;">

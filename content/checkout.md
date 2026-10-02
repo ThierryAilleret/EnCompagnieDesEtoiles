@@ -10,6 +10,8 @@ layout = "checkout"
 <script src="//widget.mondialrelay.com/parcelshop-picker/jquery.plugin.mondialrelay.parcelshoppicker.min.js"></script>
 
 <script>
+const REGEX_MAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
 document.addEventListener("DOMContentLoaded", () => {
 
   // 🔁 Surveille les champs de facturation
@@ -20,13 +22,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 🔍 Autocomplétion Géoportail, réutilisable sur les deux adresses
   attacherAutocompletion("adresse", item => {
-    remplirAdresseGeo(item, "adresse", "complement_adresse");
-    localStorage.setItem("codePostal", item.zipcode  || "");
+    remplirAdresseGeo(item, "adresse");
+    localStorage.setItem("codePostal", item.zipcode  | "");
     localStorage.setItem("ville", item.city || item.oldcity || "");
   });
 
   attacherAutocompletion("adresse-livraison", item => {
-    remplirAdresseGeo(item, "adresse-livraison", "complement-livraison");
+    remplirAdresseGeo(item, "adresse-livraison");
     localStorage.setItem("codePostalLivraison", item.zipcode || "");
     localStorage.setItem("villeLivraison", item.city || item.oldcity || "");
   });
@@ -35,21 +37,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const memeAdresse = document.getElementById("meme-adresse");
   memeAdresse.addEventListener("change", () => {
     const bloc = document.getElementById("bloc-adresse-livraison-detail");
+    recopierFacturationVersLivraison();
+    bloc.style.display = memeAdresse.checked ? "none" : "block";
     if (memeAdresse.checked) {
-      bloc.style.display = "none";
-      recopierFacturationVersLivraison();
+      // Adresse déjà fiable (copie de la facturation) : pas besoin de revalider
+      window._livraisonPosteValide = true;
+      mettreAJourBoutonValidation();
     } else {
-      bloc.style.display = "block";
-      // On pré-remplit quand même pour faciliter la correction
-      recopierFacturationVersLivraison();
+      window._livraisonPosteValide = false;
     }
     verifierEtapeLivraison();
   });
 
-  // Surveille les champs de livraison
+  // Surveille les champs de livraison (toute saisie invalide la validation)
   ["adresse-livraison", "complement-livraison"].forEach(id => {
     const champ = document.getElementById(id);
-    if (champ) champ.addEventListener("input", verifierEtapeLivraison);
+    if (champ) champ.addEventListener("input", () => {
+      window._livraisonPosteValide = false;
+      mettreAJourBoutonValidation();
+      verifierEtapeLivraison();
+    });
   });
 
   // 📻 Choix du mode (uniquement affiché si cartes seules)
@@ -76,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
     Responsive: true,
     ShowResultsOnMap: false,
     OnParcelShopSelected: function (data) {
-			window._relaisValide = false;
+      window._relaisValide = false;
       const zoneInfo = document.getElementById("relai-selectionne");
       const champ = document.getElementById("info-relai");
       if (!zoneInfo || !champ) return;
@@ -130,23 +137,17 @@ document.addEventListener("DOMContentLoaded", () => {
       window._pointRelaisAdresse = `${data.Nom}, ${data.Adresse1}, ${data.CP} ${data.Ville}`;
       window._pointRelaisId = data.ID;
 
-      // On affiche le bouton de validation du relais
-      const boutonValidationRelais = document.getElementById("validation-relais-button");
-      boutonValidationRelais.classList.remove("bouton-verrouille");
-      boutonValidationRelais.style.display = "block";
-
-      // On reverrouille le paiement tant que le relais n'est pas validé
+      mettreAJourBoutonValidation();
       verrouillerEtape3();
     }
   });
 
   afficherPanierDansCheckout();
-  afficherSectionLivraison();
+  surveillerEtape1();
 });
 
 window.addEventListener("panierMisAJour", () => {
   afficherPanierDansCheckout();
-  afficherSectionLivraison();
   verifierEtatPaiement();
 });
 
@@ -208,20 +209,22 @@ function calculerModesLivraison(panier) {
   };
 }
 
+function modeCartesChoisi() {
+  return document.querySelector("input[name='mode-cartes']:checked")?.value;
+}
+
 // Le relais est-il nécessaire ?
 function relaisRequis() {
   const panier = JSON.parse(localStorage.getItem("panier")) || [];
   const modes = calculerModesLivraison(panier);
-  const modeCartes = document.querySelector("input[name='mode-cartes']:checked")?.value;
-  return modes.aTableaux || (modes.cartesSeules && modeCartes === "relais");
+  return modes.aTableaux || (modes.cartesSeules && modeCartesChoisi() === "relais");
 }
 
 // Une livraison par La Poste est-elle nécessaire ?
 function posteRequise() {
   const panier = JSON.parse(localStorage.getItem("panier")) || [];
   const modes = calculerModesLivraison(panier);
-  const modeCartes = document.querySelector("input[name='mode-cartes']:checked")?.value;
-  return modes.aLuminaires || (modes.cartesSeules && modeCartes === "poste");
+  return modes.aLuminaires || (modes.cartesSeules && modeCartesChoisi() === "poste");
 }
 
 function afficherSectionLivraison() {
@@ -241,29 +244,31 @@ function afficherSectionLivraison() {
     blocChoix.style.display        = "none";
     messageDeuxColis.style.display = "block";
     blocAdressePoste.style.display = "block";
-    widgetRelai.style.display      = "inline-block";
+    widgetRelai.style.display      = "block";
   } else if (modes.aTableaux) {
     blocChoix.style.display        = "none";
     messageDeuxColis.style.display = "none";
     blocAdressePoste.style.display = "none";
-    widgetRelai.style.display      = "inline-block";
+    widgetRelai.style.display      = "block";
   } else { // luminaires (+ cartes éventuelles)
     blocChoix.style.display        = "none";
     messageDeuxColis.style.display = "none";
     blocAdressePoste.style.display = "block";
     widgetRelai.style.display      = "none";
   }
+
+  mettreAJourBoutonValidation();
 }
 
 // Cas « cartes seules » : le radio pilote ce qui s'affiche
 function afficherSelonModeCartes() {
-  const mode = document.querySelector("input[name='mode-cartes']:checked")?.value;
+  const mode = modeCartesChoisi();
   const blocAdressePoste = document.getElementById("bloc-adresse-poste");
   const widgetRelai      = document.getElementById("zone-widget-relai");
 
   if (mode === "relais") {
     blocAdressePoste.style.display = "none";
-    widgetRelai.style.display      = "inline-block";
+    widgetRelai.style.display      = "block";
   } else { // poste
     blocAdressePoste.style.display = "block";
     widgetRelai.style.display      = "none";
@@ -283,24 +288,67 @@ function recopierFacturationVersLivraison() {
 }
 
 // ============================================================
-// 🔓 Déverrouillage de l'étape 3
+// 🔓 Verrouillage de l'étape 3
 // ============================================================
 function verrouillerEtape3() {
   document.getElementById("step-3").classList.remove("actif");
-  document.getElementById("prix-total").style.display = "none";
-  const boutonPaiement = document.getElementById("checkout-button");
-  boutonPaiement.classList.add("bouton-verrouille");
-  boutonPaiement.style.display = "none";
-  document.getElementById("info-adresse").style.display = "none";
+  document.getElementById("step-3").style.display = "none";
 }
 
 function deverrouillerEtape3() {
+  document.getElementById("step-3").style.display = "block";
   document.getElementById("step-3").classList.add("actif");
-  document.getElementById("prix-total").style.display = "block";
-  const boutonPaiement = document.getElementById("checkout-button");
-  boutonPaiement.classList.remove("bouton-verrouille");
-  boutonPaiement.style.display = "block";
-  document.getElementById("info-adresse").style.display = "block";
+}
+
+// ============================================================
+// 🎛️ Bouton de validation contextuel
+// ============================================================
+function mettreAJourBoutonValidation() {
+  const bouton = document.getElementById("validation-livraison-button");
+  if (!bouton) return;
+
+  if (relaisRequis()) {
+    bouton.textContent = "Valider ce point relais";
+    bouton.style.display = (window._pointRelaisId && !window._relaisValide) ? "inline-block" : "none";
+  } else if (posteRequise()) {
+    bouton.textContent = "Valider cette adresse de livraison";
+    const dejaValidee = window._livraisonPosteValide === true;
+    bouton.style.display = dejaValidee ? "none" : "inline-block";
+  } else {
+    bouton.style.display = "none";
+  }
+}
+
+// Vérifie que l'adresse de livraison (mode Poste) est complète
+function adresseLivraisonComplete() {
+  if (document.getElementById("meme-adresse").checked) {
+    recopierFacturationVersLivraison();
+    return true; // copie de la facturation, déjà validée à l'étape 1
+  }
+  const a = document.getElementById("adresse-livraison").value.trim();
+  return a.length >= 5 && (localStorage.getItem("codePostalLivraison") || "").length >= 4;
+}
+
+// ============================================================
+// ✅ Validation de la livraison (bouton contextuel)
+// ============================================================
+function validerLivraison() {
+  if (relaisRequis()) {
+    if (!window._pointRelaisId) {
+      alert("Veuillez d'abord choisir un point relais sur la carte.");
+      return;
+    }
+    window._relaisValide = true;
+  }
+  if (posteRequise()) {
+    if (!adresseLivraisonComplete()) {
+      alert("Veuillez renseigner une adresse de livraison complète (sélectionnez-la via les suggestions pour garantir sa validité).");
+      return;
+    }
+    window._livraisonPosteValide = true;
+  }
+  mettreAJourBoutonValidation();
+  verifierEtapeLivraison();
 }
 
 // Appelée à chaque changement pertinent : détermine si tout est prêt pour payer
@@ -308,29 +356,11 @@ function verifierEtapeLivraison() {
   const panier = JSON.parse(localStorage.getItem("panier")) || [];
   if (panier.length === 0) { verrouillerEtape3(); return; }
 
-  // Étape 1 complète ?
-  const nom     = document.getElementById("nom").value.trim();
-  const prenom  = document.getElementById("prenom").value.trim();
-  const adresse = document.getElementById("adresse").value.trim();
-  const mail    = document.getElementById("mail").value.trim();
-  if (!(nom && prenom && adresse && mail)) { verrouillerEtape3(); return; }
+  const etape2Visible = document.getElementById("step-2").style.display !== "none";
+  if (!etape2Visible) { verrouillerEtape3(); return; }
 
-  const relaisOk = window._relaisValide === true;
-
-  // Adresse de livraison Poste (si requise)
-  let adresseLivraisonOk = true;
-  if (posteRequise()) {
-    if (document.getElementById("meme-adresse").checked) {
-      recopierFacturationVersLivraison(); // toujours à jour
-    } else {
-      const a = document.getElementById("adresse-livraison").value.trim();
-      adresseLivraisonOk = a.length > 3;
-    }
-  }
-
-  // Relais requis mais non validé ?
-  if (relaisRequis() && !relaisOk) { verrouillerEtape3(); return; }
-  if (!adresseLivraisonOk) { verrouillerEtape3(); return; }
+  if (relaisRequis() && window._relaisValide !== true) { verrouillerEtape3(); return; }
+  if (posteRequise() && window._livraisonPosteValide !== true) { verrouillerEtape3(); return; }
 
   deverrouillerEtape3();
 }
@@ -340,17 +370,30 @@ function surveillerEtape1() {
   const prenom  = document.getElementById("prenom").value.trim();
   const adresse = document.getElementById("adresse").value.trim();
   const mail    = document.getElementById("mail").value.trim();
+  const champMail = document.getElementById("mail");
 
+  // ✅ Validation du format de l'e-mail
+  const mailValide = REGEX_MAIL.test(mail);
+
+  const etape1 = document.getElementById("step-1");
   const etape2 = document.getElementById("step-2");
-  const etape_1_complete = nom && prenom && adresse && mail;
+  const etape_1_complete = nom && prenom && adresse && mail && mailValide;
+
+  if (mail && !mailValide) {
+    champMail.style.borderColor = "#d9534f";
+    champMail.title = "Adresse e-mail invalide";
+  } else {
+    champMail.style.borderColor = "";
+    champMail.title = "";
+  }
 
   if (etape_1_complete) {
-    etape2.classList.add("actif");
+    // Étape 2 : complètement masquée jusqu'ici, on la révèle
+    etape2.style.display = "block";
     afficherSectionLivraison();
     verifierEtapeLivraison();
   } else {
-    etape2.classList.remove("actif");
-    document.getElementById("zone-widget-relai").style.display = "none";
+    etape2.style.display = "none";
     verrouillerEtape3();
   }
 }
@@ -359,7 +402,7 @@ function verifierEtatPaiement() {
   const panier = JSON.parse(localStorage.getItem("panier")) || [];
   if (panier.length === 0) {
     verrouillerEtape3();
-    document.getElementById("step-2").classList.remove("actif");
+    document.getElementById("step-2").style.display = "none";
   } else {
     surveillerEtape1();
   }
@@ -408,11 +451,6 @@ function afficherPanierDansCheckout() {
     <strong>Total :</strong> ${totaux.totalFinal.toFixed(2)} €
     ${details}
   `;
-
-  const totalPaiement = document.getElementById("prix-total");
-  if (totalPaiement) {
-    totalPaiement.innerHTML = `Total : ${totaux.totalFinal.toFixed(2)} €`;
-  }
 }
 </script>
 
@@ -432,16 +470,16 @@ function afficherPanierDansCheckout() {
           <div id="autocomplete-container-adresse" class="autocomplete-box"></div>
         </div>
         <label>Complément d'addresse :<br><input type="text" name="complement_adresse" id="complement_adresse"/></label>
-        <label>Mail :<br><input type="text" name="mail" id="mail" required /></label>
+        <label>Mail :<br><input type="text" name="mail" id="mail" required placeholder="nom@domaine.fr" /></label>
       </fieldset>
-      <!-- Étape 2 : Livraison -->
-      <fieldset id="step-2" class="etape">
+      <!-- Étape 2 : Livraison (entièrement masquée tant que l'étape 1 est incomplète) -->
+      <fieldset id="step-2" class="etape" style="display:none;">
         <legend><span class="etape-numero">2</span> Livraison</legend>
         <div id="livraison-section">
           <!-- Choix du mode : uniquement si cartes seules -->
           <div id="choix-poste" style="display:none; margin-bottom:1em;">
+            <label><input type="radio" name="mode-cartes" value="poste" checked> Envoi par La Poste</label>
             <label><input type="radio" name="mode-cartes" value="relais"> Point relais Mondial Relay</label>
-            <label><input type="radio" name="mode-cartes" value="poste" checked> Envoi par La Poste</label><br>
           </div>
           <!-- Explication deux colis -->
           <div id="message-deux-colis" style="display:none; padding:0.8em; background:#f5f5f0; border-radius:6px; margin-bottom:1em;">
@@ -450,7 +488,7 @@ function afficherPanierDansCheckout() {
             Elle partira donc en <strong>deux colis</strong> : l'un à l'adresse de livraison ci-dessous,
             l'autre au point relais. Les frais de port restent <strong>offerts</strong>.
           </div>
-          <!-- Livraison par La Poste : adresse de livraison -->
+          <!-- Livraison par La Poste : directement sous le bouton radio "La Poste" -->
           <div id="bloc-adresse-poste" style="display:none; margin-bottom:1em;">
             <label>
               <input type="checkbox" id="meme-adresse" checked />
@@ -469,8 +507,8 @@ function afficherPanierDansCheckout() {
               </label>
             </div>
           </div>
-          <!-- Widget Mondial Relay -->
-          <div id="zone-widget-relai" style="display:none; margin-top:0em;">
+          <!-- Widget Mondial Relay : directement sous le bouton radio "Mondial Relay" -->
+          <div id="zone-widget-relai" style="display:none;">
             <div id="Zone_Widget"></div>
             <input type="hidden" id="Target_Widget" name="point-relay" />
           </div>
@@ -478,19 +516,19 @@ function afficherPanierDansCheckout() {
             <div id="titre-relai-selectionne"><strong>Relais sélectionné :</strong></div>
             <div id="info-relai"></div>
           </div>
-          <button type="button" id="validation-relais-button" class="bouton-validation-relai bouton-verrouille" style="display:none">
-            Choisir ce point relais
+          <!-- Bouton de validation contextuel (relais OU adresse) -->
+          <button type="button" id="validation-livraison-button" class="bouton-validation-relai" style="display:none;">
+            Valider
           </button>
         </div>
       </fieldset>
-      <!-- Étape 3 : Paiement -->
-      <fieldset id="step-3" class="etape">
+      <!-- Étape 3 : Paiement (masquée tant que la livraison n'est pas validée) -->
+      <fieldset id="step-3" class="etape" style="display:none;">
         <legend><span class="etape-numero">3</span> Paiement</legend>
-        <div id="prix-total" style="display:none">Total : ... €</div>
-        <button type="button" id="checkout-button" class="bouton-checkout bouton-verrouille" style="display:none">
+        <div id="prix-total">Total : ... €</div>
+        <button type="button" id="checkout-button" class="bouton-checkout bouton-verrouille" style="display:none;">
           Payer avec Stripe
         </button>
-        <div id="info-adresse" style="display:none;color:#777; font-style:italic; font-size:0.8rem;">Vous payez sur la page sécurisée de Stripe, aucune adresse ne vous sera redemandée.</div>
         <script src="https://js.stripe.com/v3/"></script>
       </fieldset>
     </form>
@@ -504,10 +542,13 @@ function afficherPanierDansCheckout() {
 </div>
 
 <script>
-document.getElementById("validation-relais-button").addEventListener("click", function (event) {
+document.getElementById("validation-livraison-button").addEventListener("click", function (event) {
   event.preventDefault();
-  window._relaisValide = true;
-  verifierEtapeLivraison();
+  validerLivraison();
+  // Une fois la livraison validée, on révèle l'étape 3 avec le bouton de paiement
+  const boutonPaiement = document.getElementById("checkout-button");
+  boutonPaiement.classList.remove("bouton-verrouille");
+  boutonPaiement.style.display = "block";
 });
 
 document.getElementById("checkout-button").addEventListener("click", function (event) {
@@ -525,7 +566,7 @@ document.getElementById("checkout-button").addEventListener("click", function (e
   }
 
   const modes = calculerModesLivraison(panier);
-  const modeCartes = document.querySelector("input[name='mode-cartes']:checked")?.value;
+  const modeCartes = modeCartesChoisi();
 
   // Mode de livraison global (pour les métadonnées)
   let modeLivraison = "poste";
@@ -549,7 +590,7 @@ document.getElementById("checkout-button").addEventListener("click", function (e
     complement: document.querySelector("[name='complement_adresse']").value.trim(),
     codePostal: localStorage.getItem("codePostal") || "",
     ville: localStorage.getItem("ville") || "",
-    // 🆕 Livraison
+    // Livraison
     adresseLivraison: document.getElementById("adresse-livraison").value.trim(),
     complementLivraison: document.getElementById("complement-livraison").value.trim(),
     codePostalLivraison: localStorage.getItem("codePostalLivraison") || "",
@@ -562,7 +603,7 @@ document.getElementById("checkout-button").addEventListener("click", function (e
     articlesRelais: articlesRelais.join(" ; ")
   };
 
-  if (!client.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(client.email)) {
+  if (!client.email || !REGEX_MAIL.test(client.email)) {
     alert("Veuillez entrer une adresse e-mail valide.");
     return;
   }

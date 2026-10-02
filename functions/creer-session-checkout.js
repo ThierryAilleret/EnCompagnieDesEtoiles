@@ -125,7 +125,7 @@ exports.handler = async (event) => {
       customer_creation: "always",
       customer_email: client.email,
       line_items,
-			(discounts.length > 0 ? { discounts } : []),
+			...(discounts.length > 0 ? { discounts } : []),
       success_url: `${baseUrl}/success`,
       cancel_url: `${baseUrl}/cancel`,
       billing_address_collection: "required",

@@ -234,6 +234,9 @@ window.addEventListener("DOMContentLoaded", () => {
 </header>
 
 <script>
+		window.stripeEnv = "";
+		window.stripePublicKey = "";
+			
 		 
 		function ouvrirOuFermerPanier() {
 			const volet = document.getElementById('mini-panier');
@@ -268,15 +271,78 @@ window.addEventListener("DOMContentLoaded", () => {
 			volet.classList.remove('actif');
 		}
 
+		function calculerTotaux(panier) {
+			let totalCartes = 0;
+			let totalOrigami = 0;
+			let totalAutres = 0;
+
+			panier.forEach(item => {
+				const sousTotal = item.prix * item.quantite;
+				if (item.categorie === "carte") {
+					totalCartes += sousTotal;
+				} else if (item.categorie === "tableaux_origami") {
+					totalOrigami += sousTotal;
+				} else {
+					totalAutres += sousTotal;
+				}
+			});
+
+			
+			let reductionCartes = 0;
+			if (totalCartes >= 10) {
+				reductionCartes = totalCartes * 0.15;
+			}
+			let reductionOrigami = 0;
+			if (totalOrigami > 250) {
+				reductionOrigami = totalOrigami * 0.15;
+			}
+
+			const totalCartesApresReduc = totalCartes - reductionCartes;
+			const totalOrigamiApresReduc = totalOrigami - reductionOrigami;
+
+			
+			let fraisPort = 2;
+			const totalAvantPort = totalCartesApresReduc + totalOrigamiApresReduc + totalAutres;
+			if (totalAvantPort >= 10) {
+				fraisPort = 0;
+			}
+
+			const totalFinal = totalAvantPort + fraisPort;
+
+			return {
+				totalCartes,
+				reductionCartes,
+				totalOrigami,
+				reductionOrigami,
+				totalAutres,
+				fraisPort,
+				totalFinal
+			};
+		}
+
+
 		function afficherMiniPanier() {
 			const panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+			if (panier.length === 0) {
+				document.getElementById("contenu-panier").innerHTML = `
+					<p style="padding:10px; color:#777; font-style:italic;">Votre panier est vide.</p>
+				`;
+				document.getElementById("total-panier").innerHTML = `Total : 0 €`;
+				
+				const btnCommander = document.querySelector(".bouton-checkout");
+				if (btnCommander) {
+					btnCommander.disabled = true;
+					btnCommander.classList.add("bouton-verrouille");
+				}
+
+				return; 
+			}
+
 			const conteneur = document.getElementById("contenu-panier");
 			conteneur.innerHTML = "";
 
-			let total = 0;
-
 			panier.forEach(item => {
-				total += parseFloat(item.prix) * item.quantite;
 				const bloc = document.createElement("div");
 				bloc.className = "item-panier";
 				bloc.innerHTML = `
@@ -296,7 +362,41 @@ window.addEventListener("DOMContentLoaded", () => {
 				conteneur.appendChild(bloc);
 			});
 
-			document.getElementById("total-panier").textContent = `Total : ${total.toFixed(2)} € frais de port inclus`;
+			const totaux = calculerTotaux(panier);
+
+			let texteTotal = `Total : ${totaux.totalFinal.toFixed(2)} €`;
+
+			
+			let details = "";
+			if (totaux.reductionCartes > 0) {
+				details += `Réduction cartes (-15%) : –${totaux.reductionCartes.toFixed(2)} € · `;
+			}
+			if (totaux.reductionOrigami > 0) {
+				details += `Réduction tableaux (-15%) : –${totaux.reductionOrigami.toFixed(2)} € · `;
+			}
+			if (totaux.fraisPort === 0) {
+				details += `Frais de port offerts`;
+			} else {
+				details += `Frais de port : ${totaux.fraisPort.toFixed(2)} €`;
+			}
+
+			document.getElementById("total-panier").innerHTML = `
+				<div>Total : ${totaux.totalFinal.toFixed(2)} €</div>
+
+				${totaux.reductionCartes > 0 ? `
+					<div style="color:#777; font-style:italic; font-size:0.8rem;">
+						Réduction de 15% appliquée sur les cartes : -${totaux.reductionCartes.toFixed(2)} €
+					</div>` : ``}
+
+				${totaux.reductionOrigami > 0 ? `
+					<div style="color:#777; font-style:italic; font-size:0.8rem;">
+						Réduction de 15% appliquée sur les tableaux : -${totaux.reductionOrigami.toFixed(2)} €
+					</div>` : ``}
+
+				<div style="color:#777; font-style:italic; font-size:0.8rem;">
+					${totaux.fraisPort === 0 ? `Frais de port offerts` : `Frais de port : ${totaux.fraisPort.toFixed(2)} €`}
+				</div>
+			`;
 
 			const btnCommander = document.querySelector(".btn-commander");
 			if (btnCommander) {
@@ -308,7 +408,26 @@ window.addEventListener("DOMContentLoaded", () => {
 					btnCommander.classList.remove("desactive");
 				}
 			}
+		}
 
+		async function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
+				const panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
+				const data = await response.json();
+				quantiteDisponible = parseInt(data.inventory, 10);
+
+				
+				
+				
+
+				
+				if (quantiteDemandee > quantiteDisponible) {
+						alert("⚠️ Stock insuffisant : quantité demandée supérieure au stock disponible.");
+						return false;
+				}
+
+				return true;
 		}
 
 		async function modifierQuantite(nom, delta) {
@@ -343,7 +462,6 @@ window.addEventListener("DOMContentLoaded", () => {
 			localStorage.setItem("panier", JSON.stringify(nouveau));
 			afficherMiniPanier();
 			window.dispatchEvent(new Event("panierMisAJour"));
-
 			
 			const indicateurEl = document.getElementById("panier-toggle");
 			if (indicateurEl) {
@@ -439,6 +557,10 @@ document.addEventListener("DOMContentLoaded", () => {
 	const cp = localStorage.getItem('codePostal')?.trim() || "";
 	const ville = localStorage.getItem('ville')?.trim() || "";
 
+	console.log("CP =", cp);
+	console.log("Ville =", ville);
+	console.log("Brand =", "CC23JV2D");
+
 	$("#Zone_Widget").MR_ParcelShopPicker({
 		Target: "#Target_Widget",
 		Brand: "CC23JV2D",
@@ -449,7 +571,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		PostCode: cp,
 		City: ville,
 		NbResults: "10",
-		ColLivMod: "XL",
 		Responsive: true,
 		ShowResultsOnMap: false,
 		OnParcelShopSelected: function (data) {
@@ -532,10 +653,10 @@ function afficherPanierDansCheckout() {
 	const panierJSON = localStorage.getItem("panier");
 	if (!panierJSON) return;
 
-	let total = 0;
 	const panier = JSON.parse(panierJSON);
 	const ul = document.getElementById("panier-resume");
-
+	const totaux = calculerTotaux(panier);
+		
 	ul.innerHTML = "";
 	panier.forEach(article => {
 		const li = document.createElement("li");
@@ -550,14 +671,45 @@ function afficherPanierDansCheckout() {
 			</div>
 		`;
 		ul.appendChild(li);
-		total += article.prix * article.quantite;
 	});
 
-	document.getElementById("total-commande").innerHTML = `<strong>Total :</strong> ${total} € frais de port inclus`;
-  const totalPaiement = document.getElementById("prix-total");
-  if (totalPaiement) {
-    totalPaiement.innerHTML = `Total : ${total} €`;
-  }
+	let details = "";
+
+	if (totaux.reductionCartes > 0) {
+			details += `
+					<div style="color:#777; font-style:italic; font-size:0.8rem;">
+							Réduction cartes (-15%) : -${totaux.reductionCartes.toFixed(2)} €
+					</div>
+			`;
+	}
+
+	if (totaux.reductionOrigami > 0) {
+			details += `
+					<div style="color:#777; font-style:italic; font-size:0.8rem;">
+							Réduction tableaux (-15%) : -${totaux.reductionOrigami.toFixed(2)} €
+					</div>
+			`;
+	}
+
+	details += `
+			<div style="color:#777; font-style:italic; font-size:0.8rem;">
+					${totaux.fraisPort === 0
+							? "Frais de port offerts"
+							: `Frais de port : ${totaux.fraisPort.toFixed(2)} €`
+					}
+			</div>
+	`;
+
+	document.getElementById("total-commande").innerHTML = `
+			<strong>Total :</strong> ${totaux.totalFinal.toFixed(2)} €
+			${details}
+	`;
+
+	const totalPaiement = document.getElementById("prix-total");
+	if (totalPaiement) {
+			totalPaiement.innerHTML =
+					`Total : ${totaux.totalFinal.toFixed(2)} €`;
+	}
 }
 
 function remplirAdresseGeo(item) {
@@ -688,6 +840,7 @@ window.addEventListener("panierMisAJour", function () {
 				<button type="button" id="checkout-button" class="bouton-checkout  bouton-verrouille" style="display:none">
           Payer avec Stripe
         </button>
+				<div id="info-adresse" style="display:none;color:#777; font-style:italic; font-size:0.8rem;">Vous payez sur la page sécurisée de Stripe, aucune adresse ne vous sera redemandée.</div>
 				<script src="https://js.stripe.com/v3/"></script>
       </fieldset>
     </form>
@@ -713,6 +866,9 @@ document.getElementById("validation-relais-button").addEventListener("click", fu
 	boutonPaiement.classList.remove("bouton-verrouille");
 	boutonPaiement.style.display = "block";
 
+	const infoAdresse = document.getElementById("info-adresse");
+	infoAdresse.style.display = "block";
+
 });
 document.getElementById("checkout-button").addEventListener("click", function (event) {
   event.preventDefault(); // Empêche la soumission du formulaire
@@ -735,6 +891,7 @@ document.getElementById("checkout-button").addEventListener("click", function (e
     complement: document.querySelector("[name='complement_adresse']").value.trim(),
     codePostal: localStorage.getItem("codePostal") || "",
     ville: localStorage.getItem("ville") || "",
+		pointRelaisId: window._pointRelaisId || "",
     pointRelais: window._pointRelaisAdresse || ""
   };
 

@@ -234,6 +234,9 @@ window.addEventListener("DOMContentLoaded", () => {
 </header>
 
 <script>
+		window.stripeEnv = "";
+		window.stripePublicKey = "";
+			
 		 
 		function ouvrirOuFermerPanier() {
 			const volet = document.getElementById('mini-panier');
@@ -268,15 +271,78 @@ window.addEventListener("DOMContentLoaded", () => {
 			volet.classList.remove('actif');
 		}
 
+		function calculerTotaux(panier) {
+			let totalCartes = 0;
+			let totalOrigami = 0;
+			let totalAutres = 0;
+
+			panier.forEach(item => {
+				const sousTotal = item.prix * item.quantite;
+				if (item.categorie === "carte") {
+					totalCartes += sousTotal;
+				} else if (item.categorie === "tableaux_origami") {
+					totalOrigami += sousTotal;
+				} else {
+					totalAutres += sousTotal;
+				}
+			});
+
+			
+			let reductionCartes = 0;
+			if (totalCartes >= 10) {
+				reductionCartes = totalCartes * 0.15;
+			}
+			let reductionOrigami = 0;
+			if (totalOrigami > 250) {
+				reductionOrigami = totalOrigami * 0.15;
+			}
+
+			const totalCartesApresReduc = totalCartes - reductionCartes;
+			const totalOrigamiApresReduc = totalOrigami - reductionOrigami;
+
+			
+			let fraisPort = 2;
+			const totalAvantPort = totalCartesApresReduc + totalOrigamiApresReduc + totalAutres;
+			if (totalAvantPort >= 10) {
+				fraisPort = 0;
+			}
+
+			const totalFinal = totalAvantPort + fraisPort;
+
+			return {
+				totalCartes,
+				reductionCartes,
+				totalOrigami,
+				reductionOrigami,
+				totalAutres,
+				fraisPort,
+				totalFinal
+			};
+		}
+
+
 		function afficherMiniPanier() {
 			const panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+			if (panier.length === 0) {
+				document.getElementById("contenu-panier").innerHTML = `
+					<p style="padding:10px; color:#777; font-style:italic;">Votre panier est vide.</p>
+				`;
+				document.getElementById("total-panier").innerHTML = `Total : 0 €`;
+				
+				const btnCommander = document.querySelector(".bouton-checkout");
+				if (btnCommander) {
+					btnCommander.disabled = true;
+					btnCommander.classList.add("bouton-verrouille");
+				}
+
+				return; 
+			}
+
 			const conteneur = document.getElementById("contenu-panier");
 			conteneur.innerHTML = "";
 
-			let total = 0;
-
 			panier.forEach(item => {
-				total += parseFloat(item.prix) * item.quantite;
 				const bloc = document.createElement("div");
 				bloc.className = "item-panier";
 				bloc.innerHTML = `
@@ -296,7 +362,41 @@ window.addEventListener("DOMContentLoaded", () => {
 				conteneur.appendChild(bloc);
 			});
 
-			document.getElementById("total-panier").textContent = `Total : ${total.toFixed(2)} € frais de port inclus`;
+			const totaux = calculerTotaux(panier);
+
+			let texteTotal = `Total : ${totaux.totalFinal.toFixed(2)} €`;
+
+			
+			let details = "";
+			if (totaux.reductionCartes > 0) {
+				details += `Réduction cartes (-15%) : –${totaux.reductionCartes.toFixed(2)} € · `;
+			}
+			if (totaux.reductionOrigami > 0) {
+				details += `Réduction tableaux (-15%) : –${totaux.reductionOrigami.toFixed(2)} € · `;
+			}
+			if (totaux.fraisPort === 0) {
+				details += `Frais de port offerts`;
+			} else {
+				details += `Frais de port : ${totaux.fraisPort.toFixed(2)} €`;
+			}
+
+			document.getElementById("total-panier").innerHTML = `
+				<div>Total : ${totaux.totalFinal.toFixed(2)} €</div>
+
+				${totaux.reductionCartes > 0 ? `
+					<div style="color:#777; font-style:italic; font-size:0.8rem;">
+						Réduction de 15% appliquée sur les cartes : -${totaux.reductionCartes.toFixed(2)} €
+					</div>` : ``}
+
+				${totaux.reductionOrigami > 0 ? `
+					<div style="color:#777; font-style:italic; font-size:0.8rem;">
+						Réduction de 15% appliquée sur les tableaux : -${totaux.reductionOrigami.toFixed(2)} €
+					</div>` : ``}
+
+				<div style="color:#777; font-style:italic; font-size:0.8rem;">
+					${totaux.fraisPort === 0 ? `Frais de port offerts` : `Frais de port : ${totaux.fraisPort.toFixed(2)} €`}
+				</div>
+			`;
 
 			const btnCommander = document.querySelector(".btn-commander");
 			if (btnCommander) {
@@ -308,7 +408,26 @@ window.addEventListener("DOMContentLoaded", () => {
 					btnCommander.classList.remove("desactive");
 				}
 			}
+		}
 
+		async function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
+				const panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
+				const data = await response.json();
+				quantiteDisponible = parseInt(data.inventory, 10);
+
+				
+				
+				
+
+				
+				if (quantiteDemandee > quantiteDisponible) {
+						alert("⚠️ Stock insuffisant : quantité demandée supérieure au stock disponible.");
+						return false;
+				}
+
+				return true;
 		}
 
 		async function modifierQuantite(nom, delta) {
@@ -343,7 +462,6 @@ window.addEventListener("DOMContentLoaded", () => {
 			localStorage.setItem("panier", JSON.stringify(nouveau));
 			afficherMiniPanier();
 			window.dispatchEvent(new Event("panierMisAJour"));
-
 			
 			const indicateurEl = document.getElementById("panier-toggle");
 			if (indicateurEl) {
@@ -387,14 +505,70 @@ window.addEventListener("DOMContentLoaded", () => {
         <p>Merci pour votre commande !</p>
 <p>Votre paiement a été effectué avec succès.</p>
 <p>Nous préparons votre commande avec soin et vous informerons par email.</p>
-<p><a href="/">Retour à l&rsquo;accueil</a></p>
+<div id="recap-commande" style="display:none; margin-top:1.5em;">
+  <h3>Récapitulatif de votre commande</h3>
+  <p id="recap-total"></p>
+  <h4>Livraison en point relais</h4>
+  <div id="recap-relais"></div>
+  <h4>Adresse</h4>
+  <div id="recap-adresse"></div>
+</div>
+<p id="recap-erreur" style="display:none; color:#777; font-style:italic;">
+  (Récapitulatif indisponible — retrouvez les détails de votre commande dans l'e-mail de confirmation.)
+</p>
+<p><a href="/">Retour à l'accueil</a></p>
 <script>
+  // 📥 Afficher le récapitulatif depuis Stripe (avant nettoyage du localStorage)
+  async function afficherRecapCommande() {
+    const sessionId = localStorage.getItem("stripeSessionId");
+    if (!sessionId) {
+      document.getElementById("recap-erreur").style.display = "block";
+      return;
+    }
+
+    try {
+      const res = await fetch("/.netlify/functions/recuperer-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId })
+      });
+      if (!res.ok) throw new Error("Session non récupérée");
+      const data = await res.json();
+
+      if (data.statut !== "paid") {
+        document.getElementById("recap-erreur").style.display = "block";
+        return;
+      }
+
+      const m = data.metadata  | {};
+      const relais = (m.pointRelais || "").split(", ").filter(Boolean);
+      const adresse = [m.adresse, m.complement, `${m.codePostal} ${m.ville}`].filter(Boolean);
+
+      document.getElementById("recap-total").innerHTML =
+        `<strong>Total payé :</strong> ${(data.montantTotal / 100).toFixed(2)} €`;
+
+      document.getElementById("recap-relais").innerHTML = relais.length
+        ? `<p style="font-weight:bold;">📍 ${relais[0]}</p><p>${relais.slice(1).join(", ")}</p>`
+        : `<p>${adresse.join("<br>")}</p>`;
+
+      document.getElementById("recap-adresse").innerHTML =
+        `<p>${m.prenom || ""} ${m.nom || ""}<br>${m.email || ""}</p>`;
+
+      document.getElementById("recap-commande").style.display = "block";
+    } catch (e) {
+      console.error("Erreur récap :", e);
+      document.getElementById("recap-erreur").style.display = "block";
+    }
+  }
+
+  afficherRecapCommande();
+
   // 🧹 Vider le panier
   localStorage.removeItem("panier");
+  localStorage.removeItem("stripeSessionId");
 
-  // 🔄 Mettre à jour l'affichage du mini-panier si nécessaire
+  // 🔄 Mettre à jour l'affichage du mini-panier
   window.dispatchEvent(new Event("panierMisAJour"));
-
 </script>
       </div>
     </div>

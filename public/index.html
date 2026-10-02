@@ -235,6 +235,9 @@ window.addEventListener("DOMContentLoaded", () => {
 </header>
 
 <script>
+		window.stripeEnv = "";
+		window.stripePublicKey = "";
+			
 		 
 		function ouvrirOuFermerPanier() {
 			const volet = document.getElementById('mini-panier');
@@ -269,15 +272,78 @@ window.addEventListener("DOMContentLoaded", () => {
 			volet.classList.remove('actif');
 		}
 
+		function calculerTotaux(panier) {
+			let totalCartes = 0;
+			let totalOrigami = 0;
+			let totalAutres = 0;
+
+			panier.forEach(item => {
+				const sousTotal = item.prix * item.quantite;
+				if (item.categorie === "carte") {
+					totalCartes += sousTotal;
+				} else if (item.categorie === "tableaux_origami") {
+					totalOrigami += sousTotal;
+				} else {
+					totalAutres += sousTotal;
+				}
+			});
+
+			
+			let reductionCartes = 0;
+			if (totalCartes >= 10) {
+				reductionCartes = totalCartes * 0.15;
+			}
+			let reductionOrigami = 0;
+			if (totalOrigami > 250) {
+				reductionOrigami = totalOrigami * 0.15;
+			}
+
+			const totalCartesApresReduc = totalCartes - reductionCartes;
+			const totalOrigamiApresReduc = totalOrigami - reductionOrigami;
+
+			
+			let fraisPort = 2;
+			const totalAvantPort = totalCartesApresReduc + totalOrigamiApresReduc + totalAutres;
+			if (totalAvantPort >= 10) {
+				fraisPort = 0;
+			}
+
+			const totalFinal = totalAvantPort + fraisPort;
+
+			return {
+				totalCartes,
+				reductionCartes,
+				totalOrigami,
+				reductionOrigami,
+				totalAutres,
+				fraisPort,
+				totalFinal
+			};
+		}
+
+
 		function afficherMiniPanier() {
 			const panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+			if (panier.length === 0) {
+				document.getElementById("contenu-panier").innerHTML = `
+					<p style="padding:10px; color:#777; font-style:italic;">Votre panier est vide.</p>
+				`;
+				document.getElementById("total-panier").innerHTML = `Total : 0 €`;
+				
+				const btnCommander = document.querySelector(".bouton-checkout");
+				if (btnCommander) {
+					btnCommander.disabled = true;
+					btnCommander.classList.add("bouton-verrouille");
+				}
+
+				return; 
+			}
+
 			const conteneur = document.getElementById("contenu-panier");
 			conteneur.innerHTML = "";
 
-			let total = 0;
-
 			panier.forEach(item => {
-				total += parseFloat(item.prix) * item.quantite;
 				const bloc = document.createElement("div");
 				bloc.className = "item-panier";
 				bloc.innerHTML = `
@@ -297,7 +363,41 @@ window.addEventListener("DOMContentLoaded", () => {
 				conteneur.appendChild(bloc);
 			});
 
-			document.getElementById("total-panier").textContent = `Total : ${total.toFixed(2)} € frais de port inclus`;
+			const totaux = calculerTotaux(panier);
+
+			let texteTotal = `Total : ${totaux.totalFinal.toFixed(2)} €`;
+
+			
+			let details = "";
+			if (totaux.reductionCartes > 0) {
+				details += `Réduction cartes (-15%) : –${totaux.reductionCartes.toFixed(2)} € · `;
+			}
+			if (totaux.reductionOrigami > 0) {
+				details += `Réduction tableaux (-15%) : –${totaux.reductionOrigami.toFixed(2)} € · `;
+			}
+			if (totaux.fraisPort === 0) {
+				details += `Frais de port offerts`;
+			} else {
+				details += `Frais de port : ${totaux.fraisPort.toFixed(2)} €`;
+			}
+
+			document.getElementById("total-panier").innerHTML = `
+				<div>Total : ${totaux.totalFinal.toFixed(2)} €</div>
+
+				${totaux.reductionCartes > 0 ? `
+					<div style="color:#777; font-style:italic; font-size:0.8rem;">
+						Réduction de 15% appliquée sur les cartes : -${totaux.reductionCartes.toFixed(2)} €
+					</div>` : ``}
+
+				${totaux.reductionOrigami > 0 ? `
+					<div style="color:#777; font-style:italic; font-size:0.8rem;">
+						Réduction de 15% appliquée sur les tableaux : -${totaux.reductionOrigami.toFixed(2)} €
+					</div>` : ``}
+
+				<div style="color:#777; font-style:italic; font-size:0.8rem;">
+					${totaux.fraisPort === 0 ? `Frais de port offerts` : `Frais de port : ${totaux.fraisPort.toFixed(2)} €`}
+				</div>
+			`;
 
 			const btnCommander = document.querySelector(".btn-commander");
 			if (btnCommander) {
@@ -309,7 +409,26 @@ window.addEventListener("DOMContentLoaded", () => {
 					btnCommander.classList.remove("desactive");
 				}
 			}
+		}
 
+		async function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
+				const panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
+				const data = await response.json();
+				quantiteDisponible = parseInt(data.inventory, 10);
+
+				
+				
+				
+
+				
+				if (quantiteDemandee > quantiteDisponible) {
+						alert("⚠️ Stock insuffisant : quantité demandée supérieure au stock disponible.");
+						return false;
+				}
+
+				return true;
 		}
 
 		async function modifierQuantite(nom, delta) {
@@ -344,7 +463,6 @@ window.addEventListener("DOMContentLoaded", () => {
 			localStorage.setItem("panier", JSON.stringify(nouveau));
 			afficherMiniPanier();
 			window.dispatchEvent(new Event("panierMisAJour"));
-
 			
 			const indicateurEl = document.getElementById("panier-toggle");
 			if (indicateurEl) {

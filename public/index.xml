@@ -74,15 +74,50 @@
       <description>&lt;p&gt;Merci pour votre commande !&lt;/p&gt;
 &lt;p&gt;Votre paiement a été effectué avec succès.&lt;/p&gt;
 &lt;p&gt;Nous préparons votre commande avec soin et vous informerons par email.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://encompagniedesetoiles.fr/&#34;&gt;Retour à l&amp;rsquo;accueil&lt;/a&gt;&lt;/p&gt;
+&lt;div id=&#34;recap-commande&#34; style=&#34;display:none; margin-top:1.5em;&#34;&gt;
+  &lt;h3&gt;Récapitulatif de votre commande&lt;/h3&gt;
+  &lt;p id=&#34;recap-total&#34;&gt;&lt;/p&gt;
+  &lt;h4&gt;Livraison en point relais&lt;/h4&gt;
+  &lt;div id=&#34;recap-relais&#34;&gt;&lt;/div&gt;
+  &lt;h4&gt;Adresse&lt;/h4&gt;
+  &lt;div id=&#34;recap-adresse&#34;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p id=&#34;recap-erreur&#34; style=&#34;display:none; color:#777; font-style:italic;&#34;&gt;
+  (Récapitulatif indisponible — retrouvez les détails de votre commande dans l&#39;e-mail de confirmation.)
+&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://encompagniedesetoiles.fr/&#34;&gt;Retour à l&#39;accueil&lt;/a&gt;&lt;/p&gt;
 &lt;script&gt;
-  // 🧹 Vider le panier
-  localStorage.removeItem(&#34;panier&#34;);
+  // 📥 Afficher le récapitulatif depuis Stripe (avant nettoyage du localStorage)
+  async function afficherRecapCommande() {
+    const sessionId = localStorage.getItem(&#34;stripeSessionId&#34;);
+    if (!sessionId) {
+      document.getElementById(&#34;recap-erreur&#34;).style.display = &#34;block&#34;;
+      return;
+    }
 
-  // 🔄 Mettre à jour l&#39;affichage du mini-panier si nécessaire
-  window.dispatchEvent(new Event(&#34;panierMisAJour&#34;));
+    try {
+      const res = await fetch(&#34;/.netlify/functions/recuperer-session&#34;, {
+        method: &#34;POST&#34;,
+        headers: { &#34;Content-Type&#34;: &#34;application/json&#34; },
+        body: JSON.stringify({ sessionId })
+      });
+      if (!res.ok) throw new Error(&#34;Session non récupérée&#34;);
+      const data = await res.json();
 
-&lt;/script&gt;</description>
+      if (data.statut !== &#34;paid&#34;) {
+        document.getElementById(&#34;recap-erreur&#34;).style.display = &#34;block&#34;;
+        return;
+      }
+
+      const m = data.metadata  | {};
+      const relais = (m.pointRelais || &#34;&#34;).split(&#34;, &#34;).filter(Boolean);
+      const adresse = [m.adresse, m.complement, `${m.codePostal} ${m.ville}`].filter(Boolean);
+
+      document.getElementById(&#34;recap-total&#34;).innerHTML =
+        `&lt;strong&gt;Total payé :&lt;/strong&gt; ${(data.montantTotal / 100).toFixed(2)} €`;
+
+      document.getElementById(&#34;recap-relais&#34;).innerHTML = relais.length
+        ? `&lt;p style=&#34;font-weight:bold;&#34;&gt;📍 ${relais[0]}&lt;/p&gt;</description>
     </item>
     <item>
       <title>Conditions Générales de Vente</title>
@@ -153,6 +188,10 @@ document.addEventListener(&#34;DOMContentLoaded&#34;, () =&gt; {
 	const cp = localStorage.getItem(&#39;codePostal&#39;)?.trim() || &#34;&#34;;
 	const ville = localStorage.getItem(&#39;ville&#39;)?.trim() || &#34;&#34;;
 
+	console.log(&#34;CP =&#34;, cp);
+	console.log(&#34;Ville =&#34;, ville);
+	console.log(&#34;Brand =&#34;, &#34;CC23JV2D&#34;);
+
 	$(&#34;#Zone_Widget&#34;).MR_ParcelShopPicker({
 		Target: &#34;#Target_Widget&#34;,
 		Brand: &#34;CC23JV2D&#34;,
@@ -163,7 +202,6 @@ document.addEventListener(&#34;DOMContentLoaded&#34;, () =&gt; {
 		PostCode: cp,
 		City: ville,
 		NbResults: &#34;10&#34;,
-		ColLivMod: &#34;XL&#34;,
 		Responsive: true,
 		ShowResultsOnMap: false,
 		OnParcelShopSelected: function (data) {
@@ -246,10 +284,10 @@ function afficherPanierDansCheckout() {
 	const panierJSON = localStorage.getItem(&#34;panier&#34;);
 	if (!panierJSON) return;
 
-	let total = 0;
 	const panier = JSON.parse(panierJSON);
 	const ul = document.getElementById(&#34;panier-resume&#34;);
-
+	const totaux = calculerTotaux(panier);
+		
 	ul.innerHTML = &#34;&#34;;
 	panier.forEach(article =&gt; {
 		const li = document.createElement(&#34;li&#34;);
@@ -264,14 +302,45 @@ function afficherPanierDansCheckout() {
 			&lt;/div&gt;
 		`;
 		ul.appendChild(li);
-		total += article.prix * article.quantite;
 	});
 
-	document.getElementById(&#34;total-commande&#34;).innerHTML = `&lt;strong&gt;Total :&lt;/strong&gt; ${total} € frais de port inclus`;
-  const totalPaiement = document.getElementById(&#34;prix-total&#34;);
-  if (totalPaiement) {
-    totalPaiement.innerHTML = `Total : ${total} €`;
-  }
+	let details = &#34;&#34;;
+
+	if (totaux.reductionCartes &gt; 0) {
+			details += `
+					&lt;div style=&#34;color:#777; font-style:italic; font-size:0.8rem;&#34;&gt;
+							Réduction cartes (-15%) : -${totaux.reductionCartes.toFixed(2)} €
+					&lt;/div&gt;
+			`;
+	}
+
+	if (totaux.reductionOrigami &gt; 0) {
+			details += `
+					&lt;div style=&#34;color:#777; font-style:italic; font-size:0.8rem;&#34;&gt;
+							Réduction tableaux (-15%) : -${totaux.reductionOrigami.toFixed(2)} €
+					&lt;/div&gt;
+			`;
+	}
+
+	details += `
+			&lt;div style=&#34;color:#777; font-style:italic; font-size:0.8rem;&#34;&gt;
+					${totaux.fraisPort === 0
+							? &#34;Frais de port offerts&#34;
+							: `Frais de port : ${totaux.fraisPort.toFixed(2)} €`
+					}
+			&lt;/div&gt;
+	`;
+
+	document.getElementById(&#34;total-commande&#34;).innerHTML = `
+			&lt;strong&gt;Total :&lt;/strong&gt; ${totaux.totalFinal.toFixed(2)} €
+			${details}
+	`;
+
+	const totalPaiement = document.getElementById(&#34;prix-total&#34;);
+	if (totalPaiement) {
+			totalPaiement.innerHTML =
+					`Total : ${totaux.totalFinal.toFixed(2)} €`;
+	}
 }
 
 function remplirAdresseGeo(item) {
@@ -402,6 +471,7 @@ window.addEventListener(&#34;panierMisAJour&#34;, function () {
 				&lt;button type=&#34;button&#34; id=&#34;checkout-button&#34; class=&#34;bouton-checkout  bouton-verrouille&#34; style=&#34;display:none&#34;&gt;
           Payer avec Stripe
         &lt;/button&gt;
+				&lt;div id=&#34;info-adresse&#34; style=&#34;display:none;color:#777; font-style:italic; font-size:0.8rem;&#34;&gt;Vous payez sur la page sécurisée de Stripe, aucune adresse ne vous sera redemandée.&lt;/div&gt;
 				&lt;script src=&#34;https://js.stripe.com/v3/&#34;&gt;&lt;/script&gt;
       &lt;/fieldset&gt;
     &lt;/form&gt;

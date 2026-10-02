@@ -78,27 +78,28 @@ exports.handler = async (event) => {
     const reductionCartes = totalCartes >= SEUIL_CARTES ? Math.round(totalCartes * TAUX) : 0;
     const reductionOrigami = totalOrigami > SEUIL_ORIGAMI ? Math.round(totalOrigami * TAUX) : 0;
 
-    // --- 2bis) Remises sous forme de lignes négatives ---
-    if (reductionCartes > 0) {
-      line_items.push({
-        quantity: 1,
-        price_data: {
-          currency: "eur",
-          unit_amount: -reductionCartes, // négatif = remise
-          product_data: { name: "Réduction cartes (-15 %)" }
-        }
-      });
-    }
-    if (reductionOrigami > 0) {
-      line_items.push({
-        quantity: 1,
-        price_data: {
-          currency: "eur",
-          unit_amount: -reductionOrigami,
-          product_data: { name: "Réduction tableaux (-15 %)" }
-        }
-      });
-    }
+		// --- 2bis) Remises via coupons à montant fixe créés à la volée ---
+		const discounts = [];
+
+		if (reductionCartes > 0) {
+			const coupon = await stripe.coupons.create({
+				amount_off: reductionCartes,        // en centimes, ex. 180 = -1,80 €
+				currency: "eur",
+				duration: "once",
+				name: "Réduction cartes (-15 %)"
+			});
+			discounts.push({ coupon: coupon.id });
+		}
+
+		if (reductionOrigami > 0) {
+			const coupon = await stripe.coupons.create({
+				amount_off: reductionOrigami,
+				currency: "eur",
+				duration: "once",
+				name: "Réduction tableaux (-15 %)"
+			});
+			discounts.push({ coupon: coupon.id });
+		}
 
     // --- 3) Frais de port ---
     const totalAvantPort = totalCartes - reductionCartes

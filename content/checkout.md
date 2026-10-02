@@ -231,27 +231,32 @@ function afficherSectionLivraison() {
   const panier = JSON.parse(localStorage.getItem("panier")) || [];
   const modes = calculerModesLivraison(panier);
 
-  const blocChoix         = document.getElementById("choix-poste");
-  const messageDeuxColis  = document.getElementById("message-deux-colis");
-  const blocAdressePoste  = document.getElementById("bloc-adresse-poste");
-  const widgetRelai       = document.getElementById("zone-widget-relai");
+  const blocChoix        = document.getElementById("choix-poste");
+  const blocChoixRelais  = document.getElementById("choix-relais");
+  const messageDeuxColis = document.getElementById("message-deux-colis");
+  const blocAdressePoste = document.getElementById("bloc-adresse-poste");
+  const widgetRelai      = document.getElementById("zone-widget-relai");
 
   if (modes.cartesSeules) {
     blocChoix.style.display        = "block";
+    blocChoixRelais.style.display  = "block";
     messageDeuxColis.style.display = "none";
     afficherSelonModeCartes();
   } else if (modes.deuxColis) {
     blocChoix.style.display        = "none";
+    blocChoixRelais.style.display  = "none";
     messageDeuxColis.style.display = "block";
     blocAdressePoste.style.display = "block";
     widgetRelai.style.display      = "block";
   } else if (modes.aTableaux) {
     blocChoix.style.display        = "none";
+    blocChoixRelais.style.display  = "none";
     messageDeuxColis.style.display = "none";
     blocAdressePoste.style.display = "none";
     widgetRelai.style.display      = "block";
-  } else { // luminaires (+ cartes éventuelles)
+  } else {
     blocChoix.style.display        = "none";
+    blocChoixRelais.style.display  = "none";
     messageDeuxColis.style.display = "none";
     blocAdressePoste.style.display = "block";
     widgetRelai.style.display      = "none";
@@ -260,18 +265,23 @@ function afficherSectionLivraison() {
   mettreAJourBoutonValidation();
 }
 
-// Cas « cartes seules » : le radio pilote ce qui s'affiche
 function afficherSelonModeCartes() {
   const mode = modeCartesChoisi();
-  const blocAdressePoste = document.getElementById("bloc-adresse-poste");
-  const widgetRelai      = document.getElementById("zone-widget-relai");
+  const blocAdressePoste  = document.getElementById("bloc-adresse-poste");
+  const widgetRelai       = document.getElementById("zone-widget-relai");
+  const relaiSelectionne  = document.getElementById("relai-selectionne");
 
   if (mode === "relais") {
     blocAdressePoste.style.display = "none";
     widgetRelai.style.display      = "block";
-  } else { // poste
+  } else {
     blocAdressePoste.style.display = "block";
     widgetRelai.style.display      = "none";
+    // 🧹 On repart de zéro côté relais
+    relaiSelectionne.style.display = "none";
+    window._pointRelaisId     = "";
+    window._pointRelaisAdresse = "";
+    window._relaisValide      = false;
   }
 }
 
@@ -296,8 +306,18 @@ function verrouillerEtape3() {
 }
 
 function deverrouillerEtape3() {
-  document.getElementById("step-3").style.display = "block";
-  document.getElementById("step-3").classList.add("actif");
+  const etape3 = document.getElementById("step-3");
+  etape3.style.display = "block";
+  etape3.classList.add("actif");
+
+  // 💰 Affiche le total à payer au-dessus du bouton
+  const panier = JSON.parse(localStorage.getItem("panier")) || [];
+  const totaux = calculerTotaux(panier);
+  const prixTotal = document.getElementById("prix-total");
+  if (prixTotal) {
+    prixTotal.innerHTML = `<strong>Total à payer :</strong> ${totaux.totalFinal.toFixed(2)} €`;
+    prixTotal.style.display = "block";
+  }
 }
 
 // ============================================================
@@ -479,11 +499,6 @@ function afficherPanierDansCheckout() {
       <fieldset id="step-2" class="etape" style="display:none;">
         <legend><span class="etape-numero">2</span> Livraison</legend>
         <div id="livraison-section">
-          <!-- Choix du mode : uniquement si cartes seules -->
-          <div id="choix-poste" style="display:none; margin-bottom:1em;">
-            <label><input type="radio" name="mode-cartes" value="poste" checked> Envoi par La Poste</label>
-            <label><input type="radio" name="mode-cartes" value="relais"> Point relais Mondial Relay</label>
-          </div>
           <!-- Explication deux colis -->
           <div id="message-deux-colis" style="display:none; padding:0.8em; background:#f5f5f0; border-radius:6px; margin-bottom:1em;">
             ⚠️ Votre commande contient des <strong>luminaires</strong> (expédiés par La Poste)
@@ -491,7 +506,11 @@ function afficherPanierDansCheckout() {
             Elle partira donc en <strong>deux colis</strong> : l'un à l'adresse de livraison ci-dessous,
             l'autre au point relais. Les frais de port restent <strong>offerts</strong>.
           </div>
-          <!-- Livraison par La Poste : directement sous le bouton radio "La Poste" -->
+          <!-- Choix du mode : uniquement si cartes seules -->
+          <div id="choix-poste" style="display:none; margin-bottom:1em;">
+            <label><input type="radio" name="mode-cartes" value="poste" checked> Envoi par La Poste</label>
+          </div>
+					<!-- Livraison par La Poste : directement sous le bouton radio "La Poste" -->
           <div id="bloc-adresse-poste" style="display:none; margin-bottom:1em;">
             <label>
               <input type="checkbox" id="meme-adresse" checked />
@@ -511,7 +530,10 @@ function afficherPanierDansCheckout() {
             </div>
           </div>
           <!-- Widget Mondial Relay : directement sous le bouton radio "Mondial Relay" -->
-          <div id="zone-widget-relai" style="display:none;">
+          <div id="choix-relais" style="display:none; margin-bottom:1em;">
+            <label><input type="radio" name="mode-cartes" value="relais"> Point relais Mondial Relay</label>
+          </div>
+					<div id="zone-widget-relai" style="display:none;">
             <div id="Zone_Widget"></div>
             <input type="hidden" id="Target_Widget" name="point-relay" />
           </div>

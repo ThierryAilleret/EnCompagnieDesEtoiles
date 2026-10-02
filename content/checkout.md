@@ -390,10 +390,12 @@ function surveillerEtape1() {
   if (etape_1_complete) {
     // Étape 2 : complètement masquée jusqu'ici, on la révèle
     etape2.style.display = "block";
+		etape2.classList.add("actif");
     afficherSectionLivraison();
     verifierEtapeLivraison();
   } else {
     etape2.style.display = "none";
+		etape2.classList.remove("actif");
     verrouillerEtape3();
   }
 }
@@ -403,6 +405,7 @@ function verifierEtatPaiement() {
   if (panier.length === 0) {
     verrouillerEtape3();
     document.getElementById("step-2").style.display = "none";
+		etape2.classList.remove("actif");
   } else {
     surveillerEtape1();
   }

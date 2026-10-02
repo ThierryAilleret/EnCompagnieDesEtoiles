@@ -393,6 +393,7 @@ document.getElementById("checkout-button").addEventListener("click", function (e
     complement: document.querySelector("[name='complement_adresse']").value.trim(),
     codePostal: localStorage.getItem("codePostal") || "",
     ville: localStorage.getItem("ville") || "",
+		pointRelaisId: window._pointRelaisId || "",
     pointRelais: window._pointRelaisAdresse || ""
   };
 

@@ -51,11 +51,11 @@ exports.handler = async (event) => {
     let totalAutres = 0;
 
     for (const item of panier) {
-      if (!item.priceId?.startsWith("price_") || !Number.isInteger(item.quantite) || item.quantite < 1) {
-        return { statusCode: 400, body: JSON.stringify({ error: "Article invalide" }) };
-      }
+			if (!item.priceIdStripe?.startsWith("price_") || !Number.isInteger(item.quantite) || item.quantite < 1) {
+				return { statusCode: 400, body: JSON.stringify({ error: "Article invalide" }) };
+			}
 
-      const price = await stripe.prices.retrieve(item.priceId);
+      const price = await stripe.prices.retrieve(item.priceIdStripe);
       const sousTotal = price.unit_amount * item.quantite; // en centimes
 
       if (item.categorie === "carte") {
@@ -66,7 +66,7 @@ exports.handler = async (event) => {
         totalAutres += sousTotal;
       }
 
-      line_items.push({ price: item.priceId, quantity: item.quantite });
+      line_items.push({ price: item.priceIdStripe, quantity: item.quantite });
     }
 
     // --- 2) Réductions (mêmes règles que calculerTotaux, en centimes) ---

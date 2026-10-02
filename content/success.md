@@ -16,7 +16,7 @@ Nous préparons votre commande avec soin et vous informerons par email.
   <h4>Livraison en point relais</h4>
   <div id="recap-relais"></div>
 
-  <h4>Coordonnées de contact</h4>
+  <h4>Vos coordonnées de contact</h4>
   <div id="recap-contact"></div>
 </div>
 

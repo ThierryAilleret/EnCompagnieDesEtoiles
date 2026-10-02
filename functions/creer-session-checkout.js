@@ -136,6 +136,13 @@ exports.handler = async (event) => {
         complement: client.complement || "",
         codePostal: client.codePostal || "",
         ville: client.ville || "",
+				adresseLivraison: client.adresseLivraison || "",
+				complementLivraison: client.complementLivraison || "",
+				codePostalLivraison: client.codePostalLivraison || "",
+				villeLivraison: client.villeLivraison || "",
+				modeLivraison: client.modeLivraison || "poste",
+				articlesPoste: client.articlesPoste || "",
+				articlesRelais: client.articlesRelais || "",
         pointRelais: client.pointRelais || "",
         pointRelaisId: client.pointRelaisId || "",
         environnement: process.env.STRIPE_ENV === "live" ? "live" : "test"

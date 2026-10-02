@@ -81,6 +81,7 @@ exports.handler = async (event) => {
 
 		// --- 2bis) Remise via un coupon à montant fixe créé à la volée ---
 		// (Checkout accepte 1 seul coupon : on fusionne cartes + origami)
+		const discounts = [];
 		const remiseTotale = reductionCartes + reductionOrigami;
 
 		if (remiseTotale > 0) {

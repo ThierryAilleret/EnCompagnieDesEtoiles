@@ -434,18 +434,15 @@ function afficherPanierDansCheckout() {
         <label>Complément d'addresse :<br><input type="text" name="complement_adresse" id="complement_adresse"/></label>
         <label>Mail :<br><input type="text" name="mail" id="mail" required /></label>
       </fieldset>
-
       <!-- Étape 2 : Livraison -->
       <fieldset id="step-2" class="etape">
         <legend><span class="etape-numero">2</span> Livraison</legend>
         <div id="livraison-section">
-
           <!-- Choix du mode : uniquement si cartes seules -->
           <div id="choix-poste" style="display:none; margin-bottom:1em;">
             <label><input type="radio" name="mode-cartes" value="poste" checked> Envoi par La Poste</label><br>
             <label><input type="radio" name="mode-cartes" value="relais"> Point relais Mondial Relay</label>
           </div>
-
           <!-- Explication deux colis -->
           <div id="message-deux-colis" style="display:none; padding:0.8em; background:#f5f5f0; border-radius:6px; margin-bottom:1em;">
             ⚠️ Votre commande contient des <strong>luminaires</strong> (expédiés par La Poste)
@@ -453,7 +450,6 @@ function afficherPanierDansCheckout() {
             Elle partira donc en <strong>deux colis</strong> : l'un à l'adresse de livraison ci-dessous,
             l'autre au point relais. Les frais de port restent <strong>offerts</strong>.
           </div>
-
           <!-- Livraison par La Poste : adresse de livraison -->
           <div id="bloc-adresse-poste" style="display:none; margin-bottom:1em;">
             <label>
@@ -473,7 +469,6 @@ function afficherPanierDansCheckout() {
               </label>
             </div>
           </div>
-
           <!-- Widget Mondial Relay -->
           <div id="zone-widget-relai" style="display:none; margin-top:0em;">
             <div id="Zone_Widget"></div>
@@ -488,7 +483,6 @@ function afficherPanierDansCheckout() {
           </button>
         </div>
       </fieldset>
-
       <!-- Étape 3 : Paiement -->
       <fieldset id="step-3" class="etape">
         <legend><span class="etape-numero">3</span> Paiement</legend>

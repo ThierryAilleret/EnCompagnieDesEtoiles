@@ -147,7 +147,10 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 window.addEventListener("panierMisAJour", () => {
+  window._relaisValide = false;
+  window._livraisonPosteValide = false;
   afficherPanierDansCheckout();
+  afficherSectionLivraison();
   verifierEtatPaiement();
 });
 
@@ -436,13 +439,19 @@ function verifierEtatPaiement() {
 // ============================================================
 function afficherPanierDansCheckout() {
   const panierJSON = localStorage.getItem("panier");
-  if (!panierJSON) return;
-
-  const panier = JSON.parse(panierJSON);
+  const panier = panierJSON ? JSON.parse(panierJSON) : [];
   const ul = document.getElementById("panier-resume");
   const totaux = calculerTotaux(panier);
 
   ul.innerHTML = "";
+
+  // 🧹 Panier vide : affichage propre, pas de total fantôme
+  if (panier.length === 0) {
+    ul.innerHTML = `<li style="color:#777; font-style:italic;">Votre panier est vide.</li>`;
+    document.getElementById("total-commande").innerHTML = "";
+    return;
+  }
+
   panier.forEach(article => {
     const li = document.createElement("li");
     li.innerHTML = `

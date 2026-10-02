@@ -263,30 +263,37 @@ window.addEventListener("DOMContentLoaded", () => {
 
 		function calculerTotaux(panier) {
 			let totalCartes = 0;
+			let totalOrigami = 0;
 			let totalAutres = 0;
 
 			panier.forEach(item => {
 				const sousTotal = item.prix * item.quantite;
 				if (item.categorie === "carte") {
 					totalCartes += sousTotal;
+				elseif (item.categorie === "tableaux_origami") {
+					totalOrigami += sousTotal;
 				} else {
 					totalAutres += sousTotal;
 				}
 			});
 
 			// Réduction cartes
-			let reduction = 0;
+			let reductionCartes = 0;
 			if (totalCartes >= 10) {
-				reduction = totalCartes * 0.15;
+				reductionCartes = totalCartes * 0.15;
+			}
+			let reductionOrigami = 0;
+			if (totalOrigami >= 250) {
+				reductionOrigami = totalOrigami * 0.15;
 			}
 
-			const totalCartesApresReduc = totalCartes - reduction;
+			const totalCartesApresReduc = totalCartes - reductionCartes;
+			const totalOrigamiApresReduc = totalOrigami - reductionOrigami;
 
-			// Frais de port
+			// Frais de port (gratuits si 
 			let fraisPort = 2;
-			const totalAvantPort = totalCartesApresReduc + totalAutres;
-
-			if (totalAutres > 0 || totalAvantPort >= 10) {
+			const totalAvantPort = totalCartesApresReduc + totalOrigamiApresReduc + totalAutres;
+			if (totalAvantPort >= 10) {
 				fraisPort = 0;
 			}
 
@@ -294,7 +301,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
 			return {
 				totalCartes,
-				reduction,
+				reductionCartes,
+				totalOrigami,
+				reductionOrigami,
 				totalAutres,
 				fraisPort,
 				totalFinal
@@ -349,8 +358,11 @@ window.addEventListener("DOMContentLoaded", () => {
 
 			// On ajoute les détails sous le total
 			let details = "";
-			if (totaux.reduction > 0) {
-				details += `Réduction de 15% sur les cartes : –${totaux.reduction.toFixed(2)} € · `;
+			if (totaux.reductionCartes > 0) {
+				details += `Réduction de 15% sur les cartes : –${totaux.reductionCartes.toFixed(2)} € · `;
+			}
+			if (totaux.reductionOrigami > 0) {
+				details += `Réduction de 15% sur les cartes : –${totaux.reductionOrigami.toFixed(2)} € · `;
 			}
 			if (totaux.fraisPort === 0) {
 				details += `Frais de port offerts`;

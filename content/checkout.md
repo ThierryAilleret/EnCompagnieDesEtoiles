@@ -345,7 +345,7 @@ window.addEventListener("panierMisAJour", function () {
 				<button type="button" id="checkout-button" class="bouton-checkout  bouton-verrouille" style="display:none">
           Payer avec Stripe
         </button>
-				<div id="info-adresse" style="color:#777; font-style:italic; font-size:0.8rem;">Vous payez sur la page sécurisée de Stripe, aucune adresse ne vous sera redemandée</div>
+				<div id="info-adresse" style="display:none;color:#777; font-style:italic; font-size:0.8rem;">Vous payez sur la page sécurisée de Stripe, aucune adresse ne vous sera redemandée</div>
 				<script src="https://js.stripe.com/v3/"></script>
       </fieldset>
     </form>

@@ -26,130 +26,91 @@ exports.handler = async (event) => {
     };
   }
 
+  if (event.httpMethod !== "POST") {
+    return { statusCode: 405, body: "Method Not Allowed" };
+  }
+
   const baseUrl = process.env.URL_SITE;
 
   try {
-    const { panier } = JSON.parse(event.body);
+    const { panier, client } = JSON.parse(event.body);
 
-    // --- 1) Séparer cartes / autres produits ---
-    let cardTotal = 0;
-    let otherTotal = 0;
-
-    panier.forEach(item => {
-      const subtotal = item.prix * item.quantite;
-      if (item.categorie === "carte") {
-        cardTotal += subtotal;
-      } else {
-        otherTotal += subtotal;
-      }
-    });
-
-    // --- 2) Réduction cartes ---
-    let cardDiscount = 0;
-    if (cardTotal >= 10) {
-      cardDiscount = cardTotal * 0.15;
+    if (!Array.isArray(panier) || panier.length === 0) {
+      return { statusCode: 400, body: JSON.stringify({ error: "Panier vide" }) };
     }
-    const cardTotalAfterDiscount = cardTotal - cardDiscount;
-
-    // --- 3) Frais de port ---
-    let shippingCost = 2;
-    const totalBeforeShipping = cardTotalAfterDiscount + otherTotal;
-
-    if (otherTotal > 0 || totalBeforeShipping >= 10) {
-      shippingCost = 0;
+    if (!client?.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(client.email)) {
+      return { statusCode: 400, body: JSON.stringify({ error: "Email invalide" }) };
     }
 
-    // --- 4) Construire les line_items détaillés ---
+    // --- 1) Récupérer les prix AUPRÈS DE STRIPE ---
+    // Le panier ne doit contenir que { priceId, quantite, categorie }.
     const line_items = [];
+    let totalCartes = 0;
+    let totalOrigami = 0;
+    let totalAutres = 0;
 
-    panier.forEach(item => {
-      const isCard = item.categorie === "carte";
-
-      // prix unitaire après réduction éventuelle
-      let unitPrice = item.prix;
-
-      if (isCard && cardDiscount > 0) {
-        const reductionFactor = (cardTotal - cardDiscount) / cardTotal;
-        unitPrice = unitPrice * reductionFactor;
+    for (const item of panier) {
+      if (!item.priceId?.startsWith("price_") || !Number.isInteger(item.quantite) || item.quantite < 1) {
+        return { statusCode: 400, body: JSON.stringify({ error: "Article invalide" }) };
       }
 
+      const price = await stripe.prices.retrieve(item.priceId);
+      const sousTotal = price.unit_amount * item.quantite; // en centimes
+
+      if (item.categorie === "carte") {
+        totalCartes += sousTotal;
+      } else if (item.categorie === "tableaux_origami") {
+        totalOrigami += sousTotal;
+      } else {
+        totalAutres += sousTotal;
+      }
+
+      line_items.push({ price: item.priceId, quantity: item.quantite });
+    }
+
+    // --- 2) Réductions (mêmes règles que calculerTotaux, en centimes) ---
+    const SEUIL_FRAIS_DE_PORT = 10_00;   // 10,00 €
+    const SEUIL_CARTES = 10_00;          // 10,00 €
+    const SEUIL_ORIGAMI = 250_00;        // strictement supérieur
+    const TAUX = 0.15;
+
+    const reductionCartes = totalCartes >= SEUIL_CARTES ? Math.round(totalCartes * TAUX) : 0;
+    const reductionOrigami = totalOrigami > SEUIL_ORIGAMI ? Math.round(totalOrigami * TAUX) : 0;
+
+    // --- 2bis) Remises sous forme de lignes négatives ---
+    if (reductionCartes > 0) {
       line_items.push({
-        quantity: item.quantite,
+        quantity: 1,
         price_data: {
           currency: "eur",
-          unit_amount: Math.round(unitPrice * 100),
-          product_data: {
-            name: item.nom,
-            images: [item.image]
-          }
+          unit_amount: -reductionCartes, // négatif = remise
+          product_data: { name: "Réduction cartes (-15 %)" }
         }
       });
-    });
+    }
+    if (reductionOrigami > 0) {
+      line_items.push({
+        quantity: 1,
+        price_data: {
+          currency: "eur",
+          unit_amount: -reductionOrigami,
+          product_data: { name: "Réduction tableaux (-15 %)" }
+        }
+      });
+    }
 
-    // --- 5) Ajouter les frais de port si nécessaires ---
-		if (shippingCost > 0) {
-			line_items.push({
-				quantity: 1,
-				price_data: {
-					currency: "eur",
-					unit_amount: shippingCost * 100,
-					product_data: {
-						name: "Frais de port"
-					}
-				}
-			});
-		} else {
-			line_items.push({
-				quantity: 1,
-				price_data: {
-					currency: "eur",
-					unit_amount: 0,
-					product_data: {
-						name: "Frais de port - Offerts"
-					}
-				}
-			});
-		}
+    // --- 3) Frais de port ---
+    const totalAvantPort = totalCartes - reductionCartes
+                         + totalOrigami - reductionOrigami
+                         + totalAutres;
+    const fraisPort = totalAvantPort >= SEUIL_FRAIS_DE_PORT ? 0 : 2_00;
 
-
-    // --- 6) Créer la session Stripe ---
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      mode: "payment",
-      customer_creation: "always",
-      line_items,
-      success_url: `${baseUrl}/success`,
-      cancel_url: `${baseUrl}/cancel`,
-      billing_address_collection: "required",
-      shipping_address_collection: {
-        allowed_countries: ["FR"]
-      },
-      metadata: {
-        environnement: process.env.STRIPE_ENV === "live" ? "live" : "test"
-      }
-    });
-
-    return {
-      statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": isAllowedOrigin
-          ? origin
-          : "https://encompagniedesetoiles.fr"
-      },
-      body: JSON.stringify({ sessionId: session.id })
-    };
-  } catch (err) {
-    console.error("Stripe error:", err);
-    return {
-      statusCode: 500,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": isAllowedOrigin
-          ? origin
-          : "https://encompagniedesetoiles.fr"
-      },
-      body: JSON.stringify({ error: err.message })
-    };
-  }
-};
+    if (fraisPort > 0) {
+      line_items.push({
+        quantity: 1,
+        price_data: {
+          currency: "eur",
+          unit_amount: fraisPort,
+          product_data: { name: "Frais de port" }
+        }
+     

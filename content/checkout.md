@@ -182,7 +182,7 @@ function afficherPanierDansCheckout() {
 	if (totaux.reductionCartes > 0) {
 			details += `
 					<div style="color:#777; font-style:italic; font-size:0.8rem;">
-							Réduction cartes : -${totaux.reductionCartes.toFixed(2)} €
+							Réduction cartes (-15%) : -${totaux.reductionCartes.toFixed(2)} €
 					</div>
 			`;
 	}
@@ -190,7 +190,7 @@ function afficherPanierDansCheckout() {
 	if (totaux.reductionOrigami > 0) {
 			details += `
 					<div style="color:#777; font-style:italic; font-size:0.8rem;">
-							Réduction tableaux : -${totaux.reductionOrigami.toFixed(2)} €
+							Réduction tableaux (-15%) : -${totaux.reductionOrigami.toFixed(2)} €
 					</div>
 			`;
 	}

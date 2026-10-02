@@ -78,29 +78,28 @@ exports.handler = async (event) => {
     const reductionCartes = totalCartes >= SEUIL_CARTES ? Math.round(totalCartes * TAUX) : 0;
     const reductionOrigami = totalOrigami > SEUIL_ORIGAMI ? Math.round(totalOrigami * TAUX) : 0;
 
-		// --- 2bis) Remises via coupons à montant fixe créés à la volée ---
-		const discounts = [];
 
-		if (reductionCartes > 0) {
+		// --- 2bis) Remise via un coupon à montant fixe créé à la volée ---
+		// (Checkout accepte 1 seul coupon : on fusionne cartes + origami)
+		const remiseTotale = reductionCartes + reductionOrigami;
+
+		if (remiseTotale > 0) {
+			// Libellé explicite pour le reçu
+			const libelles = [];
+			if (reductionCartes > 0) libelles.push("cartes");
+			if (reductionOrigami > 0) libelles.push("tableaux");
+			// Stripe accepte des montants négatifs dans le nom, mais pas de "+" vide :
+			const nomCoupon = `Réduction -15 % (${libelles.join(" + ")})`;
+
 			const coupon = await stripe.coupons.create({
-				amount_off: reductionCartes,        // en centimes, ex. 180 = -1,80 €
+				amount_off: remiseTotale,   // en centimes
 				currency: "eur",
 				duration: "once",
-				name: "Réduction cartes (-15 %)"
+				name: nomCoupon
 			});
 			discounts.push({ coupon: coupon.id });
 		}
-
-		if (reductionOrigami > 0) {
-			const coupon = await stripe.coupons.create({
-				amount_off: reductionOrigami,
-				currency: "eur",
-				duration: "once",
-				name: "Réduction tableaux (-15 %)"
-			});
-			discounts.push({ coupon: coupon.id });
-		}
-
+		
     // --- 3) Frais de port ---
     const totalAvantPort = totalCartes - reductionCartes
                          + totalOrigami - reductionOrigami

@@ -157,7 +157,6 @@ function afficherPanierDansCheckout() {
 	const panierJSON = localStorage.getItem("panier");
 	if (!panierJSON) return;
 
-	let total = 0;
 	const panier = JSON.parse(panierJSON);
 	const ul = document.getElementById("panier-resume");
 
@@ -175,14 +174,47 @@ function afficherPanierDansCheckout() {
 			</div>
 		`;
 		ul.appendChild(li);
-		total += article.prix * article.quantite;
+
+		const totaux = calculerTotaux(panier);
 	});
 
-	document.getElementById("total-commande").innerHTML = `<strong>Total :</strong> ${total} € frais de port inclus`;
-  const totalPaiement = document.getElementById("prix-total");
-  if (totalPaiement) {
-    totalPaiement.innerHTML = `Total : ${total} €`;
-  }
+	let details = "";
+
+	if (totaux.reductionCartes > 0) {
+			details += `
+					<div>
+							Réduction cartes : -${totaux.reductionCartes.toFixed(2)} €
+					</div>
+			`;
+	}
+
+	if (totaux.reductionOrigami > 0) {
+			details += `
+					<div>
+							Réduction tableaux : -${totaux.reductionOrigami.toFixed(2)} €
+					</div>
+			`;
+	}
+
+	details += `
+			<div>
+					${totaux.fraisPort === 0
+							? "Frais de port offerts"
+							: `Frais de port : ${totaux.fraisPort.toFixed(2)} €`
+					}
+			</div>
+	`;
+
+	document.getElementById("total-commande").innerHTML = `
+			<strong>Total :</strong> ${totaux.totalFinal.toFixed(2)} €
+			${details}
+	`;
+
+	const totalPaiement = document.getElementById("prix-total");
+	if (totalPaiement) {
+			totalPaiement.innerHTML =
+					`Total : ${totaux.totalFinal.toFixed(2)} €`;
+	}
 }
 
 function remplirAdresseGeo(item) {

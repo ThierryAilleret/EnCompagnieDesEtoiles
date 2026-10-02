@@ -128,8 +128,6 @@ exports.handler = async (event) => {
 			...(discounts.length > 0 ? { discounts } : []),
       success_url: `${baseUrl}/success`,
       cancel_url: `${baseUrl}/cancel`,
-      billing_address_collection: "required",
-      shipping_address_collection: { allowed_countries: ["FR"] },
       metadata: {
         nom: client.nom,
         prenom: client.prenom,

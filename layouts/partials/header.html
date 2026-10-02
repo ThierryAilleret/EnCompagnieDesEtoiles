@@ -359,10 +359,10 @@ window.addEventListener("DOMContentLoaded", () => {
 			// On ajoute les détails sous le total
 			let details = "";
 			if (totaux.reductionCartes > 0) {
-				details += `Réduction de 15% sur les cartes : –${totaux.reductionCartes.toFixed(2)} € · `;
+				details += `Réduction sur cartes : –${totaux.reductionCartes.toFixed(2)} € · `;
 			}
 			if (totaux.reductionOrigami > 0) {
-				details += `Réduction de 15% sur les tableaux : –${totaux.reductionOrigami.toFixed(2)} € · `;
+				details += `Réduction sur tableaux : –${totaux.reductionOrigami.toFixed(2)} € · `;
 			}
 			if (totaux.fraisPort === 0) {
 				details += `Frais de port offerts`;

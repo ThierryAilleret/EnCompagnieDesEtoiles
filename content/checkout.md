@@ -181,7 +181,7 @@ function afficherPanierDansCheckout() {
 
 	if (totaux.reductionCartes > 0) {
 			details += `
-					<div>
+					<div style="color:#777; font-style:italic; font-size:0.8rem;">
 							Réduction cartes : -${totaux.reductionCartes.toFixed(2)} €
 					</div>
 			`;
@@ -189,14 +189,14 @@ function afficherPanierDansCheckout() {
 
 	if (totaux.reductionOrigami > 0) {
 			details += `
-					<div>
+					<div style="color:#777; font-style:italic; font-size:0.8rem;">
 							Réduction tableaux : -${totaux.reductionOrigami.toFixed(2)} €
 					</div>
 			`;
 	}
 
 	details += `
-			<div>
+			<div style="color:#777; font-style:italic; font-size:0.8rem;">
 					${totaux.fraisPort === 0
 							? "Frais de port offerts"
 							: `Frais de port : ${totaux.fraisPort.toFixed(2)} €`

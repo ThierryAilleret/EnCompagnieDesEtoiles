@@ -159,7 +159,8 @@ function afficherPanierDansCheckout() {
 
 	const panier = JSON.parse(panierJSON);
 	const ul = document.getElementById("panier-resume");
-
+	const totaux = calculerTotaux(panier);
+		
 	ul.innerHTML = "";
 	panier.forEach(article => {
 		const li = document.createElement("li");
@@ -174,8 +175,6 @@ function afficherPanierDansCheckout() {
 			</div>
 		`;
 		ul.appendChild(li);
-
-		const totaux = calculerTotaux(panier);
 	});
 
 	let details = "";

@@ -1,7 +1,7 @@
 +++
-stripeProductTest = ""
+stripeProductTest = "prod_VMkkeoWkkShz2h"
 stripeProductLive = "prod_UkiOy96liEQe7l"
-priceIdStripeTest = ""
+priceIdStripeTest = "price_1UM1F4GEPWcc8pKFIVuYYSyX"
 priceIdStripeLive = "price_1TlCxWGEPWcc8pKFgesbKf0X"
 
 categorie = "tableaux_origami"

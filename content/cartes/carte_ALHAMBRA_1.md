@@ -1,7 +1,7 @@
 +++
-stripeProductTest = ""
+stripeProductTest = "prod_VMkaL6YfUqC1v9"
 stripeProductLive = "prod_TrHHro2oh5zJ6O"
-priceIdStripeTest = ""
+priceIdStripeTest = "price_1UM15UGEPWcc8pKFD4ew1yP2"
 priceIdStripeLive = "price_1StYiWGEPWcc8pKFeLyCIEIQ"
 
 categorie = "carte"

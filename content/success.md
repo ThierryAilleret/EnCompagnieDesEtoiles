@@ -16,8 +16,8 @@ Nous préparons votre commande avec soin et vous informerons par email.
   <h4>Livraison en point relais</h4>
   <div id="recap-relais"></div>
 
-  <h4>Adresse</h4>
-  <div id="recap-adresse"></div>
+  <h4>Coordonnées de contact</h4>
+  <div id="recap-contact"></div>
 </div>
 
 <p id="recap-erreur" style="display:none; color:#777; font-style:italic;">
@@ -58,10 +58,10 @@ Nous préparons votre commande avec soin et vous informerons par email.
         `<strong>Total payé :</strong> ${(data.montantTotal / 100).toFixed(2)} €`;
 
       document.getElementById("recap-relais").innerHTML = relais.length
-        ? `<p style="font-weight:bold;">📍 ${relais[0]}</p><p>${relais.slice(1).join(", ")}</p>`
+        ? `<p>📍 ${relais[0]}</br>${relais.slice(1).join(", ")}</p>`
         : `<p>${adresse.join("<br>")}</p>`;
 
-      document.getElementById("recap-adresse").innerHTML =
+      document.getElementById("recap-contact").innerHTML =
         `<p>${m.prenom || ""} ${m.nom || ""}<br>${m.email || ""}</p>`;
 
       document.getElementById("recap-commande").style.display = "block";

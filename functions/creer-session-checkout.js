@@ -105,7 +105,7 @@ exports.handler = async (event) => {
                          + totalAutres;
     const fraisPort = totalAvantPort >= SEUIL_FRAIS_DE_PORT ? 0 : 2_00;
 
-    if (fraisPort > 0) {
+		if (fraisPort > 0) {
       line_items.push({
         quantity: 1,
         price_data: {
@@ -113,4 +113,54 @@ exports.handler = async (event) => {
           unit_amount: fraisPort,
           product_data: { name: "Frais de port" }
         }
-     
+      });
+    }
+
+    // --- 4) Créer la session avec métadonnées client + remises exactes ---
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      mode: "payment",
+      customer_creation: "always",
+      customer_email: client.email,
+      line_items,
+      success_url: `${baseUrl}/success`,
+      cancel_url: `${baseUrl}/cancel`,
+      billing_address_collection: "required",
+      shipping_address_collection: { allowed_countries: ["FR"] },
+      metadata: {
+        nom: client.nom,
+        prenom: client.prenom,
+        email: client.email,
+        adresse: client.adresse,
+        complement: client.complement || "",
+        codePostal: client.codePostal || "",
+        ville: client.ville || "",
+        pointRelais: client.pointRelais || "",
+        pointRelaisId: client.pointRelaisId || "",
+        environnement: process.env.STRIPE_ENV === "live" ? "live" : "test"
+      }
+    });
+
+    return {
+      statusCode: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": isAllowedOrigin
+          ? origin
+          : "https://encompagniedesetoiles.fr"
+      },
+      body: JSON.stringify({ sessionId: session.id })
+    };
+  } catch (err) {
+    console.error("Stripe error:", err);
+    return {
+      statusCode: 500,
+      headers: {
+        "Content-Control-Allow-Origin": isAllowedOrigin
+          ? origin
+          : "https://encompagniedesetoiles.fr"
+      },
+      body: JSON.stringify({ error: err.message })
+    };
+  }
+};

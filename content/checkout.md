@@ -75,7 +75,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		PostCode: cp,
 		City: ville,
 		NbResults: "10",
-		ColLivMod: "XL",
 		Responsive: true,
 		ShowResultsOnMap: false,
 		OnParcelShopSelected: function (data) {

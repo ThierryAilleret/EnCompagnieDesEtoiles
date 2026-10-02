@@ -19,7 +19,6 @@
 				</button>
 
 				<div class="gallery">
-
 					{{ if .Params.thumbnail }}
 						<div class="gallery-item">
 							<img src="{{ .Params.thumbnail }}" alt="{{ .Params.thumbnail_alt }}"
@@ -44,10 +43,8 @@
 								<img src="{{ $src }}" alt=""
 										 onclick="openModal('{{ $src }}','')">
 							</div>
-
 						{{ end }}
 					{{ end }}
-
 				</div>
 
 				<button id="right-scroll" class="scroll-button arrow"
@@ -108,8 +105,6 @@
 
 			return [...imgs, ...vids];
 		}
-
-
     function getFilename(url) {
       return new URL(url, window.location.origin).pathname;
     }
@@ -171,7 +166,6 @@
 			setTimeout(() => modal.classList.add('show'), 10);
 		}
 
-
     function closeModal() {
       const modal = document.getElementById('imageModal');
       modal.classList.remove('show');
@@ -222,8 +216,6 @@
 			}, 300);
 		}
 
-
-		
 		async function ajouterAuPanier() {
 				const panier = JSON.parse(localStorage.getItem("panier")) || [];
 
@@ -281,7 +273,6 @@
 		//Récupération du stock sur Stripe
 		async function fetchInventoryCurrentProduct() {
 				const stripeEnv = window.stripeEnv || "test"; // fallback si non défini
-
 				const stripeProduct = stripeEnv === "live"
 					? "{{ .Params.stripeProductLive }}"
 					: "{{ .Params.stripeProductTest }}";

@@ -258,15 +258,69 @@ window.addEventListener("DOMContentLoaded", () => {
 			volet.classList.remove('actif');
 		}
 
+		function calculerTotaux(panier) {
+			let totalCartes = 0;
+			let totalAutres = 0;
+
+			panier.forEach(item => {
+				const sousTotal = item.prix * item.quantite;
+				if (item.categorie === "carte") {
+					totalCartes += sousTotal;
+				} else {
+					totalAutres += sousTotal;
+				}
+			});
+
+			// Réduction cartes
+			let reduction = 0;
+			if (totalCartes >= 10) {
+				reduction = totalCartes * 0.15;
+			}
+
+			const totalCartesApresReduc = totalCartes - reduction;
+
+			// Frais de port
+			let fraisPort = 2;
+			const totalAvantPort = totalCartesApresReduc + totalAutres;
+
+			if (totalAutres > 0 || totalAvantPort >= 10) {
+				fraisPort = 0;
+			}
+
+			const totalFinal = totalAvantPort + fraisPort;
+
+			return {
+				totalCartes,
+				reduction,
+				totalAutres,
+				fraisPort,
+				totalFinal
+			};
+		}
+
+
 		function afficherMiniPanier() {
 			const panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+			if (panier.length === 0) {
+				document.getElementById("contenu-panier").innerHTML = `
+					<p style="padding:10px; color:#777; font-style:italic;">Votre panier est vide.</p>
+				`;
+				document.getElementById("total-panier").innerHTML = `Total : 0 €`;
+				
+				const btnCommander = document.querySelector(".bouton-checkout");
+				if (btnCommander) {
+					btnCommander.disabled = true;
+					btnCommander.classList.add("bouton-verrouille");
+				}
+
+				return; // ⛔ On sort, on ne calcule rien d'autre
+			}
+
 			const conteneur = document.getElementById("contenu-panier");
 			conteneur.innerHTML = "";
 
-			let total = 0;
-
 			panier.forEach(item => {
-				total += parseFloat(item.prix) * item.quantite;
 				const bloc = document.createElement("div");
 				bloc.className = "item-panier";
 				bloc.innerHTML = `
@@ -286,7 +340,33 @@ window.addEventListener("DOMContentLoaded", () => {
 				conteneur.appendChild(bloc);
 			});
 
-			document.getElementById("total-panier").textContent = `Total : ${total.toFixed(2)} € frais de port inclus`;
+			const totaux = calculerTotaux(panier);
+
+			let texteTotal = `Total : ${totaux.totalFinal.toFixed(2)} €`;
+
+			// On ajoute les détails sous le total
+			let details = "";
+			if (totaux.reduction > 0) {
+				details += `Réduction de 15% sur les cartes : –${totaux.reduction.toFixed(2)} € · `;
+			}
+			if (totaux.fraisPort === 0) {
+				details += `Frais de port offerts`;
+			} else {
+				details += `Frais de port : ${totaux.fraisPort.toFixed(2)} €`;
+			}
+
+			document.getElementById("total-panier").innerHTML = `
+				<div>Total : ${totaux.totalFinal.toFixed(2)} €</div>
+
+				${totaux.reduction > 0 ? `
+					<div style="color:#777; font-style:italic; font-size:0.8rem;">
+						Réduction de 15% appliquée sur les cartes : -${totaux.reduction.toFixed(2)} €
+					</div>` : ``}
+
+				<div style="color:#777; font-style:italic; font-size:0.8rem;">
+					${totaux.fraisPort === 0 ? `Frais de port offerts` : `Frais de port : ${totaux.fraisPort.toFixed(2)} €`}
+				</div>
+			`;
 
 			const btnCommander = document.querySelector(".btn-commander");
 			if (btnCommander) {
@@ -298,7 +378,26 @@ window.addEventListener("DOMContentLoaded", () => {
 					btnCommander.classList.remove("desactive");
 				}
 			}
+		}
 
+		async function verifierQuantiteDisponible(stripeProduct, quantiteDemandee) {
+				const panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+				const response = await fetch(`/.netlify/functions/getInventory?product=` + stripeProduct);
+				const data = await response.json();
+				quantiteDisponible = parseInt(data.inventory, 10);
+
+				// 🧾 Log de diagnostic
+				//console.log(`📦 Stock disponible : ${quantiteDisponible}`);
+				//console.log(`📥 Quantité demandée : ${quantiteDemandee}`);
+
+				// Vérifie si la quantité demandée dépasse le stock
+				if (quantiteDemandee > quantiteDisponible) {
+						alert("⚠️ Stock insuffisant : quantité demandée supérieure au stock disponible.");
+						return false;
+				}
+
+				return true;
 		}
 
 		async function modifierQuantite(nom, delta) {
@@ -333,7 +432,6 @@ window.addEventListener("DOMContentLoaded", () => {
 			localStorage.setItem("panier", JSON.stringify(nouveau));
 			afficherMiniPanier();
 			window.dispatchEvent(new Event("panierMisAJour"));
-
 			
 			const indicateurEl = document.getElementById("panier-toggle");
 			if (indicateurEl) {

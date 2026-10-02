@@ -31,7 +31,7 @@ exports.handler = async (event) => {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
 
-  const baseUrl = process.env.URL_SITE;
+  const baseUrl = process.env.URL_SITE; //Paramétré dans Netlify
 
   try {
     const { panier, client } = JSON.parse(event.body);

@@ -319,10 +319,12 @@ window.addEventListener("panierMisAJour", function () {
       <fieldset id="step-2" class="etape">
         <legend><span class="etape-numero">2</span> Livraison</legend>
         <div id="livraison-section">
-          <div id="bloc-ville-cp" style="display:none; margin-bottom:1em;">
+          <!-- partie à supprimer ? 
+					<div id="bloc-ville-cp" style="display:none; margin-bottom:1em;">
               <input type="text" id="code-postal" name="code-postal" maxlength="5" style="display:none;">
               <input type="text" id="ville" name="ville"  style="display:none;">
           </div>
+					-->
 					<!-- Zone d’intégration directe du widget Mondial Relay -->
 					<div id="zone-widget-relai" style="display:none; margin-top:0em;">
 						<div id="Zone_Widget"></div>

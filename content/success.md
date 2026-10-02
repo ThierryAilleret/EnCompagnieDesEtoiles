@@ -1,493 +1,81 @@
-<!DOCTYPE html>
-<html lang="en" dir="auto">
++++
+title = "Commande validée"
+url    = "/success.html"
+layout = "post_checkout"
++++
+Merci pour votre commande !
 
-<head>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZQ2FL4130K"></script>
+Votre paiement a été effectué avec succès.
 
+Nous préparons votre commande avec soin et vous informerons par email.
+
+<div id="recap-commande" style="display:none; margin-top:1.5em;">
+  <h3>Récapitulatif de votre commande</h3>
+  <p id="recap-total"></p>
+
+  <h4>Livraison en point relais</h4>
+  <div id="recap-relais"></div>
+
+  <h4>Adresse</h4>
+  <div id="recap-adresse"></div>
+</div>
+
+<p id="recap-erreur" style="display:none; color:#777; font-style:italic;">
+  (Récapitulatif indisponible — retrouvez les détails de votre commande dans l'e-mail de confirmation.)
+</p>
+
+<p><a href="/">Retour à l'accueil</a></p>
 
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){ dataLayer.push(arguments); }
+  // 📥 Afficher le récapitulatif depuis Stripe (avant nettoyage du localStorage)
+  async function afficherRecapCommande() {
+    const sessionId = localStorage.getItem("stripeSessionId");
+    if (!sessionId) {
+      document.getElementById("recap-erreur").style.display = "block";
+      return;
+    }
 
-  
-  gtag('consent', 'default', {
-    ad_storage: 'denied',
-    analytics_storage: 'denied'
-  });
-
-  gtag('js', new Date());
-  gtag('config', 'G-ZQ2FL4130K');
-</script>
-
-
-<link rel="stylesheet" href="/js/tarteaucitron/css/tarteaucitron.custom.css">
-<script src="/js/tarteaucitron/tarteaucitron.js"></script>
-<script src="/js/tarteaucitron/tarteaucitron.services.js"></script>
-
-<script>
-  
-  tarteaucitron.user.gtagUa = 'G-ZQ2FL4130K';
-  tarteaucitron.job = tarteaucitron.job || [];
-  tarteaucitron.job.push('gtag');
-	
-	
-  tarteaucitron.user.facebookpixelId = '853229717470549';
-  tarteaucitron.job.push('facebookpixel');
-
-  tarteaucitron.init({
-    privacyUrl: "/politique-confidentialite/",
-    hashtag: "#tarteaucitron",
-    cookieName: "tarteaucitron",
-    orientation: "bottom",
-    showAlertSmall: false,
-    cookieslist: true,
-    showIcon: false,
-    iconPosition: "BottomRight",
-    DenyAllCta: true,
-    AcceptAllCta: true,
-    highPrivacy: true,
-    handleBrowserDNTRequest: false,
-    removeCredit: true,
-    moreInfoLink: true,
-    useExternalCss: true,
-    useExternalJs: false
-  });
-
-  
-  document.addEventListener('tac.root_available', function () {
-    const cookie = tarteaucitron.cookie.read();
-
-    if (cookie.includes('!gtag=true')) {
-      gtag('consent', 'update', {
-        ad_storage: 'granted',
-        analytics_storage: 'granted'
+    try {
+      const res = await fetch("/.netlify/functions/recuperer-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId })
       });
-    } else if (cookie.includes('!gtag=false')) {
-      gtag('consent', 'update', {
-        ad_storage: 'denied',
-        analytics_storage: 'denied'
-      });
+      if (!res.ok) throw new Error("Session non récupérée");
+      const data = await res.json();
+
+      if (data.statut !== "paid") {
+        document.getElementById("recap-erreur").style.display = "block";
+        return;
+      }
+
+      const m = data.metadata  | {};
+      const relais = (m.pointRelais || "").split(", ").filter(Boolean);
+      const adresse = [m.adresse, m.complement, `${m.codePostal} ${m.ville}`].filter(Boolean);
+
+      document.getElementById("recap-total").innerHTML =
+        `<strong>Total payé :</strong> ${(data.montantTotal / 100).toFixed(2)} €`;
+
+      document.getElementById("recap-relais").innerHTML = relais.length
+        ? `<p style="font-weight:bold;">📍 ${relais[0]}</p><p>${relais.slice(1).join(", ")}</p>`
+        : `<p>${adresse.join("<br>")}</p>`;
+
+      document.getElementById("recap-adresse").innerHTML =
+        `<p>${m.prenom || ""} ${m.nom || ""}<br>${m.email || ""}</p>`;
+
+      document.getElementById("recap-commande").style.display = "block";
+    } catch (e) {
+      console.error("Erreur récap :", e);
+      document.getElementById("recap-erreur").style.display = "block";
     }
-  });
-</script>
-<script>
+  }
 
-fetch("/.netlify/functions/increment-views", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ path: window.location.pathname })
-});
-</script>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Commande validée</title>
-<meta name="description" content="">
+  afficherRecapCommande();
 
-<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
-
-<link rel="stylesheet" href="/css/style.css">
-
-
-  <meta name="robots" content="noindex, follow">
-
-
-</head>
-
-<body class="" id="top">
-<script>
-    if (localStorage.getItem("pref-theme") === "dark") {
-        document.body.classList.add('dark');
-    } else if (localStorage.getItem("pref-theme") === "light") {
-        document.body.classList.remove('dark')
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.body.classList.add('dark');
-    }
-
-</script>
-<script>
-class PanierManager {
-    constructor() {
-        this.indicateurEl = document.getElementById("panier-toggle");
-        this.compteEl = document.getElementById("panier-compte");
-        this.panierKey = "panier";
-        this.compteurKey = "compteurPanier";
-
-        this.init();
-    }
-
-		init() {
-				this.attendreDOM(() => {
-						this.afficherCompteur();
-						this.revelerBouton();
-				});
-
-				window.addEventListener("pageshow", () => this.mettreAJourCompteur());
-
-				
-				window.addEventListener("panierMisAJour", () => this.mettreAJourCompteur());
-		}
-
-
-    attendreDOM(callback) {
-        const interval = setInterval(() => {
-            if (this.compteEl && this.indicateurEl) {
-                clearInterval(interval);
-                callback();
-            }
-        }, 50);
-    }
-
-    afficherCompteur() {
-        const totalSauvegarde = localStorage.getItem(this.compteurKey);
-        this.compteEl.textContent = totalSauvegarde ?? "0";
-    }
-
-    revelerBouton() {
-        this.indicateurEl.classList.remove("masque");
-    }
-
-    mettreAJourCompteur() {
-        const panier = JSON.parse(localStorage.getItem(this.panierKey)) || [];
-        const total = panier.reduce((sum, item) => sum + item.quantite, 0);
-
-        localStorage.setItem(this.compteurKey, total);
-        this.compteEl.textContent = total;
-
-        this.styliserIndicateur(total);
-
-				const indicateurEl = document.getElementById("panier-toggle");
-				if (indicateurEl) {
-					indicateurEl.classList.add("pulse");
-					setTimeout(() => indicateurEl.classList.remove("pulse"), 300);
-				}
-    }
-
-    styliserIndicateur(total) {
-        if (total === 0) {
-            this.indicateurEl.style.background = "white";
-            this.indicateurEl.style.color = "black";
-        } else {
-            this.indicateurEl.style.background = "black";
-            this.indicateurEl.style.color = "white";
-        }
-    }
-}
-
-window.addEventListener("DOMContentLoaded", () => {
-    new PanierManager();
-});
-
-</script>
-<header class="header">
-	<div class="header-container">
-    <nav class="nav">
-        <div class="logo">
-
-						<div class="site-header-content">
-								<a href="/" accesskey="h" class="site-title" title="En Compagnie des Étoiles (Alt + H)">En Compagnie des Étoiles</a>							<button id="theme-toggle" accesskey="t" title="Basculer le thème (Alt + T)" aria-label="Basculer le thème">
-								<svg id="moon-icon" class="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-									<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-								</svg>
-								<svg id="sun-icon" class="theme-icon" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-									<circle cx="12" cy="12" r="5"></circle>
-									<line x1="12" y1="1" x2="12" y2="3"></line>
-									<line x1="12" y1="21" x2="12" y2="23"></line>
-									<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-									<line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-									<line x1="1" y1="12" x2="3" y2="12"></line>
-									<line x1="21" y1="12" x2="23" y2="12"></line>
-									<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-									<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-								</svg>
-							</button>
-							</div>
-            <div class="logo-switches">
-            </div>
-        </div>
-    </nav>
-
-		<button
-				id="panier-toggle"
-				class="panier-indicateur masque"
-				onclick="ouvrirOuFermerPanier()"
-				aria-label="Ouvrir ou fermer le panier"
-		>
-				🛒<span id="panier-compte">0</span>
-		</button>
-		
-		<div id="mini-panier" class="volet-panier">
-			<div class="entete-panier">
-				<h2>Mon panier</h2>
-				<button class="btn-fermer" onclick="fermerPanier()">×</button>
-			</div>
-			<div id="contenu-panier" class="contenu-panier">
-				
-			</div>
-			<div class="footer-panier">
-				<p id="total-panier">Total : 0 €</p>
-				<button onclick="window.location.href='/checkout.html'" class="btn-commander">
-					Finaliser ma commande
-				</button>
-			</div>
-		</div>
-	</div>
-</header>
-
-<script>
-		 
-		function ouvrirOuFermerPanier() {
-			const volet = document.getElementById('mini-panier');
-			const indicateur = document.getElementById('panier-toggle');
-
-			if (volet.classList.contains('actif')) {
-				
-				volet.classList.remove('actif');
-			} else {
-				
-				volet.classList.add('actif', 'slide-in');
-				afficherMiniPanier();
-				setTimeout(() => volet.classList.remove('slide-in'), 300);
-			}
-		}
-		function ouvrirPanier() {
-			const volet = document.getElementById('mini-panier');
-			const indicateur = document.getElementById('panier-toggle');
-
-			if (!volet.classList.contains('actif')) {
-				
-				volet.classList.add('actif', 'slide-in');
-				afficherMiniPanier();
-				setTimeout(() => volet.classList.remove('slide-in'), 300);
-			}
-		}
-
-		function fermerPanier() {
-			const volet = document.getElementById('mini-panier');
-			const indicateur = document.getElementById('panier-toggle');
-
-			volet.classList.remove('actif');
-		}
-
-		function afficherMiniPanier() {
-			const panier = JSON.parse(localStorage.getItem("panier")) || [];
-			const conteneur = document.getElementById("contenu-panier");
-			conteneur.innerHTML = "";
-
-			let total = 0;
-
-			panier.forEach(item => {
-				total += parseFloat(item.prix) * item.quantite;
-				const bloc = document.createElement("div");
-				bloc.className = "item-panier";
-				bloc.innerHTML = `
-					<img src="${item.image}" alt="${item.nom}">
-					<div class="info-item">
-						<strong>${item.nom}</strong><br>
-						${item.quantite} × ${item.prix} €
-						<div class="quantite-controls">
-							<button onclick="modifierQuantite('${item.nom}', 1)">+</button>
-							<button onclick="modifierQuantite('${item.nom}', -1)">−</button>
-						</div>
-						<button class="btn-supprimer" onclick="supprimerDuPanier('${item.nom}')" aria-label="Retirer du panier">
-							🗑️
-						</button>
-					</div>
-				`;
-				conteneur.appendChild(bloc);
-			});
-
-			document.getElementById("total-panier").textContent = `Total : ${total.toFixed(2)} € frais de port inclus`;
-
-			const btnCommander = document.querySelector(".btn-commander");
-			if (btnCommander) {
-				if (panier.length === 0) {
-					btnCommander.disabled = true;
-					btnCommander.classList.add("desactive");
-				} else {
-					btnCommander.disabled = false;
-					btnCommander.classList.remove("desactive");
-				}
-			}
-
-		}
-
-		async function modifierQuantite(nom, delta) {
-			const panier = JSON.parse(localStorage.getItem("panier")) || [];
-			const index = panier.findIndex(p => p.nom === nom);
-			if (index >= 0) {
-			
-				const nouvelleQuantite = panier[index].quantite + delta;
-				if (delta > 0) {
-					const ok = await verifierQuantiteDisponible( panier[index].stripeProduct, nouvelleQuantite);
-					if (!ok) return;
-				}
-				
-				panier[index].quantite += delta;
-				if (panier[index].quantite <= 0) {
-					panier.splice(index, 1);
-				}
-				localStorage.setItem("panier", JSON.stringify(panier));
-				window.dispatchEvent(new Event("panierMisAJour"));
-				afficherMiniPanier();
-			}
-			const indicateurEl = document.getElementById("panier-toggle");
-			if (indicateurEl) {
-				indicateurEl.classList.add("pulse");
-				setTimeout(() => indicateurEl.classList.remove("pulse"), 300);
-			}
-		}
-
-		function supprimerDuPanier(nom) {
-			const panier = JSON.parse(localStorage.getItem("panier")) || [];
-			const nouveau = panier.filter(p => p.nom !== nom);
-			localStorage.setItem("panier", JSON.stringify(nouveau));
-			afficherMiniPanier();
-			window.dispatchEvent(new Event("panierMisAJour"));
-
-			
-			const indicateurEl = document.getElementById("panier-toggle");
-			if (indicateurEl) {
-				indicateurEl.classList.add("pulse");
-				setTimeout(() => indicateurEl.classList.remove("pulse"), 300);
-			}
-
-		}
-
-		document.addEventListener("click", function (event) {
-			const volet = document.getElementById("mini-panier");
-			const toggle = document.getElementById("panier-toggle");
-
-			
-			const ajouterBtn = event.target.closest(".btn-add-to-cart");
-
-			
-			const quantiteBtn = event.target.closest(".quantite-controls");
-			const supprimerBtn = event.target.closest(".btn-supprimer");
-
-			if (!volet || !volet.classList.contains("actif")) return;
-
-			if (
-				volet.contains(event.target) ||
-				toggle.contains(event.target) ||
-				ajouterBtn ||
-				quantiteBtn ||
-				supprimerBtn
-			) {
-				return; 
-			}
-
-			
-			fermerPanier();
-		});
-
-</script><main class="main">
-  <section class="main-content">
-    <div class="content-wrapper">
-      <div class="content-text">
-        <p>Merci pour votre commande !</p>
-<p>Votre paiement a été effectué avec succès.</p>
-<p>Nous préparons votre commande avec soin et vous informerons par email.</p>
-<p><a href="/">Retour à l&rsquo;accueil</a></p>
-<script>
   // 🧹 Vider le panier
   localStorage.removeItem("panier");
+  localStorage.removeItem("stripeSessionId");
 
-  // 🔄 Mettre à jour l'affichage du mini-panier si nécessaire
+  // 🔄 Mettre à jour l'affichage du mini-panier
   window.dispatchEvent(new Event("panierMisAJour"));
-
 </script>
-      </div>
-    </div>
-  </section>
-
-    </main>
-    
-<footer class="footer">
-	<div id="footer" class="footer-container">
-		<span>&copy; 2026 <a href="https://encompagniedesetoiles.fr/">En Compagnie des Étoiles</a></span> · 
-		<a href="/mentions-legales/">Mentions légales</a> ·  
-		<a href="/conditions-generales-vente/">CGV</a> · 
-		<a href="/politique-confidentialite/">Confidentialité</a>
-		<span id="info-cookie"  class="info-cookie" style="display: none;">
-			 · Zéro cookie, zéro suivi
-			<span class="tooltip">Conformément à votre choix, aucun cookie publicitaire ou de mesure d'audience.<br>Seul un cookie technique est utilisé pour mémoriser votre choix de consentement.<br>Le panier fonctionne uniquement via le stockage local du navigateur.</span>
-		</span>
-	</div>
-</footer>
-<script>
-function updateFooterDisplay() {
-    const infoCookie = document.getElementById('info-cookie');
-    const footer = document.getElementById('footer');
-    if (!infoCookie || !footer) return;
-
-    const rawCookie = document.cookie.split('; ').find(row => row.startsWith('tarteaucitron='));
-    if (!rawCookie) {
-        infoCookie.style.display = 'inline';
-        footer.classList.add('visible');
-        return;
-    }
-
-    const cookieValue = decodeURIComponent(rawCookie.substring('tarteaucitron='.length));
-
-    if (cookieValue.includes('!gtag=false')) {
-        infoCookie.style.display = 'inline';
-    } else {
-        infoCookie.style.display = 'none';
-    }
-
-    footer.classList.add('visible');
-}
-
-
-document.addEventListener('DOMContentLoaded', updateFooterDisplay);
-
-
-document.addEventListener('tac.consent_updated', () => {
-    updateFooterDisplay();
-});
-</script>
-
-<script>
-    let menu = document.getElementById('menu')
-    if (menu) {
-        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
-        menu.onscroll = function () {
-            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
-        }
-    }
-
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener("click", function (e) {
-            e.preventDefault();
-            var id = this.getAttribute("href").substr(1);
-            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
-                    behavior: "smooth"
-                });
-            } else {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
-            }
-            if (id === "top") {
-                history.replaceState(null, null, " ");
-            } else {
-                history.pushState(null, null, `#${id}`);
-            }
-        });
-    });
-
-</script>
-<script>
-    document.getElementById("theme-toggle").addEventListener("click", () => {
-        if (document.body.className.includes("dark")) {
-            document.body.classList.remove('dark');
-            localStorage.setItem("pref-theme", 'light');
-        } else {
-            document.body.classList.add('dark');
-            localStorage.setItem("pref-theme", 'dark');
-        }
-    })
-
-</script>
-</body>
-
-</html>

@@ -49,7 +49,7 @@ Nous préparons votre commande avec soin et vous informerons par email.
         return;
       }
 			
-      const m = data.metadata  | {};
+      const m = data.metadata;
 			console.log("metadata récupérées :", data);
       const relais = (m.pointRelais || "").split(", ").filter(Boolean);
       const adresse = [m.adresse, m.complement, `${m.codePostal} ${m.ville}`].filter(Boolean);

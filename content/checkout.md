@@ -15,19 +15,19 @@ const REGEX_CP = /\b(?:\d{5}|2[AB]\d{3})\b/;
 
 document.addEventListener("DOMContentLoaded", () => {
 
+  // 🔁 Surveille les champs de facturation
+  ["nom", "prenom", "adresse", "mail"].forEach(id => {
+    const champ = document.getElementById(id);
+    if (champ) champ.addEventListener("input", surveillerEtape1);
+  });
+
   // 🔍 Autocomplétion Géoportail, réutilisable sur les deux adresses
   attacherAutocompletion("adresse", item => {
     remplirAdresseGeo(item, "adresse");
     localStorage.setItem("codePostal", item.zipcode  || "");
     localStorage.setItem("ville", item.city || item.oldcity || "");
   });
-	
-  // 🔁 Surveille les champs de facturation
-  ["nom", "prenom", "adresse", "mail"].forEach(id => {
-    const champ = document.getElementById(id);
-    if (champ) champ.addEventListener("input", surveillerEtape1);
-  });
-	
+
   attacherAutocompletion("adresse-livraison", item => {
     remplirAdresseGeo(item, "adresse-livraison");
     localStorage.setItem("codePostalLivraison", item.zipcode || "");
@@ -233,7 +233,7 @@ function afficherSectionLivraison() {
   const detail = document.getElementById("bloc-adresse-livraison-detail");
   detail.style.display = document.getElementById("meme-adresse").checked ? "none" : "block";
 	
-  document.getElementById("titre- 	-poste").style.display  = "none";
+  document.getElementById("titre-colis-poste").style.display  = "none";
   document.getElementById("titre-colis-relais").style.display = "none";
 	
   if (modes.cartesSeules) {

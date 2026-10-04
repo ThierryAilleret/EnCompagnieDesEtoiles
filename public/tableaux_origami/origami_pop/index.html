@@ -280,7 +280,7 @@ window.addEventListener("DOMContentLoaded", () => {
 				const sousTotal = item.prix * item.quantite;
 				if (item.categorie === "carte") {
 					totalCartes += sousTotal;
-				} else if (item.categorie === "tableaux_origami") {
+				} else if (item.categorie === "tableau_origami") {
 					totalOrigami += sousTotal;
 				} else {
 					totalAutres += sousTotal;
@@ -724,7 +724,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 				const nom = "Tableau Origami Pop";
 				const description = "Tableau d\u0027art cinétique";
-				const categorie = "tableaux_origami";
+				const categorie = "tableau_origami";
 				const prix = parseFloat("250");
 				const monnaie = "€";
 				const image = "\/images\/Origami_Pop_1.jpg".startsWith("http")

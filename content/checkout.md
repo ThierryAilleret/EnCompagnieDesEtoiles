@@ -205,11 +205,11 @@ function remplirAdresseGeo(item, adresseId) {
 function calculerModesLivraison(panier) {
   const cats = new Set(panier.map(i => i.categorie));
   return {
-    aLuminaires:  cats.has("luminaires"),
-    aTableaux:    cats.has("tableaux_origami"),
+    aLuminaires:  cats.has("luminaire"),
+    aTableaux:    cats.has("tableau_origami"),
     aCartes:      cats.has("carte"),
     cartesSeules: cats.size === 1 && cats.has("carte"),
-    deuxColis:    cats.has("luminaires") && cats.has("tableaux_origami")
+    deuxColis:    cats.has("luminaire") && cats.has("tableau_origami")
   };
 }
 
@@ -228,7 +228,7 @@ function relaisRequis() {
 function posteRequise() {
   const panier = JSON.parse(localStorage.getItem("panier")) || [];
   const modes = calculerModesLivraison(panier);
-  return modes.aLuminaires || modes.cartesSeules;   // modeCartesChoisi() n'influence plus
+  return modes.aLuminaires || modes.cartesSeules;
 }
 
 function afficherSectionLivraison() {
@@ -590,7 +590,7 @@ document.getElementById("checkout-button").addEventListener("click", function (e
 
   // Répartition des articles par colis
   const articlesRelais = panier
-    .filter(i => i.categorie === "tableaux_origami"
+    .filter(i => i.categorie === "tableau_origami"
  || (i.categorie === "carte" && (modes.aTableaux || modeCartes === "relais")))
     .map(i => `${i.quantite}x ${i.nom}`);
   const articlesPoste = panier

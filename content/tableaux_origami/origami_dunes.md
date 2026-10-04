@@ -4,7 +4,7 @@ stripeProductLive = "prod_UkiOy96liEQe7l"
 priceIdStripeTest = "price_1UM1F4GEPWcc8pKFIVuYYSyX"
 priceIdStripeLive = "price_1TlCxWGEPWcc8pKFgesbKf0X"
 
-categorie = "tableaux_origami"
+categorie = "tableau_origami"
 product = "dunes"
 title = "Tableau Origami Dunes"
 thumbnail = "/images/Origami_Dunes_1.jpg"

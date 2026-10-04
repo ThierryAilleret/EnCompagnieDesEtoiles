@@ -4,7 +4,7 @@ stripeProductLive = "prod_UkimiUb4BJv0U6"
 priceIdStripeTest = ""
 priceIdStripeLive = "price_1TlDKvGEPWcc8pKF5gs4EkVF"
 
-categorie = "tableaux_origami"
+categorie = "tableau_origami"
 product = "pop"
 title = "Tableau Origami Pop"
 thumbnail = "/images/Origami_Pop_1.jpg"

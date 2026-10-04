@@ -280,7 +280,7 @@ window.addEventListener("DOMContentLoaded", () => {
 				const sousTotal = item.prix * item.quantite;
 				if (item.categorie === "carte") {
 					totalCartes += sousTotal;
-				} else if (item.categorie === "tableaux_origami") {
+				} else if (item.categorie === "tableau_origami") {
 					totalOrigami += sousTotal;
 				} else {
 					totalAutres += sousTotal;
@@ -510,8 +510,8 @@ window.addEventListener("DOMContentLoaded", () => {
   <p id="recap-total"></p>
   <h4>Livraison en point relais</h4>
   <div id="recap-relais"></div>
-  <h4>Adresse</h4>
-  <div id="recap-adresse"></div>
+  <h4>Vos coordonnées de contact</h4>
+  <div id="recap-contact"></div>
 </div>
 <p id="recap-erreur" style="display:none; color:#777; font-style:italic;">
   (Récapitulatif indisponible — retrouvez les détails de votre commande dans l'e-mail de confirmation.)
@@ -539,8 +539,9 @@ window.addEventListener("DOMContentLoaded", () => {
         document.getElementById("recap-erreur").style.display = "block";
         return;
       }
-
-      const m = data.metadata  | {};
+			
+      const m = data.metadata || {};
+			console.log("metadata récupérées :", data);
       const relais = (m.pointRelais || "").split(", ").filter(Boolean);
       const adresse = [m.adresse, m.complement, `${m.codePostal} ${m.ville}`].filter(Boolean);
 
@@ -548,10 +549,10 @@ window.addEventListener("DOMContentLoaded", () => {
         `<strong>Total payé :</strong> ${(data.montantTotal / 100).toFixed(2)} €`;
 
       document.getElementById("recap-relais").innerHTML = relais.length
-        ? `<p style="font-weight:bold;">📍 ${relais[0]}</p><p>${relais.slice(1).join(", ")}</p>`
+        ? `<p>📍 ${relais[0]}<br>${relais.slice(1).join(", ")}</p>`
         : `<p>${adresse.join("<br>")}</p>`;
 
-      document.getElementById("recap-adresse").innerHTML =
+      document.getElementById("recap-contact").innerHTML =
         `<p>${m.prenom || ""} ${m.nom || ""}<br>${m.email || ""}</p>`;
 
       document.getElementById("recap-commande").style.display = "block";

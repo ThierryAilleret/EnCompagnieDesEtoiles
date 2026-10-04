@@ -60,7 +60,7 @@ exports.handler = async (event) => {
 
       if (item.categorie === "carte") {
         totalCartes += sousTotal;
-      } else if (item.categorie === "tableaux_origami") {
+      } else if (item.categorie === "tableau_origami") {
         totalOrigami += sousTotal;
       } else {
         totalAutres += sousTotal;

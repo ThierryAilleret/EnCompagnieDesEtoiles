@@ -11,6 +11,7 @@ layout = "checkout"
 
 <script>
 const REGEX_MAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const REGEX_CP = /\b(?:\d{5}|2[AB]\d{3})\b/;
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -56,14 +57,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (champ) champ.addEventListener("input", () => {
       window._livraisonPosteValide = false;
       mettreAJourBoutonValidation();
-      verifierEtapeLivraison();
-    });
-  });
-
-  // 📻 Choix du mode (uniquement affiché si cartes seules)
-  document.querySelectorAll("input[name='mode-cartes']").forEach(radio => {
-    radio.addEventListener("change", () => {
-      afficherSectionLivraison();
       verifierEtapeLivraison();
     });
   });
@@ -213,10 +206,6 @@ function calculerModesLivraison(panier) {
   };
 }
 
-function modeCartesChoisi() {
-  return document.querySelector("input[name='mode-cartes']:checked")?.value;
-}
-
 // Le relais est-il nécessaire ?
 function relaisRequis() {
   const panier = JSON.parse(localStorage.getItem("panier")) || [];
@@ -235,33 +224,44 @@ function afficherSectionLivraison() {
   const panier = JSON.parse(localStorage.getItem("panier")) || [];
   const modes = calculerModesLivraison(panier);
 
-  const blocChoix        = document.getElementById("choix-poste");
-  const blocChoixRelais  = document.getElementById("choix-relais");
   const messageDeuxColis = document.getElementById("message-deux-colis");
   const blocAdressePoste = document.getElementById("bloc-adresse-poste");
   const widgetRelai      = document.getElementById("zone-widget-relai");
 
+  // ♻️ Réinitialisation de l'état de la case (modifiée par le mode deux colis)
+  document.getElementById("label-meme-adresse").style.display = "block";
+  const detail = document.getElementById("bloc-adresse-livraison-detail");
+  detail.style.display = document.getElementById("meme-adresse").checked ? "none" : "block";
+	
+  document.getElementById("titre-colis-poste").style.display  = "none";
+  document.getElementById("titre-colis-relais").style.display = "none";
+	
   if (modes.cartesSeules) {
-    blocChoix.style.display        = "none";
-    blocChoixRelais.style.display  = "none";
-    messageDeuxColis.style.display = "none";
+     messageDeuxColis.style.display = "none";
     blocAdressePoste.style.display = "block";
     widgetRelai.style.display      = "none";
-  } else if (modes.deuxColis) {
-    blocChoix.style.display        = "none";
-    blocChoixRelais.style.display  = "none";
+   } else if (modes.deuxColis) {
     messageDeuxColis.style.display = "block";
     blocAdressePoste.style.display = "block";
     widgetRelai.style.display      = "block";
+
+    // 🏷️ Titres « premier / second colis »
+    document.getElementById("titre-colis-poste").style.display  = "block";
+    document.getElementById("titre-colis-relais").style.display = "block";
+
+    // 📬 Adresse visible et modifiable : case décochée + pré-remplissage
+    document.getElementById("label-meme-adresse").style.display = "none";
+    document.getElementById("meme-adresse").checked = false;
+    if (!document.getElementById("adresse-livraison").value.trim()) {
+      recopierFacturationVersLivraison();
+    }
+    document.getElementById("bloc-adresse-livraison-detail").style.display = "block";
+    window._livraisonPosteValide = false;
   } else if (modes.aTableaux) {
-    blocChoix.style.display        = "none";
-    blocChoixRelais.style.display  = "none";
     messageDeuxColis.style.display = "none";
     blocAdressePoste.style.display = "none";
     widgetRelai.style.display      = "block";
   } else {
-    blocChoix.style.display        = "none";
-    blocChoixRelais.style.display  = "none";
     messageDeuxColis.style.display = "none";
     blocAdressePoste.style.display = "block";
     widgetRelai.style.display      = "none";
@@ -315,13 +315,15 @@ function mettreAJourBoutonValidation() {
   const bouton = document.getElementById("validation-livraison-button");
   if (!bouton) return;
 
-  if (relaisRequis()) {
+  const relaisRestant    = relaisRequis() && window._relaisValide !== true;
+  const adresseRestante  = posteRequise() && window._livraisonPosteValide !== true;
+
+  if (relaisRestant) {
     bouton.textContent = "Valider ce point relais";
-    bouton.style.display = (window._pointRelaisId && !window._relaisValide) ? "inline-block" : "none";
-  } else if (posteRequise()) {
+    bouton.style.display = window._pointRelaisId ? "inline-block" : "none";
+  } else if (adresseRestante) {
     bouton.textContent = "Valider cette adresse de livraison";
-    const dejaValidee = window._livraisonPosteValide === true;
-    bouton.style.display = dejaValidee ? "none" : "inline-block";
+    bouton.style.display = "inline-block";
   } else {
     bouton.style.display = "none";
   }
@@ -331,10 +333,9 @@ function mettreAJourBoutonValidation() {
 function adresseLivraisonComplete() {
   if (document.getElementById("meme-adresse").checked) {
     recopierFacturationVersLivraison();
-    return true; // copie de la facturation, déjà validée à l'étape 1
+    return true;
   }
-  const a = document.getElementById("adresse-livraison").value.trim();
-  return a.length >= 5 && (localStorage.getItem("codePostalLivraison") || "").length >= 4;
+  return REGEX_CP.test(document.getElementById("adresse-livraison").value.trim());
 }
 
 // ============================================================
@@ -379,13 +380,15 @@ function surveillerEtape1() {
   const adresse = document.getElementById("adresse").value.trim();
   const mail    = document.getElementById("mail").value.trim();
   const champMail = document.getElementById("mail");
+	const champAdresse = document.getElementById("adresse");
 
-  // ✅ Validation du format de l'e-mail
+  // ✅ Validation du format de l'e-mail et de la présence d'un code postal
   const mailValide = REGEX_MAIL.test(mail);
+	const adresseValide = REGEX_CP.test(adresse);
 
   const etape1 = document.getElementById("step-1");
   const etape2 = document.getElementById("step-2");
-  const etape_1_complete = nom && prenom && adresse && mail && mailValide;
+  const etape_1_complete = nom && prenom && adresse && adresseValide && mail && mailValide;
 
   if (mail && !mailValide) {
     champMail.style.borderColor = "#d9534f";
@@ -395,6 +398,14 @@ function surveillerEtape1() {
     champMail.title = "";
   }
 
+  if (adresse && !adresseValide) {
+    champAdresse.style.borderColor = "#d9534f";
+    champAdresse.title = "Adresse incomplète : sélectionnez-la dans les suggestions pour inclure le code postal";
+  } else {
+    champAdresse.style.borderColor = "";
+    champAdresse.title = "";
+  }
+	
   if (etape_1_complete) {
     // Étape 2 : complètement masquée jusqu'ici, on la révèle
     etape2.style.display = "block";
@@ -412,8 +423,9 @@ function verifierEtatPaiement() {
   const panier = JSON.parse(localStorage.getItem("panier")) || [];
   if (panier.length === 0) {
     verrouillerEtape3();
-    document.getElementById("step-2").style.display = "none";
-		etape2.classList.remove("actif");
+    const etape2 = document.getElementById("step-2");
+    etape2.style.display = "none";
+    etape2.classList.remove("actif");
   } else {
     surveillerEtape1();
   }
@@ -500,13 +512,12 @@ function afficherPanierDansCheckout() {
             Elle partira donc en <strong>deux colis</strong> : l'un à l'adresse de livraison ci-dessous,
             l'autre au point relais. Les frais de port restent <strong>offerts</strong>.
           </div>
-          <!-- Choix du mode : uniquement si cartes seules -->
-          <div id="choix-poste" style="display:none; margin-bottom:1em;">
-            <label><input type="radio" name="mode-cartes" value="poste" checked> Envoi par La Poste</label>
-          </div>
-					<!-- Livraison par La Poste : directement sous le bouton radio "La Poste" -->
+					<!-- Livraison par La Poste -->
+          <h4 id="titre-colis-poste" style="display:none; margin-bottom:0.4em;">
+            📦 Adresse postale pour le premier colis
+          </h4>
           <div id="bloc-adresse-poste" style="display:none; margin-bottom:1em;">
-            <label>
+            <label id="label-meme-adresse">
               <input type="checkbox" id="meme-adresse" checked />
               Livrer à l'adresse de facturation
             </label>
@@ -523,10 +534,10 @@ function afficherPanierDansCheckout() {
               </label>
             </div>
           </div>
-          <!-- Widget Mondial Relay : directement sous le bouton radio "Mondial Relay" -->
-          <div id="choix-relais" style="display:none; margin-bottom:1em;">
-            <label><input type="radio" name="mode-cartes" value="relais"> Point relais Mondial Relay</label>
-          </div>
+          <!-- Widget Mondial Relay -->
+          <h4 id="titre-colis-relais" style="display:none; margin-bottom:0.4em;">
+            📍 Choix du point relais pour le second colis
+          </h4>
 					<div id="zone-widget-relai" style="display:none;">
             <div id="Zone_Widget"></div>
             <input type="hidden" id="Target_Widget" name="point-relay" />
@@ -581,20 +592,18 @@ document.getElementById("checkout-button").addEventListener("click", function (e
   }
 
   const modes = calculerModesLivraison(panier);
-  const modeCartes = modeCartesChoisi();
 
   // Mode de livraison global (pour les métadonnées)
   let modeLivraison = "poste";
   if (modes.deuxColis) modeLivraison = "deux-colis";
   else if (relaisRequis()) modeLivraison = "relais";
 
-  // Répartition des articles par colis
+  // Répartition : tableaux en relais, le reste (luminaires, cartes) par la Poste
   const articlesRelais = panier
-    .filter(i => i.categorie === "tableau_origami"
- || (i.categorie === "carte" && (modes.aTableaux || modeCartes === "relais")))
+    .filter(i => i.categorie === "tableau_origami")
     .map(i => `${i.quantite}x ${i.nom}`);
   const articlesPoste = panier
-    .filter(i => !articlesRelais.includes(`${i.quantite}x ${i.nom}`))
+    .filter(i => i.categorie !== "tableau_origami")
     .map(i => `${i.quantite}x ${i.nom}`);
 
   const client = {

@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     remplirAdresseGeo(item, "adresse");
     localStorage.setItem("codePostal", item.zipcode  || "");
     localStorage.setItem("ville", item.city || item.oldcity || "");
+		surveillerEtape1;
   });
 
   attacherAutocompletion("adresse-livraison", item => {
@@ -233,7 +234,7 @@ function afficherSectionLivraison() {
   const detail = document.getElementById("bloc-adresse-livraison-detail");
   detail.style.display = document.getElementById("meme-adresse").checked ? "none" : "block";
 	
-  document.getElementById("titre-colis-poste").style.display  = "none";
+  document.getElementById("titre- 	-poste").style.display  = "none";
   document.getElementById("titre-colis-relais").style.display = "none";
 	
   if (modes.cartesSeules) {

@@ -49,7 +49,7 @@ Nous préparons votre commande avec soin et vous informerons par email.
         return;
       }
 			
-      const m = data.metadata;
+      const m = data.metadata || {};
 			console.log("metadata récupérées :", data);
       const relais = (m.pointRelais || "").split(", ").filter(Boolean);
       const adresse = [m.adresse, m.complement, `${m.codePostal} ${m.ville}`].filter(Boolean);
@@ -58,7 +58,7 @@ Nous préparons votre commande avec soin et vous informerons par email.
         `<strong>Total payé :</strong> ${(data.montantTotal / 100).toFixed(2)} €`;
 
       document.getElementById("recap-relais").innerHTML = relais.length
-        ? `<p>📍 ${relais[0]}</br>${relais.slice(1).join(", ")}</p>`
+        ? `<p>📍 ${relais[0]}<br>${relais.slice(1).join(", ")}</p>`
         : `<p>${adresse.join("<br>")}</p>`;
 
       document.getElementById("recap-contact").innerHTML =

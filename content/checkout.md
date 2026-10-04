@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🔍 Autocomplétion Géoportail, réutilisable sur les deux adresses
   attacherAutocompletion("adresse", item => {
     remplirAdresseGeo(item, "adresse");
-    localStorage.setItem("codePostal", item.zipcode  | "");
+    localStorage.setItem("codePostal", item.zipcode  || "");
     localStorage.setItem("ville", item.city || item.oldcity || "");
   });
 
@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
       mettreAJourBoutonValidation();
     } else {
       window._livraisonPosteValide = false;
+			mettreAJourBoutonValidation();
     }
     verifierEtapeLivraison();
   });
@@ -220,14 +221,14 @@ function modeCartesChoisi() {
 function relaisRequis() {
   const panier = JSON.parse(localStorage.getItem("panier")) || [];
   const modes = calculerModesLivraison(panier);
-  return modes.aTableaux || (modes.cartesSeules && modeCartesChoisi() === "relais");
+  return modes.aTableaux;
 }
 
 // Une livraison par La Poste est-elle nécessaire ?
 function posteRequise() {
   const panier = JSON.parse(localStorage.getItem("panier")) || [];
   const modes = calculerModesLivraison(panier);
-  return modes.aLuminaires || (modes.cartesSeules && modeCartesChoisi() === "poste");
+  return modes.aLuminaires || modes.cartesSeules;   // modeCartesChoisi() n'influence plus
 }
 
 function afficherSectionLivraison() {
@@ -241,10 +242,11 @@ function afficherSectionLivraison() {
   const widgetRelai      = document.getElementById("zone-widget-relai");
 
   if (modes.cartesSeules) {
-    blocChoix.style.display        = "block";
-    blocChoixRelais.style.display  = "block";
+    blocChoix.style.display        = "none";
+    blocChoixRelais.style.display  = "none";
     messageDeuxColis.style.display = "none";
-    afficherSelonModeCartes();
+    blocAdressePoste.style.display = "block";
+    widgetRelai.style.display      = "none";
   } else if (modes.deuxColis) {
     blocChoix.style.display        = "none";
     blocChoixRelais.style.display  = "none";
@@ -266,26 +268,6 @@ function afficherSectionLivraison() {
   }
 
   mettreAJourBoutonValidation();
-}
-
-function afficherSelonModeCartes() {
-  const mode = modeCartesChoisi();
-  const blocAdressePoste  = document.getElementById("bloc-adresse-poste");
-  const widgetRelai       = document.getElementById("zone-widget-relai");
-  const relaiSelectionne  = document.getElementById("relai-selectionne");
-
-  if (mode === "relais") {
-    blocAdressePoste.style.display = "none";
-    widgetRelai.style.display      = "block";
-  } else {
-    blocAdressePoste.style.display = "block";
-    widgetRelai.style.display      = "none";
-    // 🧹 On repart de zéro côté relais
-    relaiSelectionne.style.display = "none";
-    window._pointRelaisId     = "";
-    window._pointRelaisAdresse = "";
-    window._relaisValide      = false;
-  }
 }
 
 // ============================================================
@@ -313,7 +295,7 @@ function deverrouillerEtape3() {
   etape3.style.display = "block";
   etape3.classList.add("actif");
 
-  // 💰 Affiche le total à payer au-dessus du bouton
+  // 💰 Total + bouton de paiement
   const panier = JSON.parse(localStorage.getItem("panier")) || [];
   const totaux = calculerTotaux(panier);
   const prixTotal = document.getElementById("prix-total");
@@ -321,6 +303,9 @@ function deverrouillerEtape3() {
     prixTotal.innerHTML = `<strong>Total à payer :</strong> ${totaux.totalFinal.toFixed(2)} €`;
     prixTotal.style.display = "block";
   }
+  const boutonPaiement = document.getElementById("checkout-button");
+  boutonPaiement.classList.remove("bouton-verrouille");
+  boutonPaiement.style.display = "block";
 }
 
 // ============================================================
@@ -578,11 +563,7 @@ function afficherPanierDansCheckout() {
 <script>
 document.getElementById("validation-livraison-button").addEventListener("click", function (event) {
   event.preventDefault();
-  validerLivraison();
-  // Une fois la livraison validée, on révèle l'étape 3 avec le bouton de paiement
-  const boutonPaiement = document.getElementById("checkout-button");
-  boutonPaiement.classList.remove("bouton-verrouille");
-  boutonPaiement.style.display = "block";
+  validerLivraison();   // deverrouillerEtape3() s'occupe du reste
 });
 
 document.getElementById("checkout-button").addEventListener("click", function (event) {

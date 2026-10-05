@@ -505,7 +505,7 @@ function afficherPanierDansCheckout() {
           </label>
           <div id="autocomplete-container-adresse" class="autocomplete-box"></div>
         </div>
-        <label>Complément d'addresse :<br><input type="text" name="complement_adresse" id="complement_adresse"/></label>
+        <label>Complément d'adresse :<br><input type="text" name="complement_adresse" id="complement_adresse"/></label>
         <label>Mail :<br><input type="text" name="mail" id="mail" required /></label>
       </fieldset>
       <!-- Étape 2 : Livraison (entièrement masquée tant que l'étape 1 est incomplète) -->

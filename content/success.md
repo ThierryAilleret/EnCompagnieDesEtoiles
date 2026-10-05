@@ -3,31 +3,25 @@ title = "Commande validée"
 url    = "/success.html"
 layout = "post_checkout"
 +++
-Merci pour votre commande !
-
-Votre paiement a été effectué avec succès.
-
-Nous préparons votre commande avec soin et vous informerons par email.
-
-<div id="recap-commande" style="display:none; margin-top:1.5em;">
-  <h3>Récapitulatif de votre commande</h3>
-  <p id="recap-total"></p>
-
-  <h4>Livraison en point relais</h4>
-  <div id="recap-relais"></div>
-
-  <h4>Vos coordonnées de contact</h4>
-  <div id="recap-contact"></div>
+<div id="recap-commande" style="display:none; max-width:640px; margin:0 auto;">
+  <h3 style="margin-bottom:0.6em;">✅ Merci pour votre commande !</h3>
+  <p style="color:#555; margin:0 0 1.2em;">
+    Votre paiement a été accepté. Nous préparons votre commande avec soin
+    et vous enverrons un e-mail de confirmation.
+  </p>
+  <div style="border:1px solid #ddd; border-radius:8px; overflow:hidden; font-size:0.95em;">
+    <div id="recap-ligne-total" style="display:flex; justify-content:space-between; padding:0.8em 1em; background:#f5f5f0; font-weight:bold;"></div>
+    <div id="recap-ligne-livraison" style="display:flex; justify-content:space-between; gap:1.5em; padding:0.8em 1em; border-top:1px solid #ddd;"></div>
+    <div id="recap-ligne-contact" style="display:flex; justify-content:space-between; gap:1.5em; padding:0.8em 1em; border-top:1px solid #ddd;"></div>
+  </div>
+  <p style="margin-top:1.2em;"><a href="/">← Retour à la boutique</a></p>
 </div>
 
 <p id="recap-erreur" style="display:none; color:#777; font-style:italic;">
   (Récapitulatif indisponible — retrouvez les détails de votre commande dans l'e-mail de confirmation.)
 </p>
 
-<p><a href="/">Retour à l'accueil</a></p>
-
 <script>
-  // 📥 Afficher le récapitulatif depuis Stripe (avant nettoyage du localStorage)
   async function afficherRecapCommande() {
     const sessionId = localStorage.getItem("stripeSessionId");
     if (!sessionId) {
@@ -48,21 +42,32 @@ Nous préparons votre commande avec soin et vous informerons par email.
         document.getElementById("recap-erreur").style.display = "block";
         return;
       }
-			
-      const m = data.metadata || {};
-			console.log("metadata récupérées :", data);
+
+      const m = data.metadata  | {};
+      const ligne = (etiquette, valeur) =>
+        `<span style="color:#777; white-space:nowrap;">${etiquette}</span><span style="text-align:right;">${valeur || "—"}</span>`;
+
+      // 💰 Total
+      document.getElementById("recap-ligne-total").innerHTML =
+        ligne("Total payé", `<strong>${(data.montantTotal / 100).toFixed(2)} €</strong>`);
+
+      // 📦 Livraison : adresse, relais, ou les deux (mode deux colis)
+      const adresse = [m.adresse, m.complement, `${m.codePostalLivraison || m.codePostal} ${m.villeLivraison || m.ville}`].filter(Boolean).join("<br>");
       const relais = (m.pointRelais || "").split(", ").filter(Boolean);
-      const adresse = [m.adresse, m.complement, `${m.codePostal} ${m.ville}`].filter(Boolean);
+      let livr;
+      if (m.modeLivraison === "deux-colis" && relais.length) {
+        livr = `${m.articlesPoste ? `📦 ${m.articlesPoste}<br>` : ""}${adresse}<br><br>` +
+               `${m.articlesRelais ? `📍 ${m.articlesRelais}<br>` : ""}${relais.join("<br>")}`;
+      } else if (relais.length) {
+        livr = `📍 ${relais.join("<br>")}`;
+      } else {
+        livr = adresse;
+      }
+      document.getElementById("recap-ligne-livraison").innerHTML = ligne("Livraison", livr);
 
-      document.getElementById("recap-total").innerHTML =
-        `<strong>Total payé :</strong> ${(data.montantTotal / 100).toFixed(2)} €`;
-
-      document.getElementById("recap-relais").innerHTML = relais.length
-        ? `<p>📍 ${relais[0]}<br>${relais.slice(1).join(", ")}</p>`
-        : `<p>${adresse.join("<br>")}</p>`;
-
-      document.getElementById("recap-contact").innerHTML =
-        `<p>${m.prenom || ""} ${m.nom || ""}<br>${m.email || ""}</p>`;
+      // 👤 Contact
+      document.getElementById("recap-ligne-contact").innerHTML =
+        ligne("Contact", `${m.prenom || ""} ${m.nom || ""}<br>${m.email || ""}`);
 
       document.getElementById("recap-commande").style.display = "block";
     } catch (e) {
@@ -76,7 +81,5 @@ Nous préparons votre commande avec soin et vous informerons par email.
   // 🧹 Vider le panier
   localStorage.removeItem("panier");
   localStorage.removeItem("stripeSessionId");
-
-  // 🔄 Mettre à jour l'affichage du mini-panier
   window.dispatchEvent(new Event("panierMisAJour"));
 </script>

@@ -38,23 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
     verifierEtapeLivraison();
   });
 
-  // 📋 Case « même adresse » : recopie la facturation vers la livraison
-  const memeAdresse = document.getElementById("meme-adresse");
-  memeAdresse.addEventListener("change", () => {
-    const bloc = document.getElementById("bloc-adresse-livraison-detail");
-    recopierFacturationVersLivraison();
-    bloc.style.display = memeAdresse.checked ? "none" : "block";
-    if (memeAdresse.checked) {
-      // Adresse déjà fiable (copie de la facturation) : pas besoin de revalider
-      window._livraisonPosteValide = true;
-      mettreAJourBoutonValidation();
-    } else {
-      window._livraisonPosteValide = false;
-			mettreAJourBoutonValidation();
-    }
-    verifierEtapeLivraison();
-  });
-
   // Surveille les champs de livraison (toute saisie invalide la validation)
   ["adresse-livraison", "complement-livraison"].forEach(id => {
     const champ = document.getElementById(id);
@@ -68,80 +51,84 @@ document.addEventListener("DOMContentLoaded", () => {
   const cp = localStorage.getItem('codePostal')?.trim() || "";
   const ville = localStorage.getItem('ville')?.trim() || "";
 
-  $("#Zone_Widget").MR_ParcelShopPicker({
-    Target: "#Target_Widget",
-    Brand: "CC23JV2D",
-    Country: "FR",
-    AllowedCountries: "FR",
-    Language: "FR",
-    EnableGeolocalisatedSearch: "Yes",
-    PostCode: cp,
-    City: ville,
-    NbResults: "10",
-    Responsive: true,
-    ShowResultsOnMap: false,
-    OnParcelShopSelected: function (data) {
-      window._relaisValide = false;
-      const zoneInfo = document.getElementById("relai-selectionne");
-      const champ = document.getElementById("info-relai");
-      if (!zoneInfo || !champ) return;
-
-      let horaires = "";
-
-      if (data.HoursHtmlTable) {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(data.HoursHtmlTable, "text/html");
-        const rows = doc.querySelectorAll("table tr");
-        const horairesBruts = [];
-
-        rows.forEach(row => {
-          const jour = row.querySelector("th")?.textContent?.trim()?.slice(0, 3);
-          const tds = row.querySelectorAll("td");
-          const heures = Array.from(tds).map(td => td.textContent.trim()).filter(Boolean).join(" / ");
-          if (jour) horairesBruts.push({ jour, horaires: heures || "-" });
-        });
-
-        const groupes = {};
-        horairesBruts.forEach(({ jour, horaires }) => {
-          if (!groupes[horaires]) groupes[horaires] = [];
-          groupes[horaires].push(jour);
-        });
-
-        const joursFR = { Mon: "Lun", Tue: "Mar", Wed: "Mer", Thu: "Jeu", Fri: "Ven", Sat: "Sam", Sun: "Dim" };
-
-        const lignes = Object.entries(groupes).map(([horaires, jours]) => {
-          const trad = jours.map(j => joursFR[j] || j);
-          const etiquette = trad.length === 1 ? trad[0] : `${trad[0]}–${trad[trad.length - 1]}`;
-          return `<div id="horaires-relai"><strong>${etiquette}</strong> : ${horaires}</div>`;
-        });
-
-        horaires = lignes.join("");
-      }
-
-      const html = `
-        <div class="carte-relai">
-          <div class="entete-relai"><span class="icone-carte">📍</span><strong>${data.Nom}</strong></div>
-          <div class="adresse-relai">${data.Adresse1}<br>${data.CP} ${data.Ville}</div>
-          <div class="horaire-relai">
-            <div class="horloge">🕒 Horaires :</div>
-            <div class="table-horaire">${horaires}</div>
-          </div>
-        </div>
-      `;
-
-      champ.innerHTML = html;
-      zoneInfo.style.display = "block";
-
-      window._pointRelaisAdresse = `${data.Nom}, ${data.Adresse1}, ${data.CP} ${data.Ville}`;
-      window._pointRelaisId = data.ID;
-
-      mettreAJourBoutonValidation();
-      verrouillerEtape3();
-    }
-  });
-
   afficherPanierDansCheckout();
   surveillerEtape1();
+	
+	try {
+		$("#Zone_Widget").MR_ParcelShopPicker({
+			Target: "#Target_Widget",
+			Brand: "CC23JV2D",
+			Country: "FR",
+			AllowedCountries: "FR",
+			Language: "FR",
+			EnableGeolocalisatedSearch: "Yes",
+			PostCode: cp,
+			City: ville,
+			NbResults: "10",
+			Responsive: true,
+			ShowResultsOnMap: false,
+			OnParcelShopSelected: function (data) {
+				window._relaisValide = false;
+				const zoneInfo = document.getElementById("relai-selectionne");
+				const champ = document.getElementById("info-relai");
+				if (!zoneInfo || !champ) return;
+
+				let horaires = "";
+
+				if (data.HoursHtmlTable) {
+					const parser = new DOMParser();
+					const doc = parser.parseFromString(data.HoursHtmlTable, "text/html");
+					const rows = doc.querySelectorAll("table tr");
+					const horairesBruts = [];
+
+					rows.forEach(row => {
+						const jour = row.querySelector("th")?.textContent?.trim()?.slice(0, 3);
+						const tds = row.querySelectorAll("td");
+						const heures = Array.from(tds).map(td => td.textContent.trim()).filter(Boolean).join(" / ");
+						if (jour) horairesBruts.push({ jour, horaires: heures || "-" });
+					});
+
+					const groupes = {};
+					horairesBruts.forEach(({ jour, horaires }) => {
+						if (!groupes[horaires]) groupes[horaires] = [];
+						groupes[horaires].push(jour);
+					});
+
+					const joursFR = { Mon: "Lun", Tue: "Mar", Wed: "Mer", Thu: "Jeu", Fri: "Ven", Sat: "Sam", Sun: "Dim" };
+
+					const lignes = Object.entries(groupes).map(([horaires, jours]) => {
+						const trad = jours.map(j => joursFR[j] || j);
+						const etiquette = trad.length === 1 ? trad[0] : `${trad[0]}–${trad[trad.length - 1]}`;
+						return `<div id="horaires-relai"><strong>${etiquette}</strong> : ${horaires}</div>`;
+					});
+
+					horaires = lignes.join("");
+				}
+
+				const html = `
+					<div class="carte-relai">
+						<div class="entete-relai"><span class="icone-carte">📍</span><strong>${data.Nom}</strong></div>
+						<div class="adresse-relai">${data.Adresse1}<br>${data.CP} ${data.Ville}</div>
+						<div class="horaire-relai">
+							<div class="horloge">🕒 Horaires :</div>
+							<div class="table-horaire">${horaires}</div>
+						</div>
+					</div>
+				`;
+
+				champ.innerHTML = html;
+				zoneInfo.style.display = "block";
+
+				window._pointRelaisAdresse = `${data.Nom}, ${data.Adresse1}, ${data.CP} ${data.Ville}`;
+				window._pointRelaisId = data.ID;
+
+				mettreAJourBoutonValidation();
+				verrouillerEtape3();
+			}
+		});
+  } catch (e) {
+    console.error("Widget Mondial Relay non chargé :", e);
+  }
 });
 
 window.addEventListener("panierMisAJour", () => {
@@ -227,10 +214,11 @@ function posteRequise() {
 function afficherSectionLivraison() {
   const panier = JSON.parse(localStorage.getItem("panier")) || [];
   const modes = calculerModesLivraison(panier);
-
   const messageDeuxColis = document.getElementById("message-deux-colis");
   const blocAdressePoste = document.getElementById("bloc-adresse-poste");
   const widgetRelai      = document.getElementById("zone-widget-relai");
+	
+	window._livraisonPosteValide = false;
 	
   // 🧹 Si le relais n'est plus nécessaire, on masque et vide la sélection
   if (!relaisRequis()) {
@@ -242,10 +230,11 @@ function afficherSectionLivraison() {
     window._relaisValide = false;
   }
 
-  // ♻️ Réinitialisation de l'état de la case (modifiée par le mode deux colis)
-  document.getElementById("label-meme-adresse").style.display = "block";
-  const detail = document.getElementById("bloc-adresse-livraison-detail");
-  detail.style.display = document.getElementById("meme-adresse").checked ? "none" : "block";
+  // ♻️ Réinitialisation : adresse toujours visible, pré-remplie si vide
+  document.getElementById("bloc-adresse-livraison-detail").style.display = "block";
+  if (!document.getElementById("adresse-livraison").value.trim()) {
+    recopierFacturationVersLivraison();
+  }
 	
   document.getElementById("titre-colis-poste").style.display  = "none";
   document.getElementById("titre-colis-relais").style.display = "none";
@@ -263,14 +252,7 @@ function afficherSectionLivraison() {
     document.getElementById("titre-colis-poste").style.display  = "block";
     document.getElementById("titre-colis-relais").style.display = "block";
 
-    // 📬 Adresse visible et modifiable : case décochée + pré-remplissage
-    document.getElementById("label-meme-adresse").style.display = "none";
-    document.getElementById("meme-adresse").checked = false;
-    if (!document.getElementById("adresse-livraison").value.trim()) {
-      recopierFacturationVersLivraison();
-    }
-    document.getElementById("bloc-adresse-livraison-detail").style.display = "block";
-    window._livraisonPosteValide = false;
+    
   } else if (modes.aTableaux) {
     messageDeuxColis.style.display = "none";
     blocAdressePoste.style.display = "none";
@@ -345,10 +327,6 @@ function mettreAJourBoutonValidation() {
 
 // Vérifie que l'adresse de livraison (mode Poste) est complète
 function adresseLivraisonComplete() {
-  if (document.getElementById("meme-adresse").checked) {
-    recopierFacturationVersLivraison();
-    return true; // copie de la facturation, déjà validée à l'étape 1
-  }
   const champ = document.getElementById("adresse-livraison").value.trim();
   const cp = (localStorage.getItem("codePostalLivraison") || "").trim();
   const ville = (localStorage.getItem("villeLivraison") || "").trim();
@@ -534,10 +512,6 @@ function afficherPanierDansCheckout() {
             📦 Adresse postale pour le premier colis
           </h4>
           <div id="bloc-adresse-poste" style="display:none; margin-bottom:1em;">
-            <label id="label-meme-adresse">
-              <input type="checkbox" id="meme-adresse" checked />
-              Livrer à l'adresse de facturation
-            </label>
             <div id="bloc-adresse-livraison-detail" style="display:none; margin-top:0.5em;">
               <div style="position:relative;">
                 <label>Adresse de livraison :<br>
@@ -603,11 +577,6 @@ document.getElementById("checkout-button").addEventListener("click", function (e
     monnaie: item.monnaie === "€" ? "eur" : item.monnaie
   }));
 
-  // S'assurer que l'adresse de livraison est à jour si « même adresse »
-  if (document.getElementById("meme-adresse").checked) {
-    recopierFacturationVersLivraison();
-  }
-
   const modes = calculerModesLivraison(panier);
 
   // Mode de livraison global (pour les métadonnées)
@@ -636,7 +605,6 @@ document.getElementById("checkout-button").addEventListener("click", function (e
     complementLivraison: document.getElementById("complement-livraison").value.trim(),
     codePostalLivraison: localStorage.getItem("codePostalLivraison") || "",
     villeLivraison: localStorage.getItem("villeLivraison") || "",
-    memeAdresse: document.getElementById("meme-adresse").checked,
     modeLivraison,
     pointRelaisId: window._pointRelaisId || "",
     pointRelais: window._pointRelaisAdresse || "",

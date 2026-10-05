@@ -26,12 +26,16 @@ document.addEventListener("DOMContentLoaded", () => {
     remplirAdresseGeo(item, "adresse");
     localStorage.setItem("codePostal", item.zipcode  || "");
     localStorage.setItem("ville", item.city || item.oldcity || "");
+		surveillerEtape1();
   });
 
-  attacherAutocompletion("adresse-livraison", item => {
+    attacherAutocompletion("adresse-livraison", item => {
     remplirAdresseGeo(item, "adresse-livraison");
     localStorage.setItem("codePostalLivraison", item.zipcode || "");
     localStorage.setItem("villeLivraison", item.city || item.oldcity || "");
+    window._livraisonPosteValide = false;
+    mettreAJourBoutonValidation();
+    verifierEtapeLivraison();
   });
 
   // 📋 Case « même adresse » : recopie la facturation vers la livraison
@@ -227,6 +231,16 @@ function afficherSectionLivraison() {
   const messageDeuxColis = document.getElementById("message-deux-colis");
   const blocAdressePoste = document.getElementById("bloc-adresse-poste");
   const widgetRelai      = document.getElementById("zone-widget-relai");
+	
+  // 🧹 Si le relais n'est plus nécessaire, on masque et vide la sélection
+  if (!relaisRequis()) {
+    const relaiSelectionne = document.getElementById("relai-selectionne");
+    relaiSelectionne.style.display = "none";
+    document.getElementById("info-relai").innerHTML = "";
+    window._pointRelaisId = "";
+    window._pointRelaisAdresse = "";
+    window._relaisValide = false;
+  }
 
   // ♻️ Réinitialisation de l'état de la case (modifiée par le mode deux colis)
   document.getElementById("label-meme-adresse").style.display = "block";
@@ -333,9 +347,12 @@ function mettreAJourBoutonValidation() {
 function adresseLivraisonComplete() {
   if (document.getElementById("meme-adresse").checked) {
     recopierFacturationVersLivraison();
-    return true;
+    return true; // copie de la facturation, déjà validée à l'étape 1
   }
-  return REGEX_CP.test(document.getElementById("adresse-livraison").value.trim());
+  const champ = document.getElementById("adresse-livraison").value.trim();
+  const cp = (localStorage.getItem("codePostalLivraison") || "").trim();
+  const ville = (localStorage.getItem("villeLivraison") || "").trim();
+  return REGEX_CP.test(champ) && REGEX_CP.test(cp) && ville.length >= 2;
 }
 
 // ============================================================
@@ -499,7 +516,7 @@ function afficherPanierDansCheckout() {
           <div id="autocomplete-container-adresse" class="autocomplete-box"></div>
         </div>
         <label>Complément d'addresse :<br><input type="text" name="complement_adresse" id="complement_adresse"/></label>
-        <label>Mail :<br><input type="text" name="mail" id="mail" required placeholder="nom@domaine.fr" /></label>
+        <label>Mail :<br><input type="text" name="mail" id="mail" required /></label>
       </fieldset>
       <!-- Étape 2 : Livraison (entièrement masquée tant que l'étape 1 est incomplète) -->
       <fieldset id="step-2" class="etape" style="display:none;">

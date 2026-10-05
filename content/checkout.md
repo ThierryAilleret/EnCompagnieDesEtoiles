@@ -21,6 +21,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (champ) champ.addEventListener("input", surveillerEtape1);
   });
 
+  // Saisie manuelle dans l'adresse de facturation : l'origine (CP/ville) est périmée
+  document.getElementById("adresse").addEventListener("input", () => {
+    localStorage.removeItem("codePostal");
+    localStorage.removeItem("ville");
+    surveillerEtape1();
+  });
+	
   // 🔍 Autocomplétion Géoportail, réutilisable sur les deux adresses
   attacherAutocompletion("adresse", item => {
     remplirAdresseGeo(item, "adresse");
@@ -29,23 +36,28 @@ document.addEventListener("DOMContentLoaded", () => {
 		surveillerEtape1();
   });
 
-    attacherAutocompletion("adresse-livraison", item => {
+  document.getElementById("adresse-livraison").addEventListener("input", () => {
+    localStorage.removeItem("codePostalLivraison");
+    localStorage.removeItem("villeLivraison");
+    window._livraisonPosteValide = false;
+    mettreAJourBoutonValidation();
+    verifierEtapeLivraison();
+  });
+
+  // Le complément n'affecte pas l'adresse postale : simple revalidation
+  document.getElementById("complement-livraison").addEventListener("input", () => {
+    window._livraisonPosteValide = false;
+    mettreAJourBoutonValidation();
+    verifierEtapeLivraison();
+  });
+	
+  attacherAutocompletion("adresse-livraison", item => {
     remplirAdresseGeo(item, "adresse-livraison");
     localStorage.setItem("codePostalLivraison", item.zipcode || "");
     localStorage.setItem("villeLivraison", item.city || item.oldcity || "");
     window._livraisonPosteValide = false;
     mettreAJourBoutonValidation();
     verifierEtapeLivraison();
-  });
-
-  // Surveille les champs de livraison (toute saisie invalide la validation)
-  ["adresse-livraison", "complement-livraison"].forEach(id => {
-    const champ = document.getElementById(id);
-    if (champ) champ.addEventListener("input", () => {
-      window._livraisonPosteValide = false;
-      mettreAJourBoutonValidation();
-      verifierEtapeLivraison();
-    });
   });
 
   const cp = localStorage.getItem('codePostal')?.trim() || "";
@@ -218,8 +230,6 @@ function afficherSectionLivraison() {
   const blocAdressePoste = document.getElementById("bloc-adresse-poste");
   const widgetRelai      = document.getElementById("zone-widget-relai");
 	
-	window._livraisonPosteValide = false;
-	
   // 🧹 Si le relais n'est plus nécessaire, on masque et vide la sélection
   if (!relaisRequis()) {
     const relaiSelectionne = document.getElementById("relai-selectionne");
@@ -376,10 +386,12 @@ function surveillerEtape1() {
   const mail    = document.getElementById("mail").value.trim();
   const champMail = document.getElementById("mail");
 	const champAdresse = document.getElementById("adresse");
-
+  const cpFact     = (localStorage.getItem("codePostal") || "").trim();
+  const villeFact  = (localStorage.getItem("ville") || "").trim();
+  
   // ✅ Validation du format de l'e-mail et de la présence d'un code postal
   const mailValide = REGEX_MAIL.test(mail);
-	const adresseValide = REGEX_CP.test(adresse);
+	const adresseValide = REGEX_CP.test(adresse) && REGEX_CP.test(cpFact) && villeFact.length >= 2;
 
   const etape1 = document.getElementById("step-1");
   const etape2 = document.getElementById("step-2");

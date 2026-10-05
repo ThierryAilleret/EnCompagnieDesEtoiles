@@ -43,9 +43,7 @@ layout = "post_checkout"
         return;
       }
 
-			console.log("metadata récupérées :", data);
-
-      const m = data.metadata  | {};
+      const m = data.metadata || {};
       const ligne = (etiquette, valeur) =>
         `<span style="color:#777; white-space:nowrap;">${etiquette}</span><span style="text-align:right;">${valeur || "—"}</span>`;
 

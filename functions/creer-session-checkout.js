@@ -124,6 +124,11 @@ exports.handler = async (event) => {
       mode: "payment",
       customer_creation: "always",
       customer_email: client.email,
+
+			invoice_creation: {
+				enabled: true,
+			},
+
       line_items,
 			...(discounts.length > 0 ? { discounts } : []),
       success_url: `${baseUrl}/success`,

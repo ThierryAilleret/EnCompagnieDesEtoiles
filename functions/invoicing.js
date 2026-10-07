@@ -32,7 +32,7 @@ exports.handler = async (event) => {
         });
       }
 
-      // 3. Écart éventuel = frais de port (ligne "Livraison")
+ /*      // 3. Écart éventuel = frais de port (ligne "Livraison")
       const sommeLignes = lineItems.data.reduce((s, li) => s + li.amount_subtotal, 0);
       const ecart = (session.amount_total || 0) - sommeLignes;
       if (ecart > 0) {
@@ -47,18 +47,17 @@ exports.handler = async (event) => {
 
       // 4. Créer la facture, la finaliser, puis la marquer payée hors bande
       //    (le paiement a déjà eu lieu via Checkout)
-      const invoice = await stripe.invoices.create({
+     const invoice = await stripe.invoices.create({
         customer: session.customer,
         auto_advance: false,   // ⚠️ pas de relance : c'est un reçu, pas une demande
       });
 
-      await stripe.invoices.finalizeInvoice(invoice.id);
-      await stripe.invoices.pay(invoice.id, { paid_out_of_band: true });
-
+      const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id);
+			
       // 5. Stocker l'URL de la facture dans les metadata du client
       await stripe.customers.update(session.customer, {
         metadata: { invoice_url: invoice.hosted_invoice_url }
-      });
+      });*/
     }
 
     return { statusCode: 200 };

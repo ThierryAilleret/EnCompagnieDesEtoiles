@@ -32,7 +32,7 @@ exports.handler = async (event) => {
         });
       }
 
- /*      // 3. Écart éventuel = frais de port (ligne "Livraison")
+  // 3. Écart éventuel = frais de port (ligne "Livraison")
       const sommeLignes = lineItems.data.reduce((s, li) => s + li.amount_subtotal, 0);
       const ecart = (session.amount_total || 0) - sommeLignes;
       if (ecart > 0) {
@@ -57,7 +57,7 @@ exports.handler = async (event) => {
       // 5. Stocker l'URL de la facture dans les metadata du client
       await stripe.customers.update(session.customer, {
         metadata: { invoice_url: invoice.hosted_invoice_url }
-      });*/
+      });
     }
 
     return { statusCode: 200 };

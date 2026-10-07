@@ -14,51 +14,20 @@ exports.handler = async (event) => {
     if (stripeEvent.type === "checkout.session.completed") {
       const session = stripeEvent.data.object;
 
-      // 1. Récupérer les lignes réellement payées (depuis Stripe, plus besoin du "panier")
-      const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
-        expand: ["data.price.product"],
-      });
+      // 📄 La facture est créée automatiquement par invoice_creation
+      //    (déjà payée, liée au paiement, avec ses metadata)
+      const sessionId = session.invoice
+        ? null
+        : session.id;
+      const s = session.invoice
+        ? session
+        : await stripe.checkout.sessions.retrieve(session.id, { expand: ["invoice"] });
 
-      // 2. Créer les lignes de facture à l'identique
-      for (const li of lineItems.data) {
-        await stripe.invoiceItems.create({
-          customer: session.customer,
-          description: li.description || li.price?.product?.name || "Article",
-          unit_amount_decimal: String(li.amount_subtotal !== 0
-            ? Math.round(li.amount_subtotal / (li.quantity || 1))
-            : li.price?.unit_amount || 0),
-          currency: li.currency,
-          quantity: li.quantity || 1,
+      if (s.invoice) {
+        await stripe.customers.update(session.customer, {
+          metadata: { invoice_url: s.invoice.hosted_invoice_url || s.invoice.id }
         });
       }
-
-  // 3. Écart éventuel = frais de port (ligne "Livraison")
-      const sommeLignes = lineItems.data.reduce((s, li) => s + li.amount_subtotal, 0);
-      const ecart = (session.amount_total || 0) - sommeLignes;
-      if (ecart > 0) {
-        await stripe.invoiceItems.create({
-          customer: session.customer,
-          description: "Frais de livraison",
-          unit_amount_decimal: String(ecart),
-          currency: session.currency || "eur",
-          quantity: 1,
-        });
-      }
-
-      // 4. Créer la facture, la finaliser, puis la marquer payée hors bande
-      //    (le paiement a déjà eu lieu via Checkout)
-     const invoice = await stripe.invoices.create({
-        customer: session.customer,
-				collection_method: "send_invoice",
-        auto_advance: false,   // ⚠️ pas de relance : c'est un reçu, pas une demande
-      });
-
-      const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id);
-			
-      // 5. Stocker l'URL de la facture dans les metadata du client
-      await stripe.customers.update(session.customer, {
-        metadata: { invoice_url: invoice.hosted_invoice_url }
-      });
     }
 
     return { statusCode: 200 };

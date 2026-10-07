@@ -129,9 +129,9 @@ exports.handler = async (event) => {
 				enabled: true,
 				invoice_data: {
 					metadata: {
-						01_nom: client.nom,
-						02_prenom: client.prenom,
-						03_email: client.email,
+						nom: client.nom,
+						prenom: client.prenom,
+						email: client.email,
 						adresse: client.adresse,
 						complement: client.complement || "",
 						codePostal: client.codePostal || "",

@@ -127,6 +127,7 @@ exports.handler = async (event) => {
 
 			invoice_creation: {
 				enabled: true,
+				footer: "Thierry AILLERET EI - 37 rue Lucien Carlier - 59240 DUNKERQUE - SIRET 932 235 237 00017 - TVA non applicable, art. 293 B du CGI",
 				invoice_data: {
 					metadata: {
 						"01_nom": client.nom,

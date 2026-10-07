@@ -127,7 +127,26 @@ exports.handler = async (event) => {
 
 			invoice_creation: {
 				enabled: true,
+				invoice_data: {
+					metadata: {
+						01_nom: client.nom,
+						02_prenom: client.prenom,
+						03_email: client.email,
+						04_adresse: client.adresse,
+						05_complement: client.complement || "",
+						06_codePostal: client.codePostal || "",
+						07_ville: client.ville || "",
+						08_adresseLivraison: client.adresseLivraison || "",
+						09_complementLivraison: client.complementLivraison || "",
+						10_codePostalLivraison: client.codePostalLivraison || "",
+						11_villeLivraison: client.villeLivraison || "",
+						12_modeLivraison: client.modeLivraison || "poste",
+						13_pointRelais: client.pointRelais || "",
+						14_pointRelaisId: client.pointRelaisId || ""
+					}
+				}
 			},
+			
 
       line_items,
 			...(discounts.length > 0 ? { discounts } : []),

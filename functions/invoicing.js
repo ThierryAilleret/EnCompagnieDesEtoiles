@@ -49,7 +49,9 @@ exports.handler = async (event) => {
       //    (le paiement a déjà eu lieu via Checkout)
      const invoice = await stripe.invoices.create({
         customer: session.customer,
+				collection_method: "send_invoice",
         auto_advance: false,   // ⚠️ pas de relance : c'est un reçu, pas une demande
+				metadata: session.metadata || {},   // ← recopie des metadata de la session
       });
 
       const finalizedInvoice = await stripe.invoices.finalizeInvoice(invoice.id);

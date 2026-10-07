@@ -132,17 +132,17 @@ exports.handler = async (event) => {
 						"01_nom": client.nom,
 						"02_prenom": client.prenom,
 						"03_email": client.email,
-						adresse: client.adresse,
-						complement: client.complement || "",
-						codePostal: client.codePostal || "",
-						ville: client.ville || "",
-						adresseLivraison: client.adresseLivraison || "",
-						complementLivraison: client.complementLivraison || "",
-						codePostalLivraison: client.codePostalLivraison || "",
-						villeLivraison: client.villeLivraison || "",
-						modeLivraison: client.modeLivraison || "poste",
-						pointRelais: client.pointRelais || "",
-						pointRelaisId: client.pointRelaisId || ""
+						"01_adresse": client.adresse,
+						"02_complement": client.complement || "",
+						"03_codePostal": client.codePostal || "",
+						"04_ville": client.ville || "",
+						"05_adresseLivraison": client.adresseLivraison || "",
+						"06_complementLivraison": client.complementLivraison || "",
+						"07_codePostalLivraison": client.codePostalLivraison || "",
+						"08_villeLivraison": client.villeLivraison || "",
+						"09_modeLivraison": client.modeLivraison || "poste",
+						"10_pointRelais": client.pointRelais || "",
+						"11_pointRelaisId": client.pointRelaisId || ""
 					}
 				}
 			},

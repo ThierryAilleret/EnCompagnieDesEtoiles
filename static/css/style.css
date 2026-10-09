@@ -1006,6 +1006,8 @@ body.dark .PR-City {
   margin-bottom: 0px;
 	padding:0em 0em;
 }
+#relai-selectionne { cursor: pointer; }
+#relai-selectionne:hover { outline: 2px dashed #999; }
 .info-relai {
   margin-bottom: 0px;
 	padding:0em 0em;

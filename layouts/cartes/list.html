@@ -1,8 +1,8 @@
 {{ define "main" }}
 <div class="product-gallery">
-	<h1>Nos cartes</h1>
-	<p class="promo-global">4 € par carte - Réduction de 15% dès 3 cartes</p>
-	<p class="promo-global-second">Frais de port 2 €, offerts dès 3 cartes</p>
+    <h1>Nos cartes</h1>
+    <p class="promo-global">4 € par carte - Réduction de 15% dès 3 cartes</p>
+    <p class="promo-global-second">Frais de port 2 €, offerts dès 3 cartes</p>
   <div class="product-grid">
     {{ range .Pages }}
       <div class="product-item">
@@ -14,26 +14,26 @@
               <img src="{{ . }}" alt="">
             {{ end }}
           </div>
-					<h2>{{ .Title }}</h2>
-					<p>{{ .Params.description }}</p>
-				</a>
+                    <h2>{{ .Title }}</h2>
+                    <p>{{ .Params.description }}</p>
+                </a>
 
         <!-- Formulaire d’ajout au panier -->
-				<form class="add-to-cart"
-							data-product-id="{{ .File.BaseFileName }}"
-							data-stripe-test="{{ .Params.stripeProductTest }}"
-							data-stripe-live="{{ .Params.stripeProductLive }}"
-							data-price-test="{{ .Params.priceIdStripeTest }}"
-							data-price-live="{{ .Params.priceIdStripeLive }}"
-							data-categorie="{{ .Params.categorie }}"
-							data-price="{{ .Params.price }}"
-							data-currency="{{ .Params.currency }}">
+                <form class="add-to-cart"
+                            data-product-id="{{ .File.BaseFileName }}"
+                            data-stripe-test="{{ .Params.stripeProductTest }}"
+                            data-stripe-live="{{ .Params.stripeProductLive }}"
+                            data-price-test="{{ .Params.priceIdStripeTest }}"
+                            data-price-live="{{ .Params.priceIdStripeLive }}"
+                            data-categorie="{{ .Params.categorie }}">
+																			 
+																							
 
-				
-					<select class="qty"></select>
+                
+                    <select class="qty"></select>
 
-					<button type="submit" class="add-btn">+</button>
-				</form>
+                    <button type="submit" class="add-btn">+</button>
+                </form>
 
       </div>
     {{ end }}
@@ -43,6 +43,24 @@
 <script>
 
 window.addEventListener("panierMisAJour", mettreAJourStockVignettes);
+
+// --- PRIX ET DEVISE DEPUIS STRIPE (mémorisés par produit) ---
+const prixStripeMap = {};   // { [stripeProduct]: { prix: centimes, monnaie: "EUR" } }
+
+async function fetchStockEtPrix(stripeProduct, priceId) {
+    const response = await fetch(`/.netlify/functions/getInventory?product=${stripeProduct}&price=${priceId}`);
+    const data = await response.json();
+
+    // 💰 Mémoriser prix + devise pour ce produit
+    if (data.prix != null) {
+        prixStripeMap[stripeProduct] = {
+            prix: data.prix,
+            monnaie: (data.monnaie || "eur").toUpperCase()
+        };
+    }
+
+    return parseInt(data.inventory, 10);
+}
 
 // --- AJOUT AU PANIER DEPUIS LA LISTE ---
 
@@ -70,19 +88,29 @@ document.addEventListener("DOMContentLoaded", () => {
       const item = form.closest(".product-item");
       const nom = item.querySelector("h2").textContent.trim();
       const description = item.querySelector("p").textContent.trim();
-			const categorie = form.dataset.categorie;
-			const prix = parseFloat(form.dataset.price);
-			const monnaie = form.dataset.currency;
+            const categorie = form.dataset.categorie;
+
+            // 💰 Prix et devise depuis Stripe
+            const infos = prixStripeMap[stripeProduct];
+            const prix = infos ? infos.prix / 100 : null;
+            const monnaie = infos ? infos.monnaie : null;
+
       const image = item.querySelector("img").src;
 
-      // Vérification du stock
-			const panier = JSON.parse(localStorage.getItem("panier")) || [];
-			const index = panier.findIndex(p => p.nom === nom);
-			const quantiteExistante = index >= 0 ? panier[index].quantite : 0;
-			const quantiteTotale = quantiteExistante + quantiteChoisie;
+      // 🔍 Sans réponse Stripe → pas d'ajout
+            if (prix == null || isNaN(prix) || !monnaie || !nom) {
+                alert("⚠️ Impossible d'ajouter cet article : le prix n'a pas pu être récupéré. Réessayez dans un instant.");
+                return;
+            }
 
-			const ok = await verifierQuantiteDisponible(stripeProduct, quantiteTotale);
-			if (!ok) return;
+      // Vérification du stock
+            const panier = JSON.parse(localStorage.getItem("panier")) || [];
+            const index = panier.findIndex(p => p.nom === nom);
+            const quantiteExistante = index >= 0 ? panier[index].quantite : 0;
+            const quantiteTotale = quantiteExistante + quantiteChoisie;
+
+            const ok = await verifierQuantiteDisponible(stripeProduct, quantiteTotale);
+            if (!ok) return;
 
       // Ajout au panier
       if (index >= 0) {
@@ -182,10 +210,12 @@ document.addEventListener("DOMContentLoaded", () => {
       ? form.dataset.stripeLive
       : form.dataset.stripeTest;
 
-    // Appel Netlify
-    const response = await fetch(`/.netlify/functions/getInventory?product=${stripeProduct}`);
-    const data = await response.json();
-    const stock = parseInt(data.inventory, 10);
+    const priceIdStripe = stripeEnv === "live"
+      ? form.dataset.priceLive
+      : form.dataset.priceTest;
+
+    // Appel Netlify (stock + mémorisation du prix)
+    const stock = await fetchStockEtPrix(stripeProduct, priceIdStripe);
 
     // Si pas de stock → désactiver
     if (stock <= 0) {
@@ -219,14 +249,18 @@ async function mettreAJourStockVignettes() {
       ? form.dataset.stripeLive
       : form.dataset.stripeTest;
 
+    const priceIdStripe = stripeEnv === "live"
+      ? form.dataset.priceLive
+      : form.dataset.priceTest;
+
     // Quantité déjà dans le panier
     const itemPanier = panier.find(p => p.stripeProduct === stripeProduct);
     const quantiteDansPanier = itemPanier ? itemPanier.quantite : 0;
 
-    // Stock Stripe
-    const response = await fetch(`/.netlify/functions/getInventory?product=${stripeProduct}`);
-    const data = await response.json();
-    const stockTotal = parseInt(data.inventory, 10);
+    // Stock Stripe (prix rafraîchi au passage)
+    const stockTotal = await fetchStockEtPrix(stripeProduct, priceIdStripe);
+																			 
+																										
 
     // Stock restant
     const stockRestant = Math.max(0, stockTotal - quantiteDansPanier);

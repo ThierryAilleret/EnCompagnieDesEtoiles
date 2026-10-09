@@ -105,8 +105,7 @@ exports.handler = async (event) => {
     const totalAvantPort = totalCartes - reductionCartes
                          + totalOrigami - reductionOrigami
                          + totalAutres;
-    //const fraisPort = totalAvantPort >= SEUIL_FRAIS_DE_PORT ? 0 : 2_00;
-		const fraisPort=0;
+    const fraisPort = totalAvantPort >= SEUIL_FRAIS_DE_PORT ? 0 : 2_00;
 		if (fraisPort > 0) {
       line_items.push({
         quantity: 1,

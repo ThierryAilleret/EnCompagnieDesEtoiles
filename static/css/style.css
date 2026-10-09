@@ -1042,6 +1042,14 @@ body.dark .carte-relai  {
 .table-horaire div {
   margin-bottom: 2px;
 }
+
+#message-vendeur {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: inherit;
+}
+
 .bouton-fermer {
   background-color: #eee;
   border: none;

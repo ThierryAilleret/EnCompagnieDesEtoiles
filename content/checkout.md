@@ -586,6 +586,7 @@ function afficherPanierDansCheckout() {
           <button type="button" id="validation-livraison-button" class="bouton-validation-relai" style="display:none;">
             Valider
           </button>
+					<br>
 					<label>Message au vendeur (facultatif) :<br>
 						<textarea id="message-vendeur" name="message-vendeur"
 											rows="3" maxlength="500"></textarea>

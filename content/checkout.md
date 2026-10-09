@@ -141,6 +141,17 @@ document.addEventListener("DOMContentLoaded", () => {
   } catch (e) {
     console.error("Widget Mondial Relay non chargé :", e);
   }
+	
+	// 🖱️ Un clic dans l'étape 2 rouvre le widget (changement de point relais)
+	document.getElementById("step-2").addEventListener("click", () => {
+		if (relaisRequis() && window._relaisValide === true) {
+			window._relaisValide = false;   // le choix précédent n'est plus validé
+			document.getElementById("zone-widget-relai").style.display = "block";
+			document.getElementById("titre-colis-relais").style.display = "block";
+			mettreAJourBoutonValidation();
+			verrouillerEtape3();   // retour à l'étape 2 : le paiement se referme
+		}
+	});
 });
 
 window.addEventListener("panierMisAJour", () => {
@@ -353,6 +364,9 @@ function validerLivraison() {
       return;
     }
     window._relaisValide = true;
+    // 🎯 Validation faite : on masque le widget, on garde le récapitulatif
+    document.getElementById("zone-widget-relai").style.display = "none";
+    document.getElementById("titre-colis-relais").style.display = "none";
   }
   if (posteRequise()) {
     if (!adresseLivraisonComplete()) {
@@ -577,6 +591,7 @@ function afficherPanierDansCheckout() {
 <script>
 document.getElementById("validation-livraison-button").addEventListener("click", function (event) {
   event.preventDefault();
+	event.stopPropagation();   // ← ne pas déclencher la réouverture du widget
   validerLivraison();   // deverrouillerEtape3() s'occupe du reste
 });
 

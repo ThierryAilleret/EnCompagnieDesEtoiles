@@ -22,7 +22,5 @@ dimensions = "diamètre 30 cm"
 materiaux = "plexiglas iridescent"
 ampoule = "E27, LED 20 W max (ampoule non fournie)"
 normes = "CE"
-price = 200
-currency = "€"
 new = true
 +++

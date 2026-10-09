@@ -18,7 +18,5 @@ dimensions = "diamètre 30 cm"
 materiaux = "boîtes de pâtes, carton, clips plastique"
 ampoule = "E27, LED 20 W max (ampoule non fournie)"
 normes = "CE"
-price = 150
-currency = "€"
 new = true
 +++

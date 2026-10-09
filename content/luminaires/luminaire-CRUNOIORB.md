@@ -17,7 +17,5 @@ description_longue = "Le <b>luminaire Nuit Étoilée</b> est une pièce unique e
 dimensions = "diamètre 30 cm"
 materiaux = "carton, papier doré, clips plastique"
 ampoule = "E27, LED 20 W max (ampoule non fournie)"
-price = 150
-currency = "€"
 new = true
 +++

@@ -17,7 +17,5 @@ description_longue = "Le <b>luminaire Maestro</b> est une pièce unique en carto
 dimensions = "diamètre 30 cm"
 materiaux = "carton, partitions chinées, clips plastique"
 ampoule = "E27, LED 20 W max (ampoule non fournie)"
-price = 150
-currency = "€"
 new = true
 +++

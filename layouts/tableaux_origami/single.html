@@ -274,7 +274,7 @@
 
 		//Récupération du stock sur Stripe
 		async function fetchInventoryCurrentProduct() {
-				const stripeEnv = window.stripeEnv || "test";
+				const stripeEnv = window.stripeEnv || "test"; // fallback si non défini
 				const stripeProduct = stripeEnv === "live"
 						? "{{ .Params.stripeProductLive }}"
 						: "{{ .Params.stripeProductTest }}";

@@ -16,7 +16,5 @@ description = "Tableau d'art cinétique"
 description_longue = "Rêvez devant ce paysage de dunes qui change selon la lumière, selon votre point de vue, selon votre regard.<br>Chaque tableau est signé et numéroté, série limitée à 10 exemplaires."
 dimensions = "46 x 46 cm"
 materiaux = "papier à grain"
-price = 250
-currency = "€"
 new = true
 +++

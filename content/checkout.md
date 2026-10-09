@@ -255,6 +255,10 @@ function afficherSectionLivraison() {
   const blocAdressePoste = document.getElementById("bloc-adresse-poste");
   const widgetRelai      = document.getElementById("zone-widget-relai");
 	
+	// 🎯 Le widget reste replié si un relais est déjà validé
+  const relaisDejaValide = relaisRequis() && window._relaisValide === true;
+  const widgetDisplay = relaisDejaValide ? "none" : "block";
+	
   // 🧹 Si le relais n'est plus nécessaire, on masque et vide la sélection
   if (!relaisRequis()) {
     const relaiSelectionne = document.getElementById("relai-selectionne");
@@ -281,18 +285,19 @@ function afficherSectionLivraison() {
    } else if (modes.deuxColis) {
     messageDeuxColis.style.display = "block";
     blocAdressePoste.style.display = "block";
-    widgetRelai.style.display      = "block";
+    widgetRelai.style.display = widgetDisplay;
 
     // 🏷️ Titres « premier / second colis »
     document.getElementById("titre-colis-poste").style.display  = "block";
-    document.getElementById("titre-colis-relais").style.display = "block";
+    document.getElementById("titre-colis-relais").style.display = "widgetDisplay";
 
     
   } else if (modes.aTableaux) {
     messageDeuxColis.style.display = "none";
     blocAdressePoste.style.display = "none";
-    widgetRelai.style.display      = "block";
-  } else {
+    widgetRelai.style.display = widgetDisplay;
+    document.getElementById("titre-colis-relais").style.display = widgetDisplay;
+	} else {
     messageDeuxColis.style.display = "none";
     blocAdressePoste.style.display = "block";
     widgetRelai.style.display      = "none";

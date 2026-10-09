@@ -586,6 +586,10 @@ function afficherPanierDansCheckout() {
           <button type="button" id="validation-livraison-button" class="bouton-validation-relai" style="display:none;">
             Valider
           </button>
+					<label>Message au vendeur (facultatif) :<br>
+						<textarea id="message-vendeur" name="message-vendeur"
+											rows="3" maxlength="500"></textarea>
+					</label>
         </div>
       </fieldset>
       <!-- Étape 3 : Paiement (masquée tant que la livraison n'est pas validée) -->
@@ -654,7 +658,8 @@ document.getElementById("checkout-button").addEventListener("click", function (e
     pointRelaisId: window._pointRelaisId || "",
     pointRelais: window._pointRelaisAdresse || "",
     articlesPoste: articlesPoste.join(" ; "),
-    articlesRelais: articlesRelais.join(" ; ")
+    articlesRelais: articlesRelais.join(" ; "),
+		message: document.getElementById("message-vendeur").value.trim()
   };
 
   if (!client.email || !REGEX_MAIL.test(client.email)) {

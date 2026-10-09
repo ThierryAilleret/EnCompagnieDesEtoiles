@@ -143,7 +143,8 @@ exports.handler = async (event) => {
 						"08_villeLivraison": client.villeLivraison || "",
 						"09_modeLivraison": client.modeLivraison || "poste",
 						"10_pointRelais": client.pointRelais || "",
-						"11_pointRelaisId": client.pointRelaisId || ""
+						"11_pointRelaisId": client.pointRelaisId || "",
+						"12_message": client.message || ""
 					}
 				}
 			},
@@ -170,6 +171,7 @@ exports.handler = async (event) => {
 				articlesRelais: client.articlesRelais || "",
         pointRelais: client.pointRelais || "",
         pointRelaisId: client.pointRelaisId || "",
+				message: client.message || "",
         environnement: process.env.STRIPE_ENV === "live" ? "live" : "test"
       }
     });

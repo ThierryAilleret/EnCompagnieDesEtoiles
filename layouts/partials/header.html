@@ -291,7 +291,7 @@ window.addEventListener("DOMContentLoaded", () => {
 			const totalOrigamiApresReduc = totalOrigami - reductionOrigami;
 
 			// Frais de port (gratuits si plus de 10 euros d'achat)
-			let fraisPort = 2;
+			let fraisPort = 0;
 			const totalAvantPort = totalCartesApresReduc + totalOrigamiApresReduc + totalAutres;
 			if (totalAvantPort >= 10) {
 				fraisPort = 0;

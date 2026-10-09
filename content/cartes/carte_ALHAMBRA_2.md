@@ -16,7 +16,5 @@ description = "Inspirée de décors de l'Alhambra"
 description_longue = ""
 dimensions = "10 x 10 cm"
 materiaux = "papier à grain"
-price = 4
-currency = "€"
 new = true
 +++

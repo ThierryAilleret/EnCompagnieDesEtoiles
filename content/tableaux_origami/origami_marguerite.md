@@ -2,7 +2,7 @@
 stripeProductTest = ""
 stripeProductLive = "prod_VPSg48Y8bnnL0y"
 priceIdStripeTest = ""
-priceIdStripeLive = "price_1UOdw9GEPWcc8pKFOBkH9imA"
+priceIdStripeLive = "price_1UOdklGEPWcc8pKFKUrjXgbi"
 
 categorie = "tableau_origami"
 product = "marguerite"

@@ -1044,10 +1044,15 @@ body.dark .carte-relai  {
 }
 
 #message-vendeur {
-  width: 100%;
-  box-sizing: border-box;
-  font-family: inherit;
-  font-size: inherit;
+	width: 100%;
+	padding: 4px;
+	border: 1px solid #ccc;
+	background: #fff;
+	border-radius: 2px;
+	font-family: inherit;
+	font-size: 1em;
+	font-weight: 400;
+	box-sizing: border-box;
 }
 
 .bouton-fermer {

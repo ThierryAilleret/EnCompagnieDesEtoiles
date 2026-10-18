@@ -301,7 +301,7 @@ window.addEventListener("DOMContentLoaded", () => {
 			// Frais de port (gratuits s'il y a un tableau ou un luminaire)
 			let fraisPort = 2;
 			const totalAvantPort = totalCartesApresReduc + totalOrigamiApresReduc  + totalLuminaireApresReduc + totalAutres;
-			if (totalOrigamiApresReduc  + totalLuminaireApresReduc >= 0) {
+			if (totalOrigamiApresReduc  + totalLuminaireApresReduc > 0) {
 				fraisPort = 0;
 			}
 

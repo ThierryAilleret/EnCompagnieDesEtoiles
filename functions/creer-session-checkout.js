@@ -107,7 +107,7 @@ exports.handler = async (event) => {
 		}
 		
     // --- 3) Frais de port ---
-    const fraisPort = totalOrigami + totalLuminaire >= 0 ? 0 : 2_00;
+    const fraisPort = totalOrigami + totalLuminaire > 0 ? 0 : 2_00;
 		if (fraisPort > 0) {
       line_items.push({
         quantity: 1,

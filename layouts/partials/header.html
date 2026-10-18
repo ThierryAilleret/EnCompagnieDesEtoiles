@@ -264,6 +264,7 @@ window.addEventListener("DOMContentLoaded", () => {
 		function calculerTotaux(panier) {
 			let totalCartes = 0;
 			let totalOrigami = 0;
+			let totalLuminaire = 0;
 			let totalAutres = 0;
 
 			panier.forEach(item => {
@@ -272,6 +273,8 @@ window.addEventListener("DOMContentLoaded", () => {
 					totalCartes += sousTotal;
 				} else if (item.categorie === "tableau_origami") {
 					totalOrigami += sousTotal;
+				} else if (item.categorie === "luminaire") {
+					totalLuminaire += sousTotal;
 				} else {
 					totalAutres += sousTotal;
 				}
@@ -286,14 +289,19 @@ window.addEventListener("DOMContentLoaded", () => {
 			if (totalOrigami > 250) {
 				reductionOrigami = totalOrigami * 0.15;
 			}
+			let reductionLuminaire = 0;
+			if (totalLuminaire >= 300) {
+				reductionLuminaire = totalLuminaire * 0.15;
+			}
 
 			const totalCartesApresReduc = totalCartes - reductionCartes;
 			const totalOrigamiApresReduc = totalOrigami - reductionOrigami;
+			const totalLuminaireApresReduc = totalLuminaire - reductionLuminaire;
 
-			// Frais de port (gratuits si plus de 10 euros d'achat)
+			// Frais de port (gratuits s'il y a un tableau ou un luminaire)
 			let fraisPort = 2;
-			const totalAvantPort = totalCartesApresReduc + totalOrigamiApresReduc + totalAutres;
-			if (totalAvantPort >= 10) {
+			const totalAvantPort = totalCartesApresReduc + totalOrigamiApresReduc  + totalLuminaireApresReduc + totalAutres;
+			if (totalOrigamiApresReduc  + totalLuminaireApresReduc >= 0) {
 				fraisPort = 0;
 			}
 
@@ -304,6 +312,8 @@ window.addEventListener("DOMContentLoaded", () => {
 				reductionCartes,
 				totalOrigami,
 				reductionOrigami,
+				totalLuminaire,
+				reductionLuminaire,
 				totalAutres,
 				fraisPort,
 				totalFinal
@@ -364,6 +374,9 @@ window.addEventListener("DOMContentLoaded", () => {
 			if (totaux.reductionOrigami > 0) {
 				details += `Réduction tableaux (-15%) : –${totaux.reductionOrigami.toFixed(2)} € · `;
 			}
+			if (totaux.reductionLuminaire > 0) {
+				details += `Réduction luminaires (-15%) : –${totaux.reductionLuminaire.toFixed(2)} € · `;
+			}
 			if (totaux.fraisPort === 0) {
 				details += `Frais de port offerts`;
 			} else {
@@ -381,6 +394,11 @@ window.addEventListener("DOMContentLoaded", () => {
 				${totaux.reductionOrigami > 0 ? `
 					<div style="color:#777; font-style:italic; font-size:0.8rem;">
 						Réduction de 15% appliquée sur les tableaux : -${totaux.reductionOrigami.toFixed(2)} €
+					</div>` : ``}
+
+				${totaux.reductionLuminaire > 0 ? `
+					<div style="color:#777; font-style:italic; font-size:0.8rem;">
+						Réduction de 15% appliquée sur les luminaires : -${totaux.reductionLuminaire.toFixed(2)} €
 					</div>` : ``}
 
 				<div style="color:#777; font-style:italic; font-size:0.8rem;">

@@ -48,6 +48,7 @@ exports.handler = async (event) => {
     const line_items = [];
     let totalCartes = 0;
     let totalOrigami = 0;
+    let totalLuminaire = 0;
     let totalAutres = 0;
 
     for (const item of panier) {
@@ -62,6 +63,8 @@ exports.handler = async (event) => {
         totalCartes += sousTotal;
       } else if (item.categorie === "tableau_origami") {
         totalOrigami += sousTotal;
+      } else if (item.categorie === "luminaire") {
+        totalLuminaire += sousTotal;
       } else {
         totalAutres += sousTotal;
       }
@@ -70,25 +73,27 @@ exports.handler = async (event) => {
     }
 
     // --- 2) Réductions (mêmes règles que calculerTotaux, en centimes) ---
-    const SEUIL_FRAIS_DE_PORT = 10_00;   // 10,00 €
     const SEUIL_CARTES = 10_00;          // 10,00 €
     const SEUIL_ORIGAMI = 250_00;        // strictement supérieur
+    const SEUIL_LUMINAIRE = 300_00;        // supérieur ou égal
     const TAUX = 0.15;
 
     const reductionCartes = totalCartes >= SEUIL_CARTES ? Math.round(totalCartes * TAUX) : 0;
     const reductionOrigami = totalOrigami > SEUIL_ORIGAMI ? Math.round(totalOrigami * TAUX) : 0;
+    const reductionLuminaire = totalLuminaire >= SEUIL_LUMINAIRE ? Math.round(totalLuminaire * TAUX) : 0;
 
 
 		// --- 2bis) Remise via un coupon à montant fixe créé à la volée ---
-		// (Checkout accepte 1 seul coupon : on fusionne cartes + origami)
+		// (Checkout accepte 1 seul coupon : on fusionne cartes + origami + luminaires)
 		const discounts = [];
-		const remiseTotale = reductionCartes + reductionOrigami;
+		const remiseTotale = reductionCartes + reductionOrigami + reductionLuminaire;
 
 		if (remiseTotale > 0) {
 			// Libellé explicite pour le reçu
 			const libelles = [];
 			if (reductionCartes > 0) libelles.push("cartes");
 			if (reductionOrigami > 0) libelles.push("tableaux");
+			if (reductionLuminaire > 0) libelles.push("luminaires");
 			// Stripe accepte des montants négatifs dans le nom, mais pas de "+" vide :
 			const nomCoupon = `Réduction -15 % (${libelles.join(" + ")})`;
 
@@ -102,10 +107,7 @@ exports.handler = async (event) => {
 		}
 		
     // --- 3) Frais de port ---
-    const totalAvantPort = totalCartes - reductionCartes
-                         + totalOrigami - reductionOrigami
-                         + totalAutres;
-    const fraisPort = totalAvantPort >= SEUIL_FRAIS_DE_PORT ? 0 : 2_00;
+    const fraisPort = totalOrigami + totalLuminaire >= 0 ? 0 : 2_00;
 		if (fraisPort > 0) {
       line_items.push({
         quantity: 1,

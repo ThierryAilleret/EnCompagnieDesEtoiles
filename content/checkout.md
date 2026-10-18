@@ -512,6 +512,9 @@ function afficherPanierDansCheckout() {
   if (totaux.reductionOrigami > 0) {
     details += `<div style="color:#777; font-style:italic; font-size:0.8rem;">Réduction tableaux (-15%) : -${totaux.reductionOrigami.toFixed(2)} €</div>`;
   }
+  if (totaux.reductionLuminaire > 0) {
+    details += `<div style="color:#777; font-style:italic; font-size:0.8rem;">Réduction luminaires (-15%) : -${totaux.reductionLuminaire.toFixed(2)} €</div>`;
+  }
   details += `<div style="color:#777; font-style:italic; font-size:0.8rem;">
     ${totaux.fraisPort === 0 ? "Frais de port offerts" : `Frais de port : ${totaux.fraisPort.toFixed(2)} €`}
   </div>`;

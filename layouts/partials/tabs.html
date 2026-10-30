@@ -1,0 +1,14 @@
+{{ $active := .active }}
+{{ $univers := slice
+  (dict "section" "luminaires" "label" "Luminaires")
+  (dict "section" "tableaux_origami" "label" "Tableaux Op' Art")
+  (dict "section" "cartes" "label" "Cartes")
+}}
+<nav class="univers-tabs">
+  {{ range $univers }}
+    <a href="/{{ .section }}/"
+       class="univers-tab {{ if eq .section $active }}active{{ end }}">
+      {{ .label }}
+    </a>
+  {{ end }}
+</nav>

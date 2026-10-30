@@ -1289,6 +1289,20 @@ body.dark .promo-global-second {
   background: #444;
 }
 
-
-
-
+/* Pour les tabs */
+.univers-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+.univers-tab {
+  padding: 0.4rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px 8px 0 0;
+  text-decoration: none;
+}
+.univers-tab.active {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}

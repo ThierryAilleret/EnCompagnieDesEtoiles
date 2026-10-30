@@ -10,6 +10,7 @@ title = "Tableau Origami Marguerite"
 thumbnail = "/images/Origami_Marguerite_1.jpg"
 thumbnail_alt = "Description du tableau Origami Marguerite"
 images = [
+	"/images/Origami_Marguerite_2.mp4"
 ]
 description = "Tableau d'art cinétique"
 description_longue = "Un peu, beaucoup, à la folie ! Passez des heures à contempler cette marguerite qui apportera une touche de poésie et de design à votre intérieur.<br>Chaque tableau est signé et numéroté, série limitée à 50 exemplaires."

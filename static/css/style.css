@@ -1297,7 +1297,7 @@ body.dark .promo-global-second {
   gap: 0.5rem;
   max-width: 900px;
   margin: 1rem auto 0;
-  padding: 0px;
+  padding: 0 5px;
   border-bottom: 1px solid #000;
   font-size: 1.1rem;
   color: #444;
@@ -1326,7 +1326,7 @@ body.dark .promo-global-second {
   gap: 0.5rem;
   max-width: 900px;
   margin: 1rem auto 0;
-  padding: 0px;
+  padding: 0 5px;
   border-bottom: 1px solid #000;
   font-size: 1.1rem;
   color: #444;

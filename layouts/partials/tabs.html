@@ -1,10 +1,18 @@
 {{ $active := .active }}
 {{ $univers := slice
   (dict "section" "luminaires" "label" "Luminaires")
-  (dict "section" "tableaux_origami" "label" "Tableaux Origami")
+  (dict "section" "tableaux_origami" "label" "Tableaux Op' Art")
   (dict "section" "cartes" "label" "Cartes")
 }}
 <nav class="univers-tabs">
+  <a href="/" class="univers-tab univers-tab-home" title="Accueil" aria-label="Retour à l'accueil">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round">
+      <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+      <polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+  </a>
   {{ range $univers }}
     <a href="/{{ .section }}/"
        class="univers-tab {{ if eq .section $active }}active{{ end }}">

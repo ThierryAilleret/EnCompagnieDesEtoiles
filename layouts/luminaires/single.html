@@ -322,7 +322,7 @@
 				
 				trackViewContent({
 						content_ids: [stripeProduct],
-						content_type: 'luminaires',
+						content_type: "{{ .Params.description }}",
 						content_nom: "{{ .Title }}",
 						value: stockPrixStripe / 100,
 						currency: (monnaieStripe || 'EUR').toUpperCase()

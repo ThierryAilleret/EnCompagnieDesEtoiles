@@ -310,6 +310,14 @@
 								bouton.textContent = "Stock épuisé";
 						}
 				}
+				
+				trackViewContent({
+						content_ids: [stripeProduct],
+						content_type: "{{ .Params.description }}",
+						content_nom: "{{ .Title }}",
+						value: stockPrixStripe / 100,
+						currency: (monnaieStripe || 'EUR').toUpperCase()
+				});
 		}
 
 		fetchInventoryCurrentProduct().catch(() => {
@@ -317,5 +325,10 @@
 				const bouton = document.querySelector(".btn-add-to-cart");
 				if (bouton) { bouton.disabled = true; bouton.textContent = "Prix indisponible"; }
 		});
+
+		function trackViewContent(payload, essai = 0) {
+				if (typeof fbq === 'function') { fbq('track', 'ViewContent', payload); return; }
+				if (essai < 20) setTimeout(() => trackViewContent(payload, essai + 1), 500);
+		}
 </script>
 {{ end }}

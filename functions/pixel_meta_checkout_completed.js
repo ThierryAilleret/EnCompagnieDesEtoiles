@@ -23,6 +23,11 @@ exports.handler = async (event) => {
   const session = stripeEvent.data.object;
   const m = session.metadata ?? {};
 
+	console.log("EMAIL =", session.customer_details?.email);
+	console.log("EMAIL2 =", m["03_email"]);
+	console.log("FBP =", m["98_cookie_meta_fbp"]);
+	console.log("FBC =", m["99_cookie_meta_fbc"]);
+
   const payload = {
     data: [{
       event_name: 'Purchase',

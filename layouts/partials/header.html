@@ -455,6 +455,18 @@ window.addEventListener("DOMContentLoaded", () => {
 				}
 				localStorage.setItem("panier", JSON.stringify(panier));
 				window.dispatchEvent(new Event("panierMisAJour"));
+
+				if (typeof fbq === 'function') {
+						fbq('track', 'AddToCart', {
+						content_id: panier[index].stripeProduct,
+						content_nom: panier[index].nom,
+						content_type: panier[index].categorie,
+						number: delta,
+						value: panier[index].prix,
+						currency: panier[index].monnaie
+					});
+				}		
+
 				afficherMiniPanier();
 			}
 			const indicateurEl = document.getElementById("panier-toggle");
@@ -466,11 +478,25 @@ window.addEventListener("DOMContentLoaded", () => {
 
 		function supprimerDuPanier(nom) {
 			const panier = JSON.parse(localStorage.getItem("panier")) || [];
+			const index = panier.findIndex(p => p.nom === nom);
 			const nouveau = panier.filter(p => p.nom !== nom);
 			localStorage.setItem("panier", JSON.stringify(nouveau));
 			afficherMiniPanier();
 			window.dispatchEvent(new Event("panierMisAJour"));
-			
+
+			if (index >= 0) {
+				if (typeof fbq === 'function') {
+						fbq('track', 'AddToCart', {
+						content_id: panier[index].stripeProduct,
+						content_nom: panier[index].nom,
+						content_type: panier[index].categorie,
+						number: -panier[index].quantite,
+						value: panier[index].prix,
+						currency: panier[index].monnaie
+					});
+				}
+			}
+				
 			const indicateurEl = document.getElementById("panier-toggle");
 			if (indicateurEl) {
 				indicateurEl.classList.add("pulse");

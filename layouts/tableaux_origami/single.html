@@ -321,7 +321,7 @@
 
 				trackViewContent({
 						content_ids: [stripeProduct],
-						content_type: "{{ .Params.description }}",
+						content_type: "{{ .Params.categorie }}",
 						content_nom: "{{ .Title }}",
 						value: stockPrixStripe / 100,
 						currency: (monnaieStripe || 'EUR').toUpperCase()

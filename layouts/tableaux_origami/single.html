@@ -267,6 +267,16 @@
 
 				localStorage.setItem("panier", JSON.stringify(panier));
 				window.dispatchEvent(new Event("panierMisAJour"));
+
+				if (typeof fbq === 'function') {
+						fbq('track', 'AddToCart', {
+						content_id: stripeProduct,
+						content_nom: nom,
+						content_type: categorie,
+						value: prix,
+						currency: monnaie
+					});
+				}		
 				
 				afficherMiniPanier();
 				ouvrirPanier();

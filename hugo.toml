@@ -13,3 +13,11 @@ getenv = ['^STRIPE_', '^HUGO_', '^CI$']
 
 [params.meta]
 pixel_id = "853229717470549"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/.netlify/functions/stripe-webhook"
+  to = "/.netlify/functions/stripe-webhook"
+  status = 200

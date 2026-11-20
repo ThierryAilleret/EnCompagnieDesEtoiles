@@ -145,7 +145,9 @@ exports.handler = async (event) => {
 						"09_modeLivraison": client.modeLivraison || "poste",
 						"10_pointRelais": client.pointRelais || "",
 						"11_pointRelaisId": client.pointRelaisId || "",
-						"12_message": client.message || ""
+						"12_message": client.message || "",
+						"98_cookie_meta_fbp": body.fbp || "",
+						"99_cookie_meta_fbc": body.fbc || ""
 					}
 				}
 			},

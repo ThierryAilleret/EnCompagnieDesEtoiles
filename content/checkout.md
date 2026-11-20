@@ -686,10 +686,22 @@ document.getElementById("checkout-button").addEventListener("click", function (e
     return;
   }
 
+	//Cookies meta
+	const getCookie = name => {
+		const m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+		return m ? decodeURIComponent(m[1]) : null;
+	};
+
   fetch("/.netlify/functions/creer-session-checkout", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ panier, client })
+    body: JSON.stringify({
+			panier,
+			client,
+			fbp: getCookie('_fbp'),
+			fbc: getCookie('_fbc'),
+			eventId
+		})
   })
   .then(async response => {
     if (!response.ok) {

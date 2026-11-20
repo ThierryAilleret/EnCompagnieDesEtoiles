@@ -515,7 +515,7 @@ window.addEventListener("DOMContentLoaded", () => {
 								content_ids: panier.map(item => item.stripeProduct),
 								content_noms: panier.map(item => item.nom),
 								content_type: 'product',
-								value: totaux.TotalFinal),
+								value: totaux.TotalFinal,
 								currency: 'EUR',
 								num_items: panier.reduce((s, item) => s + item.quantite, 0)
 						});

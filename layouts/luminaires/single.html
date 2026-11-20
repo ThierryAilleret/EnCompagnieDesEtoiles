@@ -269,10 +269,21 @@
 
 				localStorage.setItem("panier", JSON.stringify(panier));
 				window.dispatchEvent(new Event("panierMisAJour"));
-				
+
+				console.log("AddToCart déclenché");
+
+				if (typeof fbq === 'function') {
+						console.log("AddToCart déclenché");
+						fbq('track', 'AddToCart', {
+						content_ids: [stripeProduct],
+						content_type: categorie,
+						value: prix,
+						currency: monnaie
+					});
+				}				
+
 				afficherMiniPanier();
 				ouvrirPanier();
-
 		}
 
 		//Récupération du stock sur Stripe
@@ -310,6 +321,14 @@
 								bouton.textContent = "Stock épuisé";
 						}
 				}
+				
+				trackViewContent({
+						content_ids: [stripeProduct],
+						content_type: 'luminaires',
+						content_name: "{{ .Title }}",
+						value: stockPrixStripe / 100,
+						currency: (monnaieStripe || 'EUR').toUpperCase()
+				});
 		}
 
 		fetchInventoryCurrentProduct().catch(() => {
@@ -317,5 +336,10 @@
 				const bouton = document.querySelector(".btn-add-to-cart");
 				if (bouton) { bouton.disabled = true; bouton.textContent = "Prix indisponible"; }
 		});
+
+		function trackViewContent(payload, essai = 0) {
+				if (typeof fbq === 'function') { fbq('track', 'ViewContent', payload); return; }
+				if (essai < 20) setTimeout(() => trackViewContent(payload, essai + 1), 500);
+		}
 </script>
 {{ end }}

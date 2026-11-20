@@ -625,6 +625,22 @@ document.getElementById("checkout-button").addEventListener("click", function (e
   event.preventDefault();
 
   let panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+  const totaux = calculerTotaux(panier);
+
+  // Meta Pixel : AddPaymentInfo
+	console.log("AddPaymentInfo déclenché");
+	if (typeof fbq === 'function') {
+		console.log("AddPaymentInfo déclenché");
+		fbq('track', 'AddPaymentInfo', {
+			content_ids: panier.map(item => item.stripeProduct),
+			content_type: 'product',
+			value: totaux.totalFinal,
+			currency: 'EUR',
+			num_items: panier.reduce((s, item) => s + item.quantite, 0)
+		});
+	}
+	
   panier = panier.map(item => ({
     ...item,
     monnaie: item.monnaie === "€" ? "eur" : item.monnaie

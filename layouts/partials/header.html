@@ -215,8 +215,8 @@ window.addEventListener("DOMContentLoaded", () => {
 			</div>
 			<div class="footer-panier">
 				<p id="total-panier">Total : 0 €</p>
-				<button onclick="window.location.href='/checkout.html'" class="btn-commander">
-					Finaliser ma commande
+				<button id="btn-checkout" class="btn-commander">
+						Finaliser ma commande
 				</button>
 			</div>
 		</div>
@@ -504,6 +504,26 @@ window.addEventListener("DOMContentLoaded", () => {
 
 			// Sinon → fermeture du volet
 			fermerPanier();
+		}
+		);
+		
+		document.getElementById("btn-checkout").addEventListener("click", () => {
+				console.log("InitiateCheckout déclenché");
+				if (typeof fbq === 'function') {
+						const panier = JSON.parse(localStorage.getItem("panier")) || [];
+						console.log("InitiateCheckout déclenché");
+
+						fbq('track', 'InitiateCheckout', {
+								content_ids: panier.map(item => item.stripeProduct),
+								content_type: 'product',
+								value: panier.reduce((s, item) => s + item.quantite * item.prix, 0),
+								currency: 'EUR',
+								num_items: panier.reduce((s, item) => s + item.quantite, 0)
+						});
+				}
+				setTimeout(() => {
+						window.location.href = "/checkout.html";
+				}, 150);
 		});
 
 </script>

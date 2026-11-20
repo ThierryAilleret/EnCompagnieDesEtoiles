@@ -10,3 +10,6 @@ theme = "PaperMod"
 
 [security.funcs]
 getenv = ['^STRIPE_', '^HUGO_', '^CI$']
+
+[params.meta]
+pixel_id = "853229717470549"

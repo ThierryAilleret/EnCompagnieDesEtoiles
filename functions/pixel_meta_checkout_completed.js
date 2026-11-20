@@ -1,8 +1,13 @@
-import Stripe from 'stripe';
+const Stripe = require("stripe");
+const crypto = require("crypto");
 
-const sha256 = (s) => crypto.createHash('sha256').update(s.toLowerCase().trim()).digest('hex');
+const sha256 = (s) =>
+  crypto
+    .createHash("sha256")
+    .update(s.toLowerCase().trim())
+    .digest("hex");
 
-export async function handler(event) {
+exports.handler = async (event) => {
   let stripeEvent;
   try {
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -22,12 +27,12 @@ export async function handler(event) {
     data: [{
       event_name: 'Purchase',
       event_time: Math.floor(Date.now() / 1000),
-      event_id: m.meta_event_id,            // déduplication avec le Purchase navigateur
+      event_id: m.meta_event_id,           // déduplication avec le Purchase navigateur
       action_source: 'website',
       user_data: {
         em: [sha256(session.customer_details?.email ?? '')],
-        fbp: m.98_cookie_meta_fbp || undefined,
-        fbc: m.99_cookie_meta_fbc || undefined,
+				fbp: m["98_cookie_meta_fbp"] || undefined,
+				fbc: m["99_cookie_meta_fbc"] || undefined,
         client_user_agent: m.user_agent || undefined
       },
       custom_data: {

@@ -448,13 +448,6 @@ window.addEventListener("DOMContentLoaded", () => {
 					const ok = await verifierQuantiteDisponible( panier[index].stripeProduct, nouvelleQuantite);
 					if (!ok) return;
 				}
-				
-				panier[index].quantite += delta;
-				if (panier[index].quantite <= 0) {
-					panier.splice(index, 1);
-				}
-				localStorage.setItem("panier", JSON.stringify(panier));
-				window.dispatchEvent(new Event("panierMisAJour"));
 
 				if (typeof fbq === 'function') {
 						fbq('track', 'AddToCart', {
@@ -465,7 +458,14 @@ window.addEventListener("DOMContentLoaded", () => {
 						value: panier[index].prix,
 						currency: panier[index].monnaie
 					});
-				}		
+				}	
+				
+				panier[index].quantite += delta;
+				if (panier[index].quantite <= 0) {
+					panier.splice(index, 1);
+				}
+				localStorage.setItem("panier", JSON.stringify(panier));
+				window.dispatchEvent(new Event("panierMisAJour"));	
 
 				afficherMiniPanier();
 			}

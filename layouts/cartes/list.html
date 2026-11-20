@@ -115,6 +115,16 @@ document.addEventListener("DOMContentLoaded", () => {
       // Ajout au panier
       if (index >= 0) {
         panier[index].quantite += quantiteChoisie;
+				if (typeof fbq === 'function') {
+					fbq('track', 'AddToCart', {
+						content_id: panier[index].stripeProduct,
+						content_nom: panier[index].nom,
+						content_type: panier[index].categorie,
+						number: quantiteChoisie,
+						value: panier[index].prix,
+						currency: panier[index].monnaie
+					});
+				}
       } else {
         panier.push({
           categorie,
@@ -127,6 +137,18 @@ document.addEventListener("DOMContentLoaded", () => {
           image,
           quantite: quantiteChoisie
         });
+	
+				if (typeof fbq === 'function') {
+					fbq('track', 'AddToCart', {
+						content_id: stripeProduct,
+						content_nom: nom,
+						content_type: categorie,
+						number: quantiteChoisie,
+						value: prix,
+						currency: monnaie
+					});
+				}
+
       }
 
       localStorage.setItem("panier", JSON.stringify(panier));

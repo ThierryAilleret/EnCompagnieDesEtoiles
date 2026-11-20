@@ -318,21 +318,22 @@
 								bouton.disabled = true;
 								bouton.textContent = "Stock épuisé";
 						}
-				}	
+				}
+				
+				trackViewContent({
+						content_ids: [stripeProduct],
+						content_type: "{{ .Params.categorie }}",
+						content_nom: "{{ .Title }}",
+						value: stockPrixStripe / 100,
+						currency: (monnaieStripe || 'EUR').toUpperCase()
+				});
+
 		}
 
 		fetchInventoryCurrentProduct().catch(() => {
 				document.getElementById("price-display").textContent = "Indisponible";
 				const bouton = document.querySelector(".btn-add-to-cart");
 				if (bouton) { bouton.disabled = true; bouton.textContent = "Prix indisponible"; }
-		});
-
-		trackViewContent({
-				content_ids: "Galerie des cartes",
-				content_type: "Galerie des cartes",
-				content_nom: "Galerie des cartes",
-				value: 4,
-				currency: 'EUR'
 		});
 
 		function trackViewContent(payload, essai = 0) {

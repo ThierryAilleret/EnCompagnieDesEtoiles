@@ -23,6 +23,11 @@ exports.handler = async (event) => {
   const session = stripeEvent.data.object;
   const m = session.metadata ?? {};	
 
+	console.log(
+		"Session Stripe",
+		JSON.stringify(session, null, 2)
+	);
+	
   const payload = {
     data: [{
       event_name: 'Purchase',
@@ -41,10 +46,7 @@ exports.handler = async (event) => {
     }]
   };
 
-	console.log(
-		"Session Stripe",
-		JSON.stringify(session, null, 2)
-	);
+
 	console.log(
 		"PAYLOAD AVANT ENVOI",
 		JSON.stringify(payload, null, 2)

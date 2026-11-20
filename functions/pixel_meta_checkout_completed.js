@@ -23,10 +23,10 @@ exports.handler = async (event) => {
   const session = stripeEvent.data.object;
   const m = session.invoice_creation.invoice_data.metadata ?? {};	
 
-	console.log(
-		"Session Stripe",
-		JSON.stringify(session, null, 2)
-	);
+	// console.log(
+		// "Session Stripe",
+		// JSON.stringify(session, null, 2)
+	// );
 	
   const payload = {
     data: [{
@@ -47,10 +47,10 @@ exports.handler = async (event) => {
   };
 
 
-	console.log(
-		"PAYLOAD AVANT ENVOI",
-		JSON.stringify(payload, null, 2)
-	);
+	// console.log(
+		// "PAYLOAD AVANT ENVOI",
+		// JSON.stringify(payload, null, 2)
+	// );
 
   const res = await fetch(
     `https://graph.facebook.com/v21.0/${process.env.META_PIXEL_ID}/events?access_token=${process.env.META_CAPI_TOKEN}`,

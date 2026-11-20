@@ -21,13 +21,7 @@ exports.handler = async (event) => {
     return { statusCode: 200, body: 'ignored' };
 
   const session = stripeEvent.data.object;
-  const m = session.metadata ?? {};
-
-	console.log("EMAIL =", session.customer_details?.email);
-	console.log("EMAIL2 =", m["03_email"]);
-	console.log("FBP =", m["98_cookie_meta_fbp"]);
-	console.log("FBC =", m["99_cookie_meta_fbc"]);
-	
+  const m = session.metadata ?? {};	
 
   const payload = {
     data: [{
@@ -35,7 +29,7 @@ exports.handler = async (event) => {
       event_time: Math.floor(Date.now() / 1000),
       action_source: 'website',
       user_data: {
-        em: m["03_email"] || undefined,
+        em: [sha256(m["03_email"])] || undefined,
 				fbp: m["98_cookie_meta_fbp"] || undefined,
 				fbc: m["99_cookie_meta_fbc"] || undefined
       },
@@ -46,6 +40,15 @@ exports.handler = async (event) => {
       }
     }]
   };
+
+	console.log(
+		"Session Stripe",
+		JSON.stringify(session, null, 2)
+	);
+	console.log(
+		"PAYLOAD AVANT ENVOI",
+		JSON.stringify(payload, null, 2)
+	);
 
   const res = await fetch(
     `https://graph.facebook.com/v21.0/${process.env.META_PIXEL_ID}/events?access_token=${process.env.META_CAPI_TOKEN}`,

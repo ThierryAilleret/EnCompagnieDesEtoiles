@@ -21,7 +21,7 @@ exports.handler = async (event) => {
     return { statusCode: 200, body: 'ignored' };
 
   const session = stripeEvent.data.object;
-  const m = session.metadata ?? {};	
+  const m = session.invoice_creation.invoice_data.metadata ?? {};	
 
 	console.log(
 		"Session Stripe",

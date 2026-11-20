@@ -634,6 +634,7 @@ document.getElementById("checkout-button").addEventListener("click", function (e
 		console.log("AddPaymentInfo déclenché");
 		fbq('track', 'AddPaymentInfo', {
 			content_ids: panier.map(item => item.stripeProduct),
+			content_noms: panier.map(item => item.nom),
 			content_type: 'product',
 			value: totaux.totalFinal,
 			currency: 'EUR',

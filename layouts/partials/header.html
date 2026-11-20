@@ -515,6 +515,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 						fbq('track', 'InitiateCheckout', {
 								content_ids: panier.map(item => item.stripeProduct),
+								content_noms: panier.map(item => item.nom),
 								content_type: 'product',
 								value: panier.reduce((s, item) => s + item.quantite * item.prix, 0),
 								currency: 'EUR',

@@ -275,7 +275,8 @@
 				if (typeof fbq === 'function') {
 						console.log("AddToCart déclenché");
 						fbq('track', 'AddToCart', {
-						content_ids: [stripeProduct],
+						content_id: stripeProduct,
+						content_nom: nom,
 						content_type: categorie,
 						value: prix,
 						currency: monnaie

@@ -699,8 +699,7 @@ document.getElementById("checkout-button").addEventListener("click", function (e
 			panier,
 			client,
 			fbp: getCookie('_fbp'),
-			fbc: getCookie('_fbc'),
-			eventId
+			fbc: getCookie('_fbc')
 		})
   })
   .then(async response => {

@@ -508,16 +508,14 @@ window.addEventListener("DOMContentLoaded", () => {
 		);
 		
 		document.getElementById("btn-checkout").addEventListener("click", () => {
-				console.log("InitiateCheckout déclenché");
 				if (typeof fbq === 'function') {
 						const panier = JSON.parse(localStorage.getItem("panier")) || [];
-						console.log("InitiateCheckout déclenché");
-
+						const totaux = calculerTotaux(panier);
 						fbq('track', 'InitiateCheckout', {
 								content_ids: panier.map(item => item.stripeProduct),
 								content_noms: panier.map(item => item.nom),
 								content_type: 'product',
-								value: panier.reduce((s, item) => s + item.quantite * item.prix, 0),
+								value: totaux.TotalFinal),
 								currency: 'EUR',
 								num_items: panier.reduce((s, item) => s + item.quantite, 0)
 						});

@@ -629,9 +629,7 @@ document.getElementById("checkout-button").addEventListener("click", function (e
   const totaux = calculerTotaux(panier);
 
   // Meta Pixel : AddPaymentInfo
-	console.log("AddPaymentInfo déclenché");
 	if (typeof fbq === 'function') {
-		console.log("AddPaymentInfo déclenché");
 		fbq('track', 'AddPaymentInfo', {
 			content_ids: panier.map(item => item.stripeProduct),
 			content_noms: panier.map(item => item.nom),

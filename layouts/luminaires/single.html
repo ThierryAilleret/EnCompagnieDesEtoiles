@@ -270,10 +270,7 @@
 				localStorage.setItem("panier", JSON.stringify(panier));
 				window.dispatchEvent(new Event("panierMisAJour"));
 
-				console.log("AddToCart déclenché");
-
 				if (typeof fbq === 'function') {
-						console.log("AddToCart déclenché");
 						fbq('track', 'AddToCart', {
 						content_id: stripeProduct,
 						content_nom: nom,
@@ -326,7 +323,7 @@
 				trackViewContent({
 						content_ids: [stripeProduct],
 						content_type: 'luminaires',
-						content_name: "{{ .Title }}",
+						content_nom: "{{ .Title }}",
 						value: stockPrixStripe / 100,
 						currency: (monnaieStripe || 'EUR').toUpperCase()
 				});

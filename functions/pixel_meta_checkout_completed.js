@@ -27,13 +27,11 @@ exports.handler = async (event) => {
     data: [{
       event_name: 'Purchase',
       event_time: Math.floor(Date.now() / 1000),
-      event_id: m.meta_event_id,           // déduplication avec le Purchase navigateur
       action_source: 'website',
       user_data: {
-        em: [sha256(session.customer_details?.email ?? '')],
+        em: m["03_email"] || undefined,
 				fbp: m["98_cookie_meta_fbp"] || undefined,
-				fbc: m["99_cookie_meta_fbc"] || undefined,
-        client_user_agent: m.user_agent || undefined
+				fbc: m["99_cookie_meta_fbc"] || undefined
       },
       custom_data: {
         value: (session.amount_total ?? 0) / 100,
@@ -47,5 +45,20 @@ exports.handler = async (event) => {
     `https://graph.facebook.com/v21.0/${process.env.META_PIXEL_ID}/events?access_token=${process.env.META_CAPI_TOKEN}`,
     { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
 
-  return { statusCode: 200, body: JSON.stringify(res.ok ? 'sent' : await res.text()) };
+  //return { statusCode: 200, body: JSON.stringify(res.ok ? 'sent' : await res.text()) };
+
+	const responseText = await res.text();
+
+	console.log("META STATUS =", res.status);
+	console.log("META RESPONSE =", responseText);
+	console.log("META PAYLOAD =", JSON.stringify(payload));
+
+	return {
+		statusCode: 200,
+		body: JSON.stringify({
+			status: res.status,
+			response: responseText
+		})
+	};
+
 }

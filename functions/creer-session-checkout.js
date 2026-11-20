@@ -34,7 +34,7 @@ exports.handler = async (event) => {
   const baseUrl = process.env.URL_SITE; //Paramétré dans Netlify
 
   try {
-    const { panier, client } = JSON.parse(event.body);
+    const { panier, client, fbp, fbc } = JSON.parse(event.body);
 
     if (!Array.isArray(panier) || panier.length === 0) {
       return { statusCode: 400, body: JSON.stringify({ error: "Panier vide" }) };
@@ -146,8 +146,8 @@ exports.handler = async (event) => {
 						"10_pointRelais": client.pointRelais || "",
 						"11_pointRelaisId": client.pointRelaisId || "",
 						"12_message": client.message || "",
-						"98_cookie_meta_fbp": body.fbp || "",
-						"99_cookie_meta_fbc": body.fbc || ""
+						"98_cookie_meta_fbp": fbp || "",
+						"99_cookie_meta_fbc": fbc || ""
 					}
 				}
 			},

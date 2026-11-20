@@ -692,12 +692,6 @@ document.getElementById("checkout-button").addEventListener("click", function (e
 		return m ? decodeURIComponent(m[1]) : null;
 	};
 
-	console.log(JSON.stringify({
-			panier,
-			client,
-			fbp: getCookie('_fbp'),
-			fbc: getCookie('_fbc')
-		}));
   fetch("/.netlify/functions/creer-session-checkout", {
     method: "POST",
     headers: { "Content-Type": "application/json" },

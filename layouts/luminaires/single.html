@@ -284,7 +284,7 @@
 				ouvrirPanier();
 		}
 
-		//Récupération du stock sur Stripe
+		// Récupération du stock sur Stripe
 		async function fetchInventoryCurrentProduct() {
 				const stripeEnv = window.stripeEnv || "test"; // fallback si non défini
 				const stripeProduct = stripeEnv === "live"

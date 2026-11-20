@@ -711,7 +711,7 @@ document.getElementById("checkout-button").addEventListener("click", function (e
     stripe.redirectToCheckout({ sessionId: data.sessionId });
   })
   .catch(error => {
-    console.error("💥 Erreur Stripe :", error);
+    console.error("💥 Erreur Stripe : ", error);
     alert("Erreur : " + error.message);
   });
 });
